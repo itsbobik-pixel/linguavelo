@@ -2213,6 +2213,13 @@ fabLock.addEventListener('mouseleave', cancelUnlockHold);
 function openDrawer() {
   document.getElementById('drawer').classList.add('open');
   document.getElementById('drawerOverlay').classList.add('open');
+  // Obnov aktivní stavy filtrů
+  document.querySelectorAll('.cat-btn').forEach(b => {
+    b.classList.toggle('cat-active', b.dataset.cat === activeCategory);
+  });
+  document.querySelectorAll('.star-btn').forEach(b => {
+    b.classList.toggle('star-active', b.dataset.stars === activeStarFilter);
+  });
 }
 function closeDrawer() {
   document.getElementById('drawer').classList.remove('open');
