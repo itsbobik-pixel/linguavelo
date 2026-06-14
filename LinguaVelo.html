@@ -1711,7 +1711,7 @@
 
     <!-- Kategorie -->
     <section>
-      <div class="drawer-section-label">Kategorie</div>
+      <div class="drawer-section-label">Kategorie <span id="activeCatLabel" style="color:#4ecca3;font-weight:700;font-size:0.9em;text-transform:none;letter-spacing:0;"></span></div>
       <div style="display:flex;flex-direction:column;gap:6px;" id="categoryFilters">
         <button class="drawer-btn cat-btn cat-active" data-cat="all">📋 Všechny kategorie</button>
         <button class="drawer-btn cat-btn" data-cat="Pozdravy">👋 Pozdravy</button>
@@ -1731,7 +1731,7 @@
 
     <!-- Filtr hvězdiček -->
     <section>
-      <div class="drawer-section-label">Procvičovat</div>
+      <div class="drawer-section-label">Procvičovat <span id="activeStarLabel" style="color:#ffc857;font-weight:700;font-size:0.9em;text-transform:none;letter-spacing:0;"></span></div>
       <div style="display:flex;flex-direction:column;gap:6px;" id="starFilters">
         <button class="drawer-btn star-btn star-active" data-stars="all">⭐ Všechny fráze</button>
         <button class="drawer-btn star-btn" data-stars="weak">⭐ Jen slabé (1–2 ★)</button>
@@ -1896,6 +1896,14 @@ function getFilteredOrder() {
 function applyFilters() {
   cardOrder = getFilteredOrder();
   renderCards();
+  // Update labelů v draweru
+  const catLabel = document.getElementById('activeCatLabel');
+  const starLabel = document.getElementById('activeStarLabel');
+  if (catLabel) catLabel.textContent = activeCategory !== 'all' ? `· ${activeCategory}` : '';
+  if (starLabel) {
+    const starNames = { weak: '· Slabé', medium: '· Střední', strong: '· Silné', unrated: '· Bez hodnocení' };
+    starLabel.textContent = activeStarFilter !== 'all' ? (starNames[activeStarFilter] || '') : '';
+  }
   closeDrawer();
 }
 let stopRequested = false;
@@ -1991,7 +1999,10 @@ function updateCounter() {
   const total = phrases.length;
   const ml = Object.values(ratings.listening).filter(v=>v===5).length;
   const mr = Object.values(ratings.remembering).filter(v=>v===5).length;
-  document.getElementById('counterBar').textContent = `🎧 ${ml} / ${total}   🧠 ${mr} / ${total}`;
+  const filtered = getFilteredOrder ? getFilteredOrder().length : total;
+  const filterInfo = (activeCategory !== 'all' || activeStarFilter !== 'all')
+    ? ` · ${filtered} zobrazeno` : '';
+  document.getElementById('counterBar').textContent = `🎧 ${ml} / ${total}   🧠 ${mr} / ${total}${filterInfo}`;
 }
 
 renderCards();
