@@ -206,6 +206,14 @@
     background: #ffc857;
     color: #1e1f29;
   }
+  .drawer-btn.cat-active {
+    background: #4ecca3;
+    color: #1e1f29;
+  }
+  .drawer-btn.star-active {
+    background: #ffc857;
+    color: #1e1f29;
+  }
   .drawer-btn-row { display: flex; gap: 10px; }
   .drawer-btn-row .drawer-btn { flex: 1; }
   #lockDrawerBtn {
@@ -1713,7 +1721,7 @@
     <section>
       <div class="drawer-section-label">Kategorie</div>
       <div style="display:flex;flex-direction:column;gap:6px;" id="categoryFilters">
-        <button class="drawer-btn cat-btn cat-active" data-cat="all">📋 Všechny kategorie</button>
+        <button class="drawer-btn cat-btn" data-cat="all">📋 Všechny kategorie</button>
         <button class="drawer-btn cat-btn" data-cat="Pozdravy">👋 Pozdravy</button>
         <button class="drawer-btn cat-btn" data-cat="Konverzace">💬 Konverzace</button>
         <button class="drawer-btn cat-btn" data-cat="Kavárna">☕ Kavárna</button>
@@ -2231,9 +2239,10 @@ document.getElementById('drawerOverlay').addEventListener('click', closeDrawer);
 // ── KATEGORIE ──
 document.querySelectorAll('.cat-btn').forEach(btn => {
   btn.addEventListener('click', () => {
-    document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('cat-active'));
-    btn.classList.add('cat-active');
     activeCategory = btn.dataset.cat;
+    document.querySelectorAll('.cat-btn').forEach(b => {
+      b.classList.toggle('cat-active', b.dataset.cat === activeCategory);
+    });
     applyFilters();
   });
 });
@@ -2241,11 +2250,20 @@ document.querySelectorAll('.cat-btn').forEach(btn => {
 // ── FILTR HVĚZDIČEK ──
 document.querySelectorAll('.star-btn').forEach(btn => {
   btn.addEventListener('click', () => {
-    document.querySelectorAll('.star-btn').forEach(b => b.classList.remove('star-active'));
-    btn.classList.add('star-active');
     activeStarFilter = btn.dataset.stars;
+    document.querySelectorAll('.star-btn').forEach(b => {
+      b.classList.toggle('star-active', b.dataset.stars === activeStarFilter);
+    });
     applyFilters();
   });
+});
+
+// Inicializuj výchozí aktivní stav
+document.querySelectorAll('.cat-btn').forEach(b => {
+  b.classList.toggle('cat-active', b.dataset.cat === activeCategory);
+});
+document.querySelectorAll('.star-btn').forEach(b => {
+  b.classList.toggle('star-active', b.dataset.stars === activeStarFilter);
 });
 </script>
 
