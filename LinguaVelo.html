@@ -312,8 +312,9 @@
     background: rgba(15,17,35,0.4);
     z-index: 200;
     backdrop-filter: blur(2px);
+    pointer-events: none;
   }
-  #drawerOverlay.open { display: block; }
+  #drawerOverlay.open { display: block; pointer-events: auto; }
 
   #drawer {
     position: fixed;
