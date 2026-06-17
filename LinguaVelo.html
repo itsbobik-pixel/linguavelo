@@ -621,6 +621,9 @@
 <!-- CATEGORY CHIPS -->
 <div id="categoryChips">
   <div class="chip active" data-cat="all">Vše</div>
+  <div class="chip" data-diff="easy">🟢 Lehké</div>
+  <div class="chip" data-diff="medium">🟡 Normální</div>
+  <div class="chip" data-diff="hard">🔴 Složité</div>
   <div class="chip" data-cat="Pozdravy">👋 Pozdravy</div>
   <div class="chip" data-cat="Konverzace">💬 Konverzace</div>
   <div class="chip" data-cat="Kavárna">☕ Kavárna</div>
@@ -809,6 +812,21 @@ const RATINGS_KEYS = { listening: 'lv-ratings-listening', remembering: 'lv-ratin
 const CUSTOM_KEY = 'lv-custom-phrases';
 const WORKER_URL = 'https://flat-paper-f764.itsbobik.workers.dev/';
 
+function guessDifficulty(p) {
+  // Pokud už má obtížnost, vrátíme ji
+  if (p.difficulty) return p.difficulty;
+  const text = p.it || p.cz;
+  const words = text.trim().split(/\s+/).length;
+  // Složitá slova (dlouhá nebo s apostrofem)
+  const complexWords = text.split(/\s+/).filter(w => w.length > 8 || w.includes("'")).length;
+  if (words <= 2 && complexWords === 0) return 'easy';
+  if (words >= 7 || complexWords >= 2) return 'hard';
+  return 'medium';
+}
+
+// Přiřadím obtížnost všem existujícím frázím
+phrases.forEach(p => { if (!p.difficulty) p.difficulty = guessDifficulty(p); });
+
 function loadRatings(mode) { try { return JSON.parse(localStorage.getItem(RATINGS_KEYS[mode])) || {}; } catch { return {}; } }
 function saveRatings(mode, r) { try { localStorage.setItem(RATINGS_KEYS[mode], JSON.stringify(r)); } catch {} }
 function loadCustom() { try { return JSON.parse(localStorage.getItem(CUSTOM_KEY)) || []; } catch { return []; } }
@@ -826,22 +844,16 @@ let activeStarMode = 'listening'; // nebo 'remembering'
 const VALID_CATEGORIES = ['Pozdravy','Cestování','Restaurace','Kavárna','Nakupování',
   'Hotel','Doprava','Rodina','Práce','Zdraví','Čísla a čas','Konverzace','Gramatika','Ostatní'];
 
+let activeDifficulty = 'all';
+
 function getFilteredOrder() {
   return phrases.map((_, i) => i).filter(i => {
     const p = phrases[i];
-    // Filtr kategorie
     if (activeCategory !== 'all') {
       if ((p.category || 'Ostatní') !== activeCategory) return false;
     }
-    // Filtr hvězdiček (bere průměr listening + remembering)
-    if (activeStarFilter !== 'all') {
-      const l = ratings.listening[i] || 0;
-      const r = ratings.remembering[i] || 0;
-      const avg = Math.round((l + r) / 2);
-      if (activeStarFilter === 'weak' && !(avg >= 1 && avg <= 2)) return false;
-      if (activeStarFilter === 'medium' && avg !== 3) return false;
-      if (activeStarFilter === 'strong' && !(avg >= 4)) return false;
-      if (activeStarFilter === 'unrated' && (l !== 0 || r !== 0)) return false;
+    if (activeDifficulty !== 'all') {
+      if ((p.difficulty || 'medium') !== activeDifficulty) return false;
     }
     return true;
   });
@@ -866,7 +878,12 @@ function buildCard(i) {
   card.className = 'card';
   card.id = `card-${i}`;
   const flag = p.lang === 'en-US' ? '🇬🇧' : '🇨🇿';
+  const diffBadge = { easy: '🟢', medium: '🟡', hard: '🔴' }[p.difficulty] || '🟡';
   card.innerHTML = `
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+      ${p.category ? `<span class="category-tag">${p.category}</span>` : '<span></span>'}
+      <span style="font-size:0.75em;">${diffBadge}</span>
+    </div>
     <div class="cz" id="cz-${i}">${flag} ${p.cz}</div>
     <div class="it" id="it-${i}">🇮🇹 ${p.it}</div>
     <button class="play-one" data-index="${i}">▶️ Přehrát</button>
@@ -1216,23 +1233,19 @@ document.querySelectorAll('.cat-btn').forEach(btn => {
   });
 });
 
-// ── FILTR HVĚZDIČEK ──
-document.querySelectorAll('.star-btn').forEach(btn => {
-  btn.addEventListener('click', () => {
-    activeStarFilter = btn.dataset.stars;
-    document.querySelectorAll('.star-btn').forEach(b => {
-      b.classList.toggle('star-active', b.dataset.stars === activeStarFilter);
-    });
-    applyFilters();
-  });
-});
-
-// Inicializuj výchozí aktivní stav
+// Inicializuj výchozí aktivní stav kategorií
 document.querySelectorAll('.cat-btn').forEach(b => {
   b.classList.toggle('cat-active', b.dataset.cat === activeCategory);
 });
-document.querySelectorAll('.star-btn').forEach(b => {
-  b.classList.toggle('star-active', b.dataset.stars === activeStarFilter);
+
+// ── DIFFICULTY CHIPS ──
+document.querySelectorAll('[data-diff]').forEach(chip => {
+  chip.addEventListener('click', () => {
+    document.querySelectorAll('[data-diff]').forEach(c => c.classList.remove('active'));
+    chip.classList.add('active');
+    activeDifficulty = chip.dataset.diff;
+    applyFilters(false);
+  });
 });
 
 // ── CATEGORY CHIPS (inline) ──
