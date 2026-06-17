@@ -943,7 +943,7 @@ function updateCounter() {
   const total = phrases.length;
   const ml = Object.values(ratings.listening).filter(v=>v===5).length;
   const mr = Object.values(ratings.remembering).filter(v=>v===5).length;
-  document.getElementById('counterBar').innerHTML = `🎧 <b>${ml}</b>/${total} &nbsp;🧠 <b>${mr}</b>/${total}`;
+  const cb = document.getElementById('counterBar'); if(cb) cb.innerHTML = `🎧 <b>${ml}</b>/${total} &nbsp;🧠 <b>${mr}</b>/${total}`;
   const slb = document.getElementById('statListeningBig');
   const srb = document.getElementById('statRememberingBig');
   const st = document.getElementById('statTotal');
