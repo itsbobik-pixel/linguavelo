@@ -530,6 +530,171 @@
     transform: rotate(45deg);
   }
 
+  #chatBtn {
+    width: 36px; height: 36px;
+    border-radius: 9px;
+    border: none;
+    font-size: 1.1em;
+    background: var(--accent-light);
+    color: var(--accent);
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    transition: all 0.15s;
+    box-shadow: 0 2px 8px rgba(37,99,235,0.15);
+  }
+  #chatBtn.open {
+    background: var(--accent);
+    color: white;
+  }
+
+  /* ── CHAT UI ── */
+  #chatOverlay {
+    display: none;
+    position: fixed; inset: 0;
+    background: rgba(15,17,35,0.35);
+    z-index: 300;
+    backdrop-filter: blur(4px);
+  }
+  #chatOverlay.open { display: block; }
+
+  #chatPanel {
+    position: fixed;
+    inset: 0;
+    z-index: 301;
+    background: var(--bg);
+    display: flex;
+    flex-direction: column;
+    transform: translateY(100%);
+    transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
+  }
+  #chatPanel.open { transform: translateY(0); }
+
+  #chatHeader {
+    background: rgba(247,248,252,0.95);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 12px 16px;
+    padding-top: max(12px, env(safe-area-inset-top));
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  #chatClose {
+    width: 36px; height: 36px;
+    border-radius: 9px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text-secondary);
+    font-size: 1em;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  #chatTitle {
+    font-size: 1em;
+    font-weight: 700;
+    flex: 1;
+  }
+  #chatSubtitle {
+    font-size: 0.75em;
+    color: var(--text-muted);
+    font-weight: 500;
+  }
+  #chatRestart {
+    width: 36px; height: 36px;
+    border-radius: 9px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text-secondary);
+    font-size: 1em;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  #chatMessages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .chat-msg {
+    max-width: 82%;
+    padding: 10px 14px;
+    border-radius: 16px;
+    font-size: 0.95em;
+    line-height: 1.45;
+    animation: msgIn 0.2s ease;
+  }
+  @keyframes msgIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .chat-msg.ai {
+    background: var(--surface);
+    color: var(--text-primary);
+    border: 1px solid var(--border);
+    border-bottom-left-radius: 4px;
+    align-self: flex-start;
+    box-shadow: var(--shadow-sm);
+  }
+  .chat-msg.user {
+    background: var(--accent);
+    color: white;
+    border-bottom-right-radius: 4px;
+    align-self: flex-end;
+  }
+  .chat-msg.typing {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    align-self: flex-start;
+    color: var(--text-muted);
+    font-style: italic;
+    font-size: 0.88em;
+  }
+
+  #chatInputBar {
+    padding: 12px 16px;
+    padding-bottom: max(12px, env(safe-area-inset-bottom));
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    display: flex;
+    gap: 8px;
+    align-items: flex-end;
+  }
+  #chatInput {
+    flex: 1;
+    background: var(--surface2);
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    color: var(--text-primary);
+    font-size: 0.95em;
+    padding: 10px 14px;
+    outline: none;
+    resize: none;
+    max-height: 120px;
+    font-family: inherit;
+    transition: border-color 0.15s;
+  }
+  #chatInput:focus { border-color: var(--accent); }
+  #chatInput::placeholder { color: var(--text-muted); }
+  #chatSend {
+    width: 42px; height: 42px;
+    border-radius: 12px;
+    border: none;
+    background: var(--accent);
+    color: white;
+    font-size: 1.1em;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    transition: opacity 0.15s;
+  }
+  #chatSend:disabled { opacity: 0.4; }
+
   /* Add Modal */
   #addOverlay {
     display: none;
@@ -614,7 +779,7 @@
   <button id="menuBtn">☰</button>
   <div class="logo-name">Lingua<span>Velo</span></div>
   <button id="fabAdd">＋</button>
-  <div id="counterBar">🎧 0 &nbsp;🧠 0</div>
+  <button id="chatBtn">💬</button>
 </div>
 
 <!-- CATEGORY CHIPS -->
@@ -649,6 +814,24 @@
 <!-- FABs -->
 <button id="fabPause">⏸</button>
 <button id="fabLock">🔓</button>
+
+<!-- Chat panel -->
+<div id="chatOverlay"></div>
+<div id="chatPanel">
+  <div id="chatHeader">
+    <button id="chatClose">←</button>
+    <div>
+      <div id="chatTitle">🇮🇹 Konverzace</div>
+      <div id="chatSubtitle">AI mluví italsky a používá tvoje fráze</div>
+    </div>
+    <button id="chatRestart">↺</button>
+  </div>
+  <div id="chatMessages"></div>
+  <div id="chatInputBar">
+    <textarea id="chatInput" rows="1" placeholder="Napiš italsky nebo česky…"></textarea>
+    <button id="chatSend">↑</button>
+  </div>
+</div>
 
 <!-- Add modal -->
 <div id="addOverlay"></div>
@@ -1249,6 +1432,132 @@ document.querySelectorAll('#categoryChips .chip').forEach(chip => {
 });
 
 // cat-btn sync je přímo v openDrawer
+
+
+// ── KONVERZACE ──
+const WORKER_URL_CHAT = 'https://flat-paper-f764.itsbobik.workers.dev/chat';
+const chatBtn = document.getElementById('chatBtn');
+const chatPanel = document.getElementById('chatPanel');
+const chatOverlay = document.getElementById('chatOverlay');
+const chatMessages = document.getElementById('chatMessages');
+const chatInput = document.getElementById('chatInput');
+const chatSend = document.getElementById('chatSend');
+
+let chatHistory = [];
+
+function openChat() {
+  chatBtn.classList.add('open');
+  chatPanel.classList.add('open');
+  chatOverlay.classList.add('open');
+  if (chatHistory.length === 0) startConversation();
+  setTimeout(() => chatInput.focus(), 300);
+}
+
+function closeChat() {
+  chatBtn.classList.remove('open');
+  chatPanel.classList.remove('open');
+  chatOverlay.classList.remove('open');
+}
+
+function addMsg(text, role) {
+  const div = document.createElement('div');
+  div.className = `chat-msg ${role}`;
+  div.textContent = text;
+  chatMessages.appendChild(div);
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+  return div;
+}
+
+function showTyping() {
+  const div = document.createElement('div');
+  div.className = 'chat-msg typing';
+  div.id = 'typingIndicator';
+  div.textContent = 'Marco píše…';
+  chatMessages.appendChild(div);
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+function hideTyping() {
+  const t = document.getElementById('typingIndicator');
+  if (t) t.remove();
+}
+
+async function sendToAI(userMsg) {
+  chatHistory.push({ role: 'user', content: userMsg });
+
+  // Vytáhnu náhodných 8 frází ze seznamu pro kontext
+  const sample = [...phrases].sort(() => Math.random() - 0.5).slice(0, 8);
+  const phraseList = sample.map(p => `"${p.cz}" = "${p.it}"`).join(', ');
+
+  const systemPrompt = `Jsi Marco, přátelský Ital žijící v La Spezia. Konverzuješ s uživatelem který se učí italsky.
+
+Pravidla:
+- Piš POUZE italsky (krátce, přirozeně, max 2 věty)
+- Do odpovědí přirozeně zapracuj fráze z tohoto seznamu: ${phraseList}
+- Pokud uživatel napíše česky, jemně ho povzbuď aby zkusil italsky, ale odpověz italsky
+- Buď přátelský, přirozený, jako kamarád na ulici
+- Nikdy nevysvětluj gramatiku, jen přirozeně konverzuj`;
+
+  try {
+    const res = await fetch('https://flat-paper-f764.itsbobik.workers.dev/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        chat: true,
+        system: systemPrompt,
+        messages: chatHistory
+      })
+    });
+    const data = await res.json();
+    const reply = data.translation || data.reply || 'Non ho capito…';
+    chatHistory.push({ role: 'assistant', content: reply });
+    return reply;
+  } catch(e) {
+    return 'Scusa, c'è un problema di connessione…';
+  }
+}
+
+async function startConversation() {
+  chatHistory = [];
+  chatMessages.innerHTML = '';
+  showTyping();
+  const opening = await sendToAI('Ciao! Inizia la conversazione in modo naturale e amichevole.');
+  hideTyping();
+  addMsg(opening, 'ai');
+}
+
+async function handleSend() {
+  const text = chatInput.value.trim();
+  if (!text) return;
+  chatInput.value = '';
+  chatInput.style.height = 'auto';
+  chatSend.disabled = true;
+
+  addMsg(text, 'user');
+  showTyping();
+
+  const reply = await sendToAI(text);
+  hideTyping();
+  addMsg(reply, 'ai');
+  chatSend.disabled = false;
+  chatInput.focus();
+}
+
+chatBtn.addEventListener('click', () => {
+  if (chatPanel.classList.contains('open')) closeChat();
+  else openChat();
+});
+document.getElementById('chatClose').addEventListener('click', closeChat);
+document.getElementById('chatRestart').addEventListener('click', startConversation);
+chatOverlay.addEventListener('click', closeChat);
+chatSend.addEventListener('click', handleSend);
+chatInput.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSend(); }
+});
+chatInput.addEventListener('input', () => {
+  chatInput.style.height = 'auto';
+  chatInput.style.height = chatInput.scrollHeight + 'px';
+});
 
 </script>
 </body>
