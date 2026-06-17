@@ -807,6 +807,22 @@
   </div>
 </div>
 
+<div id="chatPanel">
+  <div id="chatHeader">
+    <button id="chatClose">←</button>
+    <div id="chatTitleWrap">
+      <div id="chatTitle">🇮🇹 Konverzace s Marcem</div>
+      <div id="chatSubtitle">AI mluví italsky, používá tvoje fráze</div>
+    </div>
+    <button id="chatRestart">↺</button>
+  </div>
+  <div id="chatMessages"></div>
+  <div id="chatInputBar">
+    <textarea id="chatInput" rows="1" placeholder="Napiš italsky nebo česky…"></textarea>
+    <button id="chatSend" disabled>↑</button>
+  </div>
+</div>
+
 <script>
 const phrases = [
   { cz: "Ahoj", it: "Ciao", category: "Pozdravy" },
@@ -1432,20 +1448,5 @@ chatInput.addEventListener('keydown', e => {
 });
 
 </script>
-<div id="chatPanel">
-  <div id="chatHeader">
-    <button id="chatClose">←</button>
-    <div id="chatTitleWrap">
-      <div id="chatTitle">🇮🇹 Konverzace s Marcem</div>
-      <div id="chatSubtitle">AI mluví italsky, používá tvoje fráze</div>
-    </div>
-    <button id="chatRestart">↺</button>
-  </div>
-  <div id="chatMessages"></div>
-  <div id="chatInputBar">
-    <textarea id="chatInput" rows="1" placeholder="Napiš italsky nebo česky…"></textarea>
-    <button id="chatSend" disabled>↑</button>
-  </div>
-</div>
 </body>
 </html>
