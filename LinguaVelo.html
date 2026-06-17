@@ -621,9 +621,6 @@
 <!-- CATEGORY CHIPS -->
 <div id="categoryChips">
   <div class="chip active" data-cat="all">Vše</div>
-  <div class="chip" data-diff="easy">🟢 Lehké</div>
-  <div class="chip" data-diff="medium">🟡 Normální</div>
-  <div class="chip" data-diff="hard">🔴 Složité</div>
   <div class="chip" data-cat="Pozdravy">👋 Pozdravy</div>
   <div class="chip" data-cat="Konverzace">💬 Konverzace</div>
   <div class="chip" data-cat="Kavárna">☕ Kavárna</div>
@@ -636,6 +633,10 @@
   <div class="chip" data-cat="Zdraví">❤️ Zdraví</div>
   <div class="chip" data-cat="Práce">💼 Práce</div>
   <div class="chip" data-cat="Ostatní">📌 Ostatní</div>
+  <div class="chip chip-divider" style="width:1px;background:var(--border);padding:0;margin:0 4px;pointer-events:none;"></div>
+  <div class="chip" data-diff="easy">🟢 Lehké</div>
+  <div class="chip" data-diff="medium">🟡 Normální</div>
+  <div class="chip" data-diff="hard">🔴 Složité</div>
 </div>
 
 <!-- CARDS -->
@@ -878,12 +879,7 @@ function buildCard(i) {
   card.className = 'card';
   card.id = `card-${i}`;
   const flag = p.lang === 'en-US' ? '🇬🇧' : '🇨🇿';
-  const diffBadge = { easy: '🟢', medium: '🟡', hard: '🔴' }[p.difficulty] || '🟡';
   card.innerHTML = `
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
-      ${p.category ? `<span class="category-tag">${p.category}</span>` : '<span></span>'}
-      <span style="font-size:0.75em;">${diffBadge}</span>
-    </div>
     <div class="cz" id="cz-${i}">${flag} ${p.cz}</div>
     <div class="it" id="it-${i}">🇮🇹 ${p.it}</div>
     <button class="play-one" data-index="${i}">▶️ Přehrát</button>
@@ -1251,13 +1247,27 @@ document.querySelectorAll('[data-diff]').forEach(chip => {
 // ── CATEGORY CHIPS (inline) ──
 document.querySelectorAll('#categoryChips .chip').forEach(chip => {
   chip.addEventListener('click', () => {
+    if (chip.classList.contains('chip-divider')) return;
+    
+    if (chip.dataset.cat !== undefined) {
+      // Kategorie chip
+      activeCategory = chip.dataset.cat;
+      activeDifficulty = 'all';
+    } else if (chip.dataset.diff !== undefined) {
+      // Difficulty chip
+      activeDifficulty = chip.dataset.diff;
+      activeCategory = 'all';
+    }
+    
+    // Aktualizuj aktivní stav všech chipů
     document.querySelectorAll('#categoryChips .chip').forEach(c => c.classList.remove('active'));
     chip.classList.add('active');
-    activeCategory = chip.dataset.cat;
+    
     // Sync drawer cat-btn
     document.querySelectorAll('.cat-btn').forEach(b => {
       b.classList.toggle('cat-active', b.dataset.cat === activeCategory);
     });
+    
     applyFilters(false);
   });
 });
