@@ -2,7 +2,7 @@
 <html lang="cs">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, interactive-widget=resizes-content">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="LinguaVelo">
@@ -620,6 +620,7 @@
     pointer-events: none !important;
     height: 100% !important;
     height: 100dvh !important;
+    height: -webkit-fill-available !important;
   }
   #chatPanel.open {
     transform: translateX(0) !important;
@@ -1409,11 +1410,19 @@ document.getElementById('chatInput').addEventListener('keydown', e => {
   if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSend(); }
 });
 document.getElementById('chatInput').addEventListener('focus', () => {
-  // Při otevření klávesnice scrollni na konec zpráv
   setTimeout(() => {
     const msgs = document.getElementById('chatMessages');
     if (msgs) msgs.scrollTop = msgs.scrollHeight;
-  }, 300);
+    // Scrollni input do view
+    document.getElementById('chatInput').scrollIntoView({ block: 'nearest' });
+  }, 400);
+});
+document.getElementById('chatInput').addEventListener('blur', () => {
+  // Po zavření klávesnice scrollni zpátky na konec zpráv
+  setTimeout(() => {
+    const msgs = document.getElementById('chatMessages');
+    if (msgs) msgs.scrollTop = msgs.scrollHeight;
+  }, 100);
 });
 // chatBtn click - spustí konverzaci pokud je nová
 document.getElementById('chatBtn').addEventListener('click', () => {
