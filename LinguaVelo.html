@@ -1311,11 +1311,17 @@ function openChat() {
   document.getElementById('chatPanel').classList.add('open');
   document.getElementById('fabLock').style.display = 'none';
   document.getElementById('fabPause').style.display = 'none';
+  document.body.style.overflow = 'hidden';
+  document.body.style.position = 'fixed';
+  document.body.style.width = '100%';
 }
 function closeChat() {
   chatBtn.classList.remove('open');
   document.getElementById('chatPanel').classList.remove('open');
   document.getElementById('fabLock').style.display = '';
+  document.body.style.overflow = '';
+  document.body.style.position = '';
+  document.body.style.width = '';
 }
 if (chatBtn) {
   chatBtn.addEventListener('click', openChat);
