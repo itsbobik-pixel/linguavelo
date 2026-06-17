@@ -327,8 +327,9 @@
     max-height: 88vh;
     overflow-y: auto;
     box-shadow: 0 -8px 40px rgba(0,0,0,0.12);
+    pointer-events: none;
   }
-  #drawer.open { transform: translateY(0); }
+  #drawer.open { transform: translateY(0); pointer-events: all; }
 
   .drawer-handle {
     width: 36px; height: 4px;
@@ -554,8 +555,9 @@
     display: flex; flex-direction: column;
     transform: translateY(100%);
     transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
+    pointer-events: none;
   }
-  #chatPanel.open { transform: translateY(0); }
+  #chatPanel.open { transform: translateY(0); pointer-events: all; }
   #chatHeader {
     background: rgba(247,248,252,0.95);
     backdrop-filter: blur(12px);
