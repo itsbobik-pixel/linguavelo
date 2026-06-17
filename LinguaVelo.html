@@ -19,8 +19,8 @@
     --text-primary: #0F1123;
     --text-secondary: #6B7280;
     --text-muted: #9CA3AF;
-    --accent: #2563EB;
-    --accent-light: #EFF6FF;
+    --accent: #059669;
+    --accent-light: #ECFDF5;
     --green: #059669;
     --green-light: #ECFDF5;
     --yellow: #D97706;
@@ -57,7 +57,14 @@
     align-items: center;
     justify-content: space-between;
     gap: 12px;
+    position: sticky;
   }
+  .topbar-actions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+
 
   #menuBtn {
     width: 38px; height: 38px;
@@ -83,13 +90,16 @@
     font-size: 1.1em;
     color: white;
     flex-shrink: 0;
-    box-shadow: 0 2px 8px rgba(37,99,235,0.25);
+    box-shadow: 0 2px 8px rgba(5,150,105,0.25);
   }
   .logo-name {
     font-size: 1.15em;
     font-weight: 800;
     letter-spacing: -0.02em;
     color: var(--text-primary);
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
   }
   .logo-name span { color: var(--accent); }
 
@@ -135,7 +145,7 @@
     background: var(--accent);
     border-color: var(--accent);
     color: white;
-    box-shadow: 0 2px 8px rgba(37,99,235,0.25);
+    box-shadow: 0 2px 8px rgba(5,150,105,0.25);
   }
 
   /* ── PLAY BAR ── */
@@ -192,7 +202,7 @@
     background: var(--accent);
     color: white;
     border-color: var(--accent);
-    box-shadow: 0 2px 8px rgba(37,99,235,0.25);
+    box-shadow: 0 2px 8px rgba(5,150,105,0.25);
   }
   #playBar #shuffleBtn {
     background: var(--surface);
@@ -215,7 +225,7 @@
   }
   .card.playing {
     border-color: var(--accent);
-    box-shadow: 0 0 0 2px rgba(37,99,235,0.15), var(--shadow-md);
+    box-shadow: 0 0 0 2px rgba(5,150,105,0.15), var(--shadow-md);
   }
 
   .category-tag {
@@ -522,7 +532,7 @@
     transition: all 0.18s;
     flex-shrink: 0;
     line-height: 1;
-    box-shadow: 0 2px 8px rgba(37,99,235,0.25);
+    box-shadow: 0 2px 8px rgba(5,150,105,0.25);
   }
   #fabAdd:active { transform: scale(0.92); }
   #fabAdd.open {
@@ -540,7 +550,7 @@
     cursor: pointer;
     display: flex; align-items: center; justify-content: center;
     flex-shrink: 0;
-    box-shadow: 0 2px 8px rgba(37,99,235,0.15);
+    box-shadow: 0 2px 8px rgba(5,150,105,0.15);
   }
   #chatBtn.open { background: var(--accent); color: white; }
 
@@ -744,8 +754,10 @@
 <div id="topBar">
   <button id="menuBtn">☰</button>
   <div class="logo-name">Lingua<span>Velo</span></div>
-  <button id="fabAdd">＋</button>
-  <button id="chatBtn">💬</button>
+  <div class="topbar-actions">
+    <button id="fabAdd">＋</button>
+    <button id="chatBtn">💬</button>
+  </div>
 </div>
 
 <!-- CATEGORY CHIPS -->
