@@ -923,9 +923,22 @@ function buildCard(i) {
       </div>
     </div>
   `;
-  card.querySelector('.play-one').addEventListener('click', () => {
+  card.querySelector('.play-one').addEventListener('click', async () => {
+    const btn = card.querySelector('.play-one');
+    if (btn.dataset.playing) {
+      stopRequested = true; speechSynthesis.cancel();
+      btn.textContent = '▶️ Přehrát';
+      delete btn.dataset.playing;
+      setPlayingCard(null);
+      return;
+    }
     stopRequested = false; speechSynthesis.cancel();
-    playPhrase(phrases[i], i);
+    btn.textContent = '⏹️ Stop';
+    btn.dataset.playing = '1';
+    await playPhrase(phrases[i], i);
+    btn.textContent = '▶️ Přehrát';
+    delete btn.dataset.playing;
+    setPlayingCard(null);
   });
   ['listening','remembering'].forEach(mode => {
     renderStars(mode, i, card);
@@ -1043,6 +1056,11 @@ async function playPhrase(p, i) {
 
 // ── PLAYBACK CONTROLS ──
 document.getElementById('playAllBtn').addEventListener('click', async () => {
+  if (isPlaying) {
+    // restart — zastav a počkej než se smyčka ukončí
+    stopRequested = true; speechSynthesis.cancel();
+    await wait(200);
+  }
   stopRequested = false; isPaused = false; speechSynthesis.cancel();
   startKeepAlive();
   isPlaying = true;
