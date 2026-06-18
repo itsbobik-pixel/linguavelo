@@ -1328,8 +1328,6 @@ function openChat() {
   document.getElementById('fabLock').style.display = 'none';
   document.getElementById('fabPause').style.display = 'none';
   document.body.style.overflow = 'hidden';
-  document.body.style.position = 'fixed';
-  document.body.style.width = '100%';
   syncChatWithViewport();
 }
 function closeChat() {
@@ -1337,11 +1335,8 @@ function closeChat() {
   document.getElementById('chatPanel').classList.remove('open');
   const chatPanelEl = document.getElementById('chatPanel');
   chatPanelEl.style.height = '';
-  chatPanelEl.style.top = '';
   document.getElementById('fabLock').style.display = '';
   document.body.style.overflow = '';
-  document.body.style.position = '';
-  document.body.style.width = '';
 }
 if (chatBtn) {
   chatBtn.addEventListener('click', openChat);
