@@ -1438,12 +1438,23 @@ document.getElementById('chatInput').addEventListener('focus', () => {
   }, 400);
 });
 document.getElementById('chatInput').addEventListener('blur', () => {
-  // Po zavření klávesnice scrollni zpátky na konec zpráv
   setTimeout(() => {
     const msgs = document.getElementById('chatMessages');
     if (msgs) msgs.scrollTop = msgs.scrollHeight;
   }, 100);
 });
+// iOS Safari bug: kurzor vykresluje mimo input při scrollu — schováme ho během scrollování
+;(function() {
+  let caretTimer;
+  const msgs = document.getElementById('chatMessages');
+  const input = document.getElementById('chatInput');
+  if (!msgs || !input) return;
+  msgs.addEventListener('scroll', () => {
+    input.style.caretColor = 'transparent';
+    clearTimeout(caretTimer);
+    caretTimer = setTimeout(() => { input.style.caretColor = ''; }, 200);
+  }, { passive: true });
+})();
 // chatBtn click - spustí konverzaci pokud je nová
 document.getElementById('chatBtn').addEventListener('click', () => {
   if (chatHistory.length === 0) startConversation();
