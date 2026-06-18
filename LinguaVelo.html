@@ -1309,20 +1309,16 @@ function syncChatWithViewport() {
   const panel = document.getElementById('chatPanel');
   if (!panel || !panel.classList.contains('open')) return;
   if (window.visualViewport) {
-    const vv = window.visualViewport;
-    panel.style.height = vv.height + 'px';
-    panel.style.top = vv.offsetTop + 'px';
+    // Pouze výška — top NEMENÍME, jinak panel skáče při scrollu uvnitř chatu
+    panel.style.height = window.visualViewport.height + 'px';
   }
 }
 if (window.visualViewport) {
   window.visualViewport.addEventListener('resize', () => {
     syncChatWithViewport();
-    // Scroll na konec zpráv jen při změně velikosti (otevření/zavření klávesnice)
     const msgs = document.getElementById('chatMessages');
     if (msgs) setTimeout(() => { msgs.scrollTop = msgs.scrollHeight; }, 50);
   });
-  // Při scrollu jen posuň panel, neresetuj pozici zpráv
-  window.visualViewport.addEventListener('scroll', syncChatWithViewport);
 }
 // chatBtn - otevře chat panel
 const chatBtn = document.getElementById('chatBtn');
