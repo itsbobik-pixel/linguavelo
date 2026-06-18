@@ -1443,17 +1443,24 @@ document.getElementById('chatInput').addEventListener('blur', () => {
     if (msgs) msgs.scrollTop = msgs.scrollHeight;
   }, 100);
 });
-// iOS Safari bug: kurzor vykresluje mimo input při scrollu — schováme ho během scrollování
+// Skrýváme kurzor při scrollu (iOS/Android bug s fixed panelem)
 ;(function() {
   let caretTimer;
   const msgs = document.getElementById('chatMessages');
   const input = document.getElementById('chatInput');
   if (!msgs || !input) return;
-  msgs.addEventListener('scroll', () => {
+  function hideCaret() {
     input.style.caretColor = 'transparent';
     clearTimeout(caretTimer);
-    caretTimer = setTimeout(() => { input.style.caretColor = ''; }, 200);
-  }, { passive: true });
+  }
+  function showCaret() {
+    clearTimeout(caretTimer);
+    caretTimer = setTimeout(() => { input.style.caretColor = ''; }, 300);
+  }
+  msgs.addEventListener('touchstart', hideCaret, { passive: true });
+  msgs.addEventListener('touchmove', hideCaret, { passive: true });
+  msgs.addEventListener('touchend', showCaret, { passive: true });
+  msgs.addEventListener('touchcancel', showCaret, { passive: true });
 })();
 // chatBtn click - spustí konverzaci pokud je nová
 document.getElementById('chatBtn').addEventListener('click', () => {
