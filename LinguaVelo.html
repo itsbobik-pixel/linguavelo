@@ -1322,21 +1322,29 @@ if (window.visualViewport) {
 }
 // chatBtn - otevře chat panel
 const chatBtn = document.getElementById('chatBtn');
+let _chatScrollY = 0;
 function openChat() {
   chatBtn.classList.add('open');
   document.getElementById('chatPanel').classList.add('open');
   document.getElementById('fabLock').style.display = 'none';
   document.getElementById('fabPause').style.display = 'none';
+  _chatScrollY = window.scrollY;
   document.body.style.overflow = 'hidden';
+  document.body.style.position = 'fixed';
+  document.body.style.top = `-${_chatScrollY}px`;
+  document.body.style.width = '100%';
   syncChatWithViewport();
 }
 function closeChat() {
   chatBtn.classList.remove('open');
   document.getElementById('chatPanel').classList.remove('open');
-  const chatPanelEl = document.getElementById('chatPanel');
-  chatPanelEl.style.height = '';
+  document.getElementById('chatPanel').style.height = '';
   document.getElementById('fabLock').style.display = '';
   document.body.style.overflow = '';
+  document.body.style.position = '';
+  document.body.style.top = '';
+  document.body.style.width = '';
+  window.scrollTo(0, _chatScrollY);
 }
 if (chatBtn) {
   chatBtn.addEventListener('click', openChat);
