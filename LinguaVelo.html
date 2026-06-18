@@ -1313,11 +1313,15 @@ function syncChatWithViewport() {
     panel.style.height = vv.height + 'px';
     panel.style.top = vv.offsetTop + 'px';
   }
-  const msgs = document.getElementById('chatMessages');
-  if (msgs) setTimeout(() => { msgs.scrollTop = msgs.scrollHeight; }, 30);
 }
 if (window.visualViewport) {
-  window.visualViewport.addEventListener('resize', syncChatWithViewport);
+  window.visualViewport.addEventListener('resize', () => {
+    syncChatWithViewport();
+    // Scroll na konec zpráv jen při změně velikosti (otevření/zavření klávesnice)
+    const msgs = document.getElementById('chatMessages');
+    if (msgs) setTimeout(() => { msgs.scrollTop = msgs.scrollHeight; }, 50);
+  });
+  // Při scrollu jen posuň panel, neresetuj pozici zpráv
   window.visualViewport.addEventListener('scroll', syncChatWithViewport);
 }
 // chatBtn - otevře chat panel
@@ -1432,8 +1436,6 @@ document.getElementById('chatInput').addEventListener('focus', () => {
   setTimeout(() => {
     const msgs = document.getElementById('chatMessages');
     if (msgs) msgs.scrollTop = msgs.scrollHeight;
-    // Scrollni input do view
-    document.getElementById('chatInput').scrollIntoView({ block: 'nearest' });
   }, 400);
 });
 document.getElementById('chatInput').addEventListener('blur', () => {
