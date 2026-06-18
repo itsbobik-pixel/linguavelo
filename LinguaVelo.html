@@ -610,7 +610,7 @@
     top: 0 !important;
     left: 0 !important;
     right: 0 !important;
-    bottom: 0 !important;
+    /* bottom vynecháno — řídí JS via visualViewport */
     z-index: 500 !important;
     background: var(--bg) !important;
     display: flex !important;
@@ -618,9 +618,7 @@
     transform: translateX(100%) !important;
     transition: transform 0.3s cubic-bezier(0.4,0,0.2,1) !important;
     pointer-events: none !important;
-    height: 100% !important;
-    height: 100dvh !important;
-    height: -webkit-fill-available !important;
+    height: 100dvh !important; /* fallback */
   }
   #chatPanel.open {
     transform: translateX(0) !important;
@@ -1305,6 +1303,23 @@ document.querySelectorAll('#categoryChips .chip').forEach(chip => {
 // cat-btn sync je přímo v openDrawer
 
 
+
+// ── visualViewport FIX ──
+function syncChatWithViewport() {
+  const panel = document.getElementById('chatPanel');
+  if (!panel || !panel.classList.contains('open')) return;
+  if (window.visualViewport) {
+    const vv = window.visualViewport;
+    panel.style.height = vv.height + 'px';
+    panel.style.top = vv.offsetTop + 'px';
+  }
+  const msgs = document.getElementById('chatMessages');
+  if (msgs) setTimeout(() => { msgs.scrollTop = msgs.scrollHeight; }, 30);
+}
+if (window.visualViewport) {
+  window.visualViewport.addEventListener('resize', syncChatWithViewport);
+  window.visualViewport.addEventListener('scroll', syncChatWithViewport);
+}
 // chatBtn - otevře chat panel
 const chatBtn = document.getElementById('chatBtn');
 function openChat() {
@@ -1315,10 +1330,14 @@ function openChat() {
   document.body.style.overflow = 'hidden';
   document.body.style.position = 'fixed';
   document.body.style.width = '100%';
+  syncChatWithViewport();
 }
 function closeChat() {
   chatBtn.classList.remove('open');
   document.getElementById('chatPanel').classList.remove('open');
+  const chatPanelEl = document.getElementById('chatPanel');
+  chatPanelEl.style.height = '';
+  chatPanelEl.style.top = '';
   document.getElementById('fabLock').style.display = '';
   document.body.style.overflow = '';
   document.body.style.position = '';
