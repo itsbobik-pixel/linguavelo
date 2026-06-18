@@ -1331,7 +1331,8 @@ if (chatBtn) {
   </div>
   <div id="chatMessages" style="flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px;"></div>
   <div style="padding:12px 16px;padding-bottom:max(12px,env(safe-area-inset-bottom));background:var(--surface);border-top:1px solid var(--border);display:flex;gap:8px;flex-shrink:0;overflow:hidden;">
-    <textarea id="chatInput" rows="1" placeholder="Napiš italsky…" style="flex:1;background:var(--surface2);border:1.5px solid var(--border);border-radius:12px;color:var(--text-primary);font-size:1em;padding:10px 14px;outline:none;resize:none;font-family:inherit;max-height:100px;transform:translateZ(0);-webkit-transform:translateZ(0);" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
+    <button id="suggestBtn" title="Nevím co napsat" style="width:42px;height:42px;border-radius:12px;border:1px solid var(--border);background:var(--surface2);font-size:1.1em;cursor:pointer;flex-shrink:0;">💡</button>
+    <textarea id="chatInput" rows="1" placeholder="Napiš italsky…" style="flex:1;background:var(--surface2);border:1.5px solid var(--border);border-radius:12px;color:var(--text-primary);font-size:1em;padding:10px 14px;outline:none;resize:none;font-family:inherit;max-height:100px;" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
     <button id="chatSend" style="width:42px;height:42px;border-radius:12px;border:none;background:var(--accent);color:white;font-size:1.1em;cursor:pointer;flex-shrink:0;">↑</button>
   </div>
 </div>
@@ -1352,17 +1353,86 @@ async function startConversation() {
 }
 
 function addMsg(text, role) {
-  const div = document.createElement('div');
-  div.textContent = text;
+  const msgs = document.getElementById('chatMessages');
+  const wrapper = document.createElement('div');
+  wrapper.style.cssText = 'display:flex;flex-direction:column;gap:4px;' + (role === 'user' ? 'align-items:flex-end;' : 'align-items:flex-start;');
+
+  const bubble = document.createElement('div');
+  bubble.textContent = text;
   const styles = {
-    ai: 'background:var(--surface);border:1px solid var(--border);border-bottom-left-radius:4px;align-self:flex-start;',
-    user: 'background:var(--accent);color:white;border-bottom-right-radius:4px;align-self:flex-end;',
-    typing: 'background:var(--surface);border:1px solid var(--border);align-self:flex-start;font-style:italic;color:var(--text-muted);font-size:0.88em;'
+    ai: 'background:var(--surface);border:1px solid var(--border);border-bottom-left-radius:4px;cursor:pointer;',
+    user: 'background:var(--accent);color:white;border-bottom-right-radius:4px;cursor:pointer;',
+    typing: 'background:var(--surface);border:1px solid var(--border);font-style:italic;color:var(--text-muted);font-size:0.88em;'
   };
-  div.style.cssText = 'padding:10px 14px;border-radius:16px;font-size:0.95em;max-width:82%;' + (styles[role] || '');
-  document.getElementById('chatMessages').appendChild(div);
-  document.getElementById('chatMessages').scrollTop = 99999;
-  return div;
+  bubble.style.cssText = 'padding:10px 14px;border-radius:16px;font-size:0.95em;max-width:82%;' + (styles[role] || '');
+
+  const extra = document.createElement('div');
+  extra.style.cssText = 'font-size:0.8em;max-width:82%;padding:0 4px;';
+
+  if (role === 'ai') {
+    bubble.addEventListener('click', async () => {
+      if (extra.dataset.loaded) { extra.style.display = extra.style.display === 'none' ? '' : 'none'; return; }
+      extra.textContent = '⏳ Překládám…';
+      extra.style.color = 'var(--text-muted)';
+      extra.dataset.loaded = '1';
+      const t = await callAI(`Přelož tuto italskou větu do češtiny, jen překlad bez dalšího textu: "${text}"`);
+      // odstranit tuto výměnu ze skutečné historie
+      chatHistory.splice(-2, 2);
+      extra.textContent = '🇨🇿 ' + t;
+      extra.style.color = 'var(--text-secondary, var(--text-muted))';
+    });
+  }
+
+  if (role === 'user') {
+    bubble.addEventListener('click', async () => {
+      if (extra.dataset.loaded) { extra.style.display = extra.style.display === 'none' ? '' : 'none'; return; }
+      extra.textContent = '⏳ Kontroluji…';
+      extra.style.color = 'var(--text-muted)';
+      extra.dataset.loaded = '1';
+      const t = await callAI(`Jsi italský lektor. Zkontroluj tuto větu: "${text}". Pokud je správně, napiš jen "✅ Správně!". Pokud má chyby, napiš opravenou verzi a krátce vysvětli chybu. Odpověz česky.`);
+      chatHistory.splice(-2, 2);
+      extra.textContent = t;
+      extra.style.color = 'var(--text-secondary, var(--text-muted))';
+    });
+  }
+
+  wrapper.appendChild(bubble);
+  if (role === 'ai' || role === 'user') wrapper.appendChild(extra);
+  msgs.appendChild(wrapper);
+  msgs.scrollTop = 99999;
+  return wrapper;
+}
+
+async function suggestReplies() {
+  const btn = document.getElementById('suggestBtn');
+  btn.disabled = true;
+  btn.textContent = '⏳';
+  const lastAi = chatHistory.filter(m => m.role === 'assistant').slice(-1)[0];
+  const context = lastAi ? `Poslední Marcova zpráva: "${lastAi.content}"` : '';
+  const suggestions = await callAI(`${context} Navrhni 3 krátké italské odpovědi (1 věta každá). Formát - každá na novém řádku: italsky | česky`);
+  chatHistory.splice(-2, 2);
+  btn.disabled = false;
+  btn.textContent = '💡';
+
+  // zobraz návrhy jako klikatelné bubliny
+  const msgs = document.getElementById('chatMessages');
+  const box = document.createElement('div');
+  box.style.cssText = 'display:flex;flex-direction:column;gap:6px;align-items:flex-end;margin:4px 0;';
+  suggestions.split('\n').filter(l => l.includes('|')).forEach(line => {
+    const [it, cz] = line.split('|').map(s => s.trim());
+    if (!it) return;
+    const chip = document.createElement('div');
+    chip.style.cssText = 'background:var(--surface2);border:1.5px dashed var(--accent);border-radius:14px;padding:8px 14px;font-size:0.88em;cursor:pointer;max-width:85%;text-align:right;';
+    chip.innerHTML = `<span style="color:var(--text-primary)">${it}</span><br><span style="color:var(--text-muted);font-size:0.9em">${cz || ''}</span>`;
+    chip.addEventListener('click', () => {
+      box.remove();
+      document.getElementById('chatInput').value = it;
+      document.getElementById('chatInput').focus();
+    });
+    box.appendChild(chip);
+  });
+  msgs.appendChild(box);
+  msgs.scrollTop = 99999;
 }
 
 async function callAI(msg) {
@@ -1428,6 +1498,7 @@ document.getElementById('chatCloseBtn').addEventListener('click', () => {
   if (typeof closeChat === 'function') closeChat();
 });
 document.getElementById('chatRestartBtn').addEventListener('click', startConversation);
+document.getElementById('suggestBtn').addEventListener('click', suggestReplies);
 </script>
 
 </body>
