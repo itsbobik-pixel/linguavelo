@@ -925,20 +925,23 @@ function buildCard(i) {
   `;
   card.querySelector('.play-one').addEventListener('click', async () => {
     const btn = card.querySelector('.play-one');
+    const gen = ++playGen;
     if (btn.dataset.playing) {
-      stopRequested = true; speechSynthesis.cancel();
+      speechSynthesis.cancel();
       btn.textContent = '▶️ Přehrát';
       delete btn.dataset.playing;
       setPlayingCard(null);
       return;
     }
-    stopRequested = false; speechSynthesis.cancel();
+    speechSynthesis.cancel();
     btn.textContent = '⏹️ Stop';
     btn.dataset.playing = '1';
-    await playPhrase(phrases[i], i);
-    btn.textContent = '▶️ Přehrát';
-    delete btn.dataset.playing;
-    setPlayingCard(null);
+    await playPhrase(phrases[i], i, gen);
+    if (gen === playGen) {
+      btn.textContent = '▶️ Přehrát';
+      delete btn.dataset.playing;
+      setPlayingCard(null);
+    }
   });
   ['listening','remembering'].forEach(mode => {
     renderStars(mode, i, card);
@@ -1042,53 +1045,51 @@ function setPlayingCard(i) {
   if (card) { card.classList.add('playing'); card.scrollIntoView({ behavior: 'smooth', block: 'center' }); currentPlayingCard = card; }
 }
 
-async function playPhrase(p, i) {
-  if (stopRequested) return;
+let playGen = 0;
+
+async function playPhrase(p, i, gen) {
+  if (gen !== playGen) return;
   if (i !== undefined) setPlayingCard(i);
   if (currentMode !== 'listening') {
     await speak(p.cz, p.lang || 'cs-CZ');
-    if (stopRequested) return;
+    if (gen !== playGen) return;
     await wait(400);
-    if (stopRequested) return;
+    if (gen !== playGen) return;
   }
   await speak(p.it, 'it-IT');
 }
 
 // ── PLAYBACK CONTROLS ──
 document.getElementById('playAllBtn').addEventListener('click', async () => {
-  if (isPlaying) {
-    // restart — zastav a počkej než se smyčka ukončí
-    stopRequested = true; speechSynthesis.cancel();
-    await wait(200);
-  }
-  stopRequested = false; isPaused = false; speechSynthesis.cancel();
+  const gen = ++playGen;
+  speechSynthesis.cancel();
+  isPaused = false;
   startKeepAlive();
   isPlaying = true;
   document.getElementById('fabPause').style.display = 'block';
-  
   closeDrawer();
   do {
     for (const i of cardOrder) {
-      if (stopRequested) break;
-      await playPhrase(phrases[i], i);
-      if (stopRequested) break;
+      if (gen !== playGen) break;
+      await playPhrase(phrases[i], i, gen);
+      if (gen !== playGen) break;
       await wait(600);
     }
-    if (stopRequested) break;
+    if (gen !== playGen) break;
     if (document.getElementById('loopToggle').checked) { speechSynthesis.cancel(); await wait(300); }
-  } while (document.getElementById('loopToggle').checked && !stopRequested);
+  } while (document.getElementById('loopToggle').checked && gen === playGen);
+  if (gen !== playGen) return;
   stopKeepAlive();
   setPlayingCard(null);
   isPlaying = false;
   document.getElementById('fabPause').style.display = 'none';
   document.getElementById('fabPause').textContent = '⏸';
   document.getElementById('fabPause').classList.remove('paused');
-  
   isPaused = false;
 });
 
 document.getElementById('stopBtn').addEventListener('click', () => {
-  stopRequested = true; speechSynthesis.cancel(); stopKeepAlive();
+  playGen++; stopRequested = true; speechSynthesis.cancel(); stopKeepAlive();
   setPlayingCard(null); isPlaying = false;
   document.getElementById('playAllBtn').classList.remove('playing');
   document.getElementById('fabPause').style.display = 'none';
