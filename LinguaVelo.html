@@ -1408,7 +1408,7 @@ function addMsg(text, role) {
       extra.textContent = '⏳ Kontroluji…';
       extra.style.color = 'var(--text-muted)';
       extra.dataset.loaded = '1';
-      const t = await callAI(`Jsi italský lektor. Zkontroluj tuto italskou větu: "${text}". Odpověz česky ve dvou řádcích: 1) Pokud je správně: "✅ Správně!", pokud má chyby: opravená verze + krátké vysvětlení. 2) Překlad do češtiny: "🇨🇿 ..."`);
+      const t = await callAI(`Italský lektor. Věta: "${text}". Odpověz PŘESNĚ v tomto formátu (nic navíc):\n✅ Správně! nebo ❌ [opravená verze] – [chyba]\n🇨🇿 [překlad do češtiny]`);
       chatHistory.splice(-2, 2);
       extra.textContent = t;
       extra.style.color = 'var(--text-secondary, var(--text-muted))';
