@@ -606,33 +606,32 @@
     margin-top: 8px;
   }
 #chatPanel {
-    position: fixed !important;
-    top: 0 !important;
-    left: 0 !important;
-    right: 0 !important;
-    /* bottom vynecháno — řídí JS via visualViewport */
-    z-index: 500 !important;
-    background: var(--bg) !important;
-    display: flex !important;
-    flex-direction: column !important;
-    transform: translateX(100%) !important;
-    transition: transform 0.3s cubic-bezier(0.4,0,0.2,1) !important;
-    pointer-events: none !important;
-    height: 100dvh !important; /* fallback */
+    display: none;
+    flex-direction: column;
+    position: fixed;
+    inset: 0;
+    z-index: 500;
+    background: var(--bg);
+    height: 100%;
+    width: 100%;
   }
   #chatPanel.open {
-    transform: translateX(0) !important;
-    pointer-events: all !important;
+    display: flex;
   }
   #chatPanel #chatMessages {
-    flex: 1 !important;
-    overflow-y: auto !important;
-    -webkit-overflow-scrolling: touch !important;
-    overscroll-behavior: contain !important;
+    flex: 1;
+    overflow-y: auto;
+    overscroll-behavior: contain;
   }
   #chatPanel > div:last-child {
-    flex-shrink: 0 !important;
-    padding-bottom: max(12px, env(safe-area-inset-bottom)) !important;
+    flex-shrink: 0;
+    padding-bottom: max(12px, env(safe-area-inset-bottom));
+  }
+  body.chat-open > *:not(#chatPanel) {
+    display: none !important;
+  }
+  body.chat-open {
+    overflow: hidden;
   }
 </style>
 </head>
@@ -1304,47 +1303,16 @@ document.querySelectorAll('#categoryChips .chip').forEach(chip => {
 
 
 
-// ── visualViewport FIX ──
-function syncChatWithViewport() {
-  const panel = document.getElementById('chatPanel');
-  if (!panel || !panel.classList.contains('open')) return;
-  if (window.visualViewport) {
-    // Pouze výška — top NEMENÍME, jinak panel skáče při scrollu uvnitř chatu
-    panel.style.height = window.visualViewport.height + 'px';
-  }
-}
-if (window.visualViewport) {
-  window.visualViewport.addEventListener('resize', () => {
-    syncChatWithViewport();
-    const msgs = document.getElementById('chatMessages');
-    if (msgs) setTimeout(() => { msgs.scrollTop = msgs.scrollHeight; }, 50);
-  });
-}
-// chatBtn - otevře chat panel
 const chatBtn = document.getElementById('chatBtn');
-let _chatScrollY = 0;
 function openChat() {
   chatBtn.classList.add('open');
   document.getElementById('chatPanel').classList.add('open');
-  document.getElementById('fabLock').style.display = 'none';
-  document.getElementById('fabPause').style.display = 'none';
-  _chatScrollY = window.scrollY;
-  document.documentElement.style.overflow = 'hidden';
-  document.documentElement.style.height = '100%';
-  document.body.style.overflow = 'hidden';
-  document.body.style.height = '100%';
-  syncChatWithViewport();
+  document.body.classList.add('chat-open');
 }
 function closeChat() {
   chatBtn.classList.remove('open');
   document.getElementById('chatPanel').classList.remove('open');
-  document.getElementById('chatPanel').style.height = '';
-  document.getElementById('fabLock').style.display = '';
-  document.documentElement.style.overflow = '';
-  document.documentElement.style.height = '';
-  document.body.style.overflow = '';
-  document.body.style.height = '';
-  window.scrollTo(0, _chatScrollY);
+  document.body.classList.remove('chat-open');
 }
 if (chatBtn) {
   chatBtn.addEventListener('click', openChat);
@@ -1443,25 +1411,6 @@ document.getElementById('chatInput').addEventListener('blur', () => {
     if (msgs) msgs.scrollTop = msgs.scrollHeight;
   }, 100);
 });
-// Skrýváme kurzor při scrollu (iOS/Android bug s fixed panelem)
-;(function() {
-  let caretTimer;
-  const msgs = document.getElementById('chatMessages');
-  const input = document.getElementById('chatInput');
-  if (!msgs || !input) return;
-  function hideCaret() {
-    input.style.caretColor = 'transparent';
-    clearTimeout(caretTimer);
-  }
-  function showCaret() {
-    clearTimeout(caretTimer);
-    caretTimer = setTimeout(() => { input.style.caretColor = ''; }, 300);
-  }
-  msgs.addEventListener('touchstart', hideCaret, { passive: true });
-  msgs.addEventListener('touchmove', hideCaret, { passive: true });
-  msgs.addEventListener('touchend', showCaret, { passive: true });
-  msgs.addEventListener('touchcancel', showCaret, { passive: true });
-})();
 // chatBtn click - spustí konverzaci pokud je nová
 document.getElementById('chatBtn').addEventListener('click', () => {
   if (chatHistory.length === 0) startConversation();
