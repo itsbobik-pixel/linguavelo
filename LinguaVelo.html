@@ -1411,21 +1411,13 @@ document.getElementById('chatInput').addEventListener('blur', () => {
     if (msgs) msgs.scrollTop = msgs.scrollHeight;
   }, 100);
 });
-// Skrýváme kurzor při scrollu zpráv
+// Blur inputu při scrollu — skryje klávesnici i kurzor
 ;(function() {
-  let t;
   const msgs = document.getElementById('chatMessages');
   const input = document.getElementById('chatInput');
   if (!msgs || !input) return;
   msgs.addEventListener('touchstart', () => {
-    input.style.caretColor = 'transparent';
-    clearTimeout(t);
-  }, { passive: true });
-  msgs.addEventListener('touchend', () => {
-    t = setTimeout(() => { input.style.caretColor = ''; }, 300);
-  }, { passive: true });
-  msgs.addEventListener('touchcancel', () => {
-    t = setTimeout(() => { input.style.caretColor = ''; }, 300);
+    if (document.activeElement === input) input.blur();
   }, { passive: true });
 })();
 // chatBtn click - spustí konverzaci pokud je nová
