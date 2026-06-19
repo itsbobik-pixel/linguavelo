@@ -1653,19 +1653,86 @@ function showQuizCard() {
   }
 }
 
+let _voiceStream = null;
+let _voiceAnim = null;
+
+function stopVoiceVisual() {
+  if (_voiceAnim) { cancelAnimationFrame(_voiceAnim); _voiceAnim = null; }
+  if (_voiceStream) { _voiceStream.getTracks().forEach(t => t.stop()); _voiceStream = null; }
+  const c = document.getElementById('quizWave');
+  if (c) c.remove();
+}
+
 function startVoiceInput(btn) {
   const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
   if (!SR) { alert('Tvůj prohlížeč nepodporuje hlasový vstup.'); return; }
-  const rec = new SR();
-  rec.lang = quizRound === 2 ? 'it-IT' : (quizPhrases[quizIndex].lang || 'cs-CZ');
-  rec.interimResults = false;
-  btn.textContent = '🔴';
-  rec.onresult = e => {
-    document.getElementById('quizAnswer').value = e.results[0][0].transcript;
+
+  // pokud už nahrávám, zastav
+  if (btn.dataset.recording) {
+    stopVoiceVisual();
     btn.textContent = '🎤';
+    delete btn.dataset.recording;
+    return;
+  }
+
+  btn.dataset.recording = '1';
+  btn.textContent = '⏹️';
+
+  const lang = quizRound === 2 ? 'it-IT' : (quizPhrases[quizIndex].lang || 'cs-CZ');
+
+  // waveform canvas — vložit nad textarea
+  const textarea = document.getElementById('quizAnswer');
+  const canvas = document.createElement('canvas');
+  canvas.id = 'quizWave';
+  canvas.height = 48;
+  canvas.style.cssText = 'width:100%;border-radius:12px;background:var(--surface2);border:1.5px solid var(--accent);display:block;';
+  textarea.parentNode.insertBefore(canvas, textarea);
+  canvas.width = canvas.offsetWidth;
+
+  navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
+    _voiceStream = stream;
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const src = ctx.createMediaStreamSource(stream);
+    const analyser = ctx.createAnalyser();
+    analyser.fftSize = 64;
+    src.connect(analyser);
+    const data = new Uint8Array(analyser.frequencyBinCount);
+    const canvasCtx = canvas.getContext('2d');
+    const accent = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim() || '#059669';
+
+    function draw() {
+      _voiceAnim = requestAnimationFrame(draw);
+      analyser.getByteFrequencyData(data);
+      canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
+      const barW = canvas.width / data.length * 1.5;
+      data.forEach((v, i) => {
+        const h = (v / 255) * canvas.height * 0.9;
+        canvasCtx.fillStyle = accent;
+        canvasCtx.beginPath();
+        canvasCtx.roundRect(i * barW * 1.1, (canvas.height - h) / 2, barW, h, 3);
+        canvasCtx.fill();
+      });
+    }
+    draw();
+  }).catch(() => {});
+
+  // Speech recognition
+  const rec = new SR();
+  rec.lang = lang;
+  rec.interimResults = false;
+  rec.onresult = e => {
+    textarea.value = e.results[0][0].transcript;
   };
-  rec.onerror = () => { btn.textContent = '🎤'; };
-  rec.onend = () => { btn.textContent = '🎤'; };
+  rec.onend = () => {
+    stopVoiceVisual();
+    btn.textContent = '🎤';
+    delete btn.dataset.recording;
+  };
+  rec.onerror = () => {
+    stopVoiceVisual();
+    btn.textContent = '🎤';
+    delete btn.dataset.recording;
+  };
   rec.start();
 }
 
