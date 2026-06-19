@@ -1622,6 +1622,8 @@ function closeQuiz() {
   document.getElementById('quizPanel').style.display = 'none';
   document.body.classList.remove('chat-open');
   speechSynthesis.cancel();
+  stopVoiceVisual();
+  if (_sharedMicStream) { _sharedMicStream.getTracks().forEach(t => t.stop()); _sharedMicStream = null; }
 }
 
 function setQuizHeader(title, subtitle, progress) {
@@ -1717,6 +1719,7 @@ function showQuizCard() {
 
 let _voiceStream = null;
 let _voiceAnim = null;
+let _sharedMicStream = null;
 
 function stopVoiceVisual() {
   if (_voiceAnim) { cancelAnimationFrame(_voiceAnim); _voiceAnim = null; }
@@ -1751,7 +1754,11 @@ function startVoiceInput(btn) {
   textarea.parentNode.insertBefore(canvas, textarea);
   canvas.width = canvas.offsetWidth;
 
-  navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
+  const getMic = _sharedMicStream
+    ? Promise.resolve(_sharedMicStream)
+    : navigator.mediaDevices.getUserMedia({ audio: true }).then(s => { _sharedMicStream = s; return s; });
+
+  getMic.then(stream => {
     _voiceStream = stream;
     const ctx = new (window.AudioContext || window.webkitAudioContext)();
     const src = ctx.createMediaStreamSource(stream);
@@ -1805,7 +1812,7 @@ async function checkQuizAnswer(p, round, btn) {
   btn.textContent = '⏳';
 
   const correct = round === 2 ? p.cz : p.it;
-  const prompt = `Jsi italský lektor. Správná odpověď je: "${correct}". Uživatel napsal: "${answer}". DŮLEŽITÉ: ignoruj chybějící diakritiku (háčky, čárky) — hlasový vstup ji neumí přidat. Hodnoť jen obsah a smysl. Ohodnoť JEDNÍM slovem: Perfecto / Very good / Nice try / Keep going / You will get better. Pak nový řádek, 1 věta česky — co opravit nebo pochvala. Formát:\n[hodnocení]\n[komentář]`;
+  const prompt = `Jsi italský lektor. Správná odpověď je: "${correct}". Uživatel napsal: "${answer}". DŮLEŽITÉ: ignoruj chybějící diakritiku (háčky, čárky) a interpunkci (otazníky, tečky, čárky) — hlasový vstup je neumí přidat. Hodnoť POUZE obsah a smysl slov. Ohodnoť JEDNÍM slovem: Perfecto / Very good / Nice try / Keep going / You will get better. Pak nový řádek, 1 věta česky — co opravit nebo pochvala. Formát:\n[hodnocení]\n[komentář]`;
 
   const result = await callAI(prompt);
   chatHistory.splice(-2, 2);
