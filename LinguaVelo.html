@@ -1648,7 +1648,7 @@ function showQuizCard() {
   const p = quizPhrases[quizIndex];
   const body = document.getElementById('quizBody');
   const footer = document.getElementById('quizFooter');
-  document.getElementById('quizProgress').textContent = `${quizIndex + 1} / 5`;
+  document.getElementById('quizProgress').textContent = `${quizIndex + 1} / ${quizPhraseCount}`;
   body.innerHTML = '';
   footer.innerHTML = '';
 
@@ -1873,7 +1873,7 @@ function showQuizResults() {
     <div style="display:flex;flex-direction:column;gap:8px;">
       ${quizPhrases.map((p, i) => {
         const s2 = quizScores[i];
-        const s3 = quizScores[i + 5];
+        const s3 = quizScores[i + quizPhraseCount];
         const flag = p.lang === 'en-US' ? '🇬🇧' : '🇨🇿';
         return `<div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:12px;">
           <div style="font-size:0.9em;font-weight:600;">${flag} ${p.cz}</div>
