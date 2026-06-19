@@ -1623,10 +1623,10 @@ function showQuizCard() {
     })();
 
   } else {
-    // Kolo 2: zobraz CZ, skryj IT | Kolo 3: zobraz IT, skryj CZ
-    const shown = quizRound === 2 ? p.cz : p.it;
-    const shownFlag = quizRound === 2 ? (p.lang === 'en-US' ? '🇬🇧' : '🇨🇿') : '🇮🇹';
-    const targetLang = quizRound === 2 ? 'italsky' : (p.lang === 'en-US' ? 'anglicky' : 'česky');
+    // Kolo 2: vidíš IT, píšeš CZ/EN | Kolo 3: vidíš CZ/EN, píšeš IT
+    const shown = quizRound === 2 ? p.it : p.cz;
+    const shownFlag = quizRound === 2 ? '🇮🇹' : (p.lang === 'en-US' ? '🇬🇧' : '🇨🇿');
+    const targetLang = quizRound === 2 ? (p.lang === 'en-US' ? 'anglicky' : 'česky') : 'italsky';
 
     body.innerHTML = `
       <div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:20px;text-align:center;">
@@ -1678,7 +1678,7 @@ function startVoiceInput(btn) {
   btn.dataset.recording = '1';
   btn.textContent = '⏹️';
 
-  const lang = quizRound === 2 ? 'it-IT' : (quizPhrases[quizIndex].lang || 'cs-CZ');
+  const lang = quizRound === 2 ? (quizPhrases[quizIndex].lang || 'cs-CZ') : 'it-IT';
 
   // waveform canvas — vložit nad textarea
   const textarea = document.getElementById('quizAnswer');
@@ -1742,7 +1742,7 @@ async function checkQuizAnswer(p, round, btn) {
   btn.disabled = true;
   btn.textContent = '⏳';
 
-  const correct = round === 2 ? p.it : p.cz;
+  const correct = round === 2 ? p.cz : p.it;
   const prompt = `Jsi italský lektor. Správná odpověď je: "${correct}". Uživatel napsal: "${answer}". Ohodnoť odpověď JEDNÍM slovem z tohoto seznamu (vyber nejvýstižnější): Perfecto / Very good / Nice try / Keep going / You will get better. Pak na nový řádek napiš 1 větu česky — co bylo správně nebo co opravit. Formát:\n[hodnocení]\n[komentář]`;
 
   const result = await callAI(prompt);
