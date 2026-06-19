@@ -1734,6 +1734,7 @@ function startVoiceInput(btn) {
 
   // pokud už nahrávám, zastav
   if (btn.dataset.recording) {
+    if (btn._rec) { btn._rec.stop(); btn._rec = null; }
     stopVoiceVisual();
     btn.textContent = '🎤';
     delete btn.dataset.recording;
@@ -1785,23 +1786,29 @@ function startVoiceInput(btn) {
     draw();
   }).catch(() => {});
 
-  // Speech recognition
+  // Speech recognition — continuous mode
   const rec = new SR();
   rec.lang = lang;
-  rec.interimResults = false;
+  rec.continuous = true;
+  rec.interimResults = true;
+  let finalTranscript = '';
+
   rec.onresult = e => {
-    textarea.value = e.results[0][0].transcript;
-  };
-  rec.onend = () => {
-    stopVoiceVisual();
-    btn.textContent = '🎤';
-    delete btn.dataset.recording;
+    let interim = '';
+    for (let i = e.resultIndex; i < e.results.length; i++) {
+      if (e.results[i].isFinal) finalTranscript += e.results[i][0].transcript;
+      else interim = e.results[i][0].transcript;
+    }
+    textarea.value = finalTranscript + interim;
   };
   rec.onerror = () => {
     stopVoiceVisual();
     btn.textContent = '🎤';
     delete btn.dataset.recording;
   };
+
+  // ukládáme referenci aby šlo zastavit při stisku stop
+  btn._rec = rec;
   rec.start();
 }
 
