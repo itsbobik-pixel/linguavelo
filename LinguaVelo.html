@@ -1540,20 +1540,82 @@ document.getElementById('suggestBtn').addEventListener('click', suggestReplies);
 const QUIZ_RATINGS = ['🏆 Perfecto!', '⭐ Very good!', '👍 Nice try!', '💪 Keep going!', '🌱 You will get better!'];
 
 let quizPhrases = [];
-let quizRound = 0; // 1,2,3
+let quizRound = 0;
 let quizIndex = 0;
-let quizScores = []; // pole hodnocení za kola 2+3
+let quizScores = [];
+let quizTotalCycles = 1;
+let quizCurrentCycle = 1;
+let quizPhraseCount = 5;
 
 function openQuiz() {
-  // vyber 5 náhodných frází
-  const pool = [...phrases].sort(() => Math.random() - 0.5).slice(0, 5);
-  quizPhrases = pool;
-  quizRound = 1;
-  quizIndex = 0;
-  quizScores = [];
   document.getElementById('quizPanel').style.display = 'flex';
   document.body.classList.add('chat-open');
-  startQuizRound();
+  showQuizSetup();
+}
+
+function showQuizSetup() {
+  setQuizHeader('🎯 Kvíz', 'Nastav si kvíz', '');
+  const body = document.getElementById('quizBody');
+  const footer = document.getElementById('quizFooter');
+  body.innerHTML = `
+    <div style="display:flex;flex-direction:column;gap:20px;">
+      <div>
+        <div style="font-weight:600;margin-bottom:10px;">Počet frází</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          ${[3,5,8,10].map(n => `<button class="quiz-setup-btn" data-type="count" data-val="${n}" style="flex:1;padding:12px;border-radius:12px;border:2px solid var(--border);background:var(--surface2);font-size:1em;cursor:pointer;font-weight:600;">${n}</button>`).join('')}
+        </div>
+      </div>
+      <div>
+        <div style="font-weight:600;margin-bottom:10px;">Počet opakování (celý cyklus 3 kol)</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          ${[1,2,3,5].map(n => `<button class="quiz-setup-btn" data-type="cycles" data-val="${n}" style="flex:1;padding:12px;border-radius:12px;border:2px solid var(--border);background:var(--surface2);font-size:1em;cursor:pointer;font-weight:600;">${n}×</button>`).join('')}
+        </div>
+      </div>
+    </div>
+  `;
+  footer.innerHTML = '';
+
+  // výchozí hodnoty
+  let selectedCount = 5;
+  let selectedCycles = 1;
+
+  function updateButtons() {
+    body.querySelectorAll('[data-type="count"]').forEach(b => {
+      b.style.background = parseInt(b.dataset.val) === selectedCount ? 'var(--accent)' : 'var(--surface2)';
+      b.style.color = parseInt(b.dataset.val) === selectedCount ? 'white' : '';
+      b.style.borderColor = parseInt(b.dataset.val) === selectedCount ? 'var(--accent)' : 'var(--border)';
+    });
+    body.querySelectorAll('[data-type="cycles"]').forEach(b => {
+      b.style.background = parseInt(b.dataset.val) === selectedCycles ? 'var(--accent)' : 'var(--surface2)';
+      b.style.color = parseInt(b.dataset.val) === selectedCycles ? 'white' : '';
+      b.style.borderColor = parseInt(b.dataset.val) === selectedCycles ? 'var(--accent)' : 'var(--border)';
+    });
+  }
+  updateButtons();
+
+  body.querySelectorAll('.quiz-setup-btn').forEach(b => {
+    b.addEventListener('click', () => {
+      if (b.dataset.type === 'count') selectedCount = parseInt(b.dataset.val);
+      else selectedCycles = parseInt(b.dataset.val);
+      updateButtons();
+    });
+  });
+
+  const startBtn = document.createElement('button');
+  startBtn.textContent = 'Spustit kvíz →';
+  startBtn.style.cssText = 'width:100%;padding:14px;border-radius:12px;border:none;background:var(--accent);color:white;font-size:1em;font-weight:700;cursor:pointer;';
+  startBtn.onclick = () => {
+    quizPhraseCount = selectedCount;
+    quizTotalCycles = selectedCycles;
+    quizCurrentCycle = 1;
+    const pool = [...phrases].sort(() => Math.random() - 0.5).slice(0, selectedCount);
+    quizPhrases = pool;
+    quizRound = 1;
+    quizIndex = 0;
+    quizScores = [];
+    startQuizRound();
+  };
+  footer.appendChild(startBtn);
 }
 
 function closeQuiz() {
@@ -1743,7 +1805,7 @@ async function checkQuizAnswer(p, round, btn) {
   btn.textContent = '⏳';
 
   const correct = round === 2 ? p.cz : p.it;
-  const prompt = `Jsi italský lektor. Správná odpověď je: "${correct}". Uživatel napsal: "${answer}". Ohodnoť odpověď JEDNÍM slovem z tohoto seznamu (vyber nejvýstižnější): Perfecto / Very good / Nice try / Keep going / You will get better. Pak na nový řádek napiš 1 větu česky — co bylo správně nebo co opravit. Formát:\n[hodnocení]\n[komentář]`;
+  const prompt = `Jsi italský lektor. Správná odpověď je: "${correct}". Uživatel napsal: "${answer}". DŮLEŽITÉ: ignoruj chybějící diakritiku (háčky, čárky) — hlasový vstup ji neumí přidat. Hodnoť jen obsah a smysl. Ohodnoť JEDNÍM slovem: Perfecto / Very good / Nice try / Keep going / You will get better. Pak nový řádek, 1 věta česky — co opravit nebo pochvala. Formát:\n[hodnocení]\n[komentář]`;
 
   const result = await callAI(prompt);
   chatHistory.splice(-2, 2);
@@ -1768,16 +1830,23 @@ async function checkQuizAnswer(p, round, btn) {
   const footer = document.getElementById('quizFooter');
   footer.innerHTML = '';
   const nextBtn = document.createElement('button');
-  const isLast = quizIndex === 4;
+  const isLast = quizIndex === quizPhraseCount - 1;
   const isLastRound = round === 3;
-  nextBtn.textContent = isLast ? (isLastRound ? '🏁 Výsledky' : `Kolo ${round} →`) : 'Další →';
+  const isLastCycle = quizCurrentCycle >= quizTotalCycles;
+  nextBtn.textContent = isLast
+    ? (isLastRound ? (isLastCycle ? '🏁 Výsledky' : `Cyklus ${quizCurrentCycle + 1} →`) : `Kolo ${round + 1} →`)
+    : 'Další →';
   nextBtn.style.cssText = 'width:100%;padding:14px;border-radius:12px;border:none;background:var(--accent);color:white;font-size:1em;font-weight:700;cursor:pointer;';
   nextBtn.onclick = () => {
     quizIndex++;
-    if (quizIndex < 5) {
+    if (quizIndex < quizPhraseCount) {
       showQuizCard();
     } else if (round < 3) {
       quizRound++;
+      startQuizRound();
+    } else if (!isLastCycle) {
+      quizCurrentCycle++;
+      quizRound = 1;
       startQuizRound();
     } else {
       showQuizResults();
