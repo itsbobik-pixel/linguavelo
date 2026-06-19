@@ -1624,6 +1624,7 @@ function closeQuiz() {
   speechSynthesis.cancel();
   stopVoiceVisual();
   if (_sharedMicStream) { _sharedMicStream.getTracks().forEach(t => t.stop()); _sharedMicStream = null; }
+  if (_sharedAudioCtx) { _sharedAudioCtx.close(); _sharedAudioCtx = null; _sharedAnalyser = null; }
 }
 
 function setQuizHeader(title, subtitle, progress) {
@@ -1720,6 +1721,8 @@ function showQuizCard() {
 let _voiceStream = null;
 let _voiceAnim = null;
 let _sharedMicStream = null;
+let _sharedAudioCtx = null;
+let _sharedAnalyser = null;
 
 function stopVoiceVisual() {
   if (_voiceAnim) { cancelAnimationFrame(_voiceAnim); _voiceAnim = null; }
@@ -1761,11 +1764,15 @@ function startVoiceInput(btn) {
 
   getMic.then(stream => {
     _voiceStream = stream;
-    const ctx = new (window.AudioContext || window.webkitAudioContext)();
-    const src = ctx.createMediaStreamSource(stream);
-    const analyser = ctx.createAnalyser();
-    analyser.fftSize = 64;
-    src.connect(analyser);
+    // Reusuj AudioContext a Analyser — nevytvářej nový pokaždé
+    if (!_sharedAudioCtx || _sharedAudioCtx.state === 'closed') {
+      _sharedAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      const src = _sharedAudioCtx.createMediaStreamSource(stream);
+      _sharedAnalyser = _sharedAudioCtx.createAnalyser();
+      _sharedAnalyser.fftSize = 64;
+      src.connect(_sharedAnalyser);
+    }
+    const analyser = _sharedAnalyser;
     const data = new Uint8Array(analyser.frequencyBinCount);
     const canvasCtx = canvas.getContext('2d');
     const accent = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim() || '#059669';
