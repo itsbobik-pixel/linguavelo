@@ -245,6 +245,21 @@
     margin-bottom: 12px;
     line-height: 1.4;
   }
+  .es {
+    font-size: 1em;
+    font-weight: 500;
+    color: #D97706;
+    margin-bottom: 12px;
+    line-height: 1.4;
+  }
+  .hidden-es {
+    color: transparent !important;
+    background: var(--surface2);
+    border-radius: 6px;
+    user-select: none;
+    cursor: pointer;
+  }
+  .hidden-es:active { color: #D97706 !important; background: transparent; }
 
   .hidden-it {
     color: transparent !important;
@@ -835,6 +850,26 @@ const phrases = [
   { cz: "One second", lang: "en-US", it: "Un secondo", category: "Konverzace" },
   { cz: "Nothing", lang: "en-US", it: "Niente", category: "Konverzace" },
   { cz: "Thank you for the practice", lang: "en-US", it: "Grazie per la pratica", category: "Konverzace" },
+
+  // ── Costello Hostel – recepce ──
+  { cz: "Welcome to the hostel, my name is Bob", lang: "en-US", it: "Benvenuti all'ostello, mi chiamo Bob", es: "Bienvenido al hostal, me llamo Bob", category: "Hotel" },
+  { cz: "What is your name?", lang: "en-US", it: "Come ti chiami?", es: "¿Cómo te llamas?", category: "Hotel" },
+  { cz: "How are you?", lang: "en-US", it: "Come stai?", es: "¿Cómo estás?", category: "Hotel" },
+  { cz: "Can I help you with the luggage?", lang: "en-US", it: "Posso aiutarla con i bagagli?", es: "¿Puedo ayudarle con el equipaje?", category: "Hotel" },
+  { cz: "You can sit down here and put your luggage down", lang: "en-US", it: "Puoi sederti qui e appoggiare i tuoi bagagli.", es: "Puedes sentarte aquí y dejar tu equipaje.", category: "Hotel" },
+  { cz: "Can I bring you a glass of water, juice or coffee?", lang: "en-US", it: "Posso portarle un bicchiere d'acqua, di succo di frutta o di caffè?", es: "¿Quieres un vaso de agua, zumo o café?", category: "Hotel" },
+  { cz: "What brings you to La Spezia?", lang: "en-US", it: "Cosa ti porta a La Spezia?", es: "¿Qué te trae a La Spezia?", category: "Hotel" },
+  { cz: "Are you here for the Cinque Terre?", lang: "en-US", it: "Siete qui per le Cinque Terre?", es: "¿Estás aquí por las Cinque Terre?", category: "Hotel" },
+  { cz: "Let me show you around the hostel.", lang: "en-US", it: "Lasciatemi mostrarvi l'ostello.", es: "Déjame enseñarte el albergue.", category: "Hotel" },
+  { cz: "This is the kitchen. The breakfast table. Fridge. Dishwasher. Coffee.", lang: "en-US", it: "Questa è la cucina. Il tavolo della colazione. Frigorifero. Lavastoviglie. Caffè.", es: "Esta es la cocina. La mesa del desayuno. Nevera. Lavavajillas. Cafetera.", category: "Hotel" },
+  { cz: "This is the terrace. It is open from 8 to 11", lang: "en-US", it: "Questa è la terrazza. È aperta dalle 8 alle 11.", es: "Esta es la terraza. Está abierta de 8 a 11.", category: "Hotel" },
+  { cz: "This is the bathroom. Each room has a toilet and a shower.", lang: "en-US", it: "Questo è il bagno. Ogni camera ha un WC e una doccia.", es: "Este es el baño. Cada habitación tiene inodoro y ducha.", category: "Hotel" },
+  { cz: "Can you give me your id or passport?", lang: "en-US", it: "Può darmi un documento d'identità o il passaporto?", es: "¿Puedes darme tu documento de identidad o pasaporte?", category: "Hotel" },
+  { cz: "Thank you very much.", lang: "en-US", it: "Grazie mille", es: "Muchas gracias", category: "Hotel" },
+  { cz: "Will you pay by card or cash?", lang: "en-US", it: "Preferisci pagare con carta o in contanti?", es: "¿Pagará con tarjeta o en efectivo?", category: "Hotel" },
+  { cz: "Do you want a towel? It is free.", lang: "en-US", it: "Desideri un asciugamano? È gratuito.", es: "¿Quieres una toalla? Es gratis.", category: "Hotel" },
+  { cz: "Let me get your bed sheets and show you your room.", lang: "en-US", it: "Lasciami prendere le lenzuola e mostrarti la tua stanza.", es: "Déjame traerte las sábanas y mostrarte tu habitación.", category: "Hotel" },
+  { cz: "If you need anything, let me know.", lang: "en-US", it: "Se hai bisogno di qualcosa, fammelo sapere.", es: "Si necesitas algo házmelo saber.", category: "Hotel" },
 ];
 
 const RATINGS_KEYS = { listening: 'lv-ratings-listening', remembering: 'lv-ratings-remembering' };
@@ -910,6 +945,7 @@ function buildCard(i) {
   card.innerHTML = `
     <div class="cz" id="cz-${i}">${flag} ${p.cz}</div>
     <div class="it" id="it-${i}">🇮🇹 ${p.it}</div>
+    ${p.es ? `<div class="es" id="es-${i}">🇪🇸 ${p.es}</div>` : ''}
     <button class="play-one" data-index="${i}">▶️ Přehrát</button>
     <div class="stars-row">
       <span class="stars-label">🎧</span>
@@ -956,15 +992,16 @@ function buildCard(i) {
       });
     });
   });
-  ['cz','it'].forEach(cls => {
+  ['cz','it','es'].forEach(cls => {
     const el = card.querySelector(`.${cls}`);
+    if (!el) return;
+    const hClass = cls === 'cz' ? 'hidden-cz' : (cls === 'it' ? 'hidden-it' : 'hidden-es');
     el.addEventListener('click', () => {
-      const hClass = cls === 'cz' ? 'hidden-cz' : 'hidden-it';
       if (el.classList.contains(hClass)) {
         el.classList.remove(hClass);
         setTimeout(() => {
           if (cls === 'cz' && currentMode === 'listening') el.classList.add('hidden-cz');
-          if (cls === 'it' && currentMode === 'remembering') el.classList.add('hidden-it');
+          if ((cls === 'it' || cls === 'es') && currentMode === 'remembering') el.classList.add(hClass);
         }, 2500);
       }
     });
@@ -976,9 +1013,17 @@ function buildCard(i) {
 function applyModeToCard(card) {
   const czEl = card.querySelector('.cz');
   const itEl = card.querySelector('.it');
-  if (currentMode === 'listening') { czEl.classList.add('hidden-cz'); itEl.classList.remove('hidden-it'); }
-  else if (currentMode === 'remembering') { itEl.classList.add('hidden-it'); czEl.classList.remove('hidden-cz'); }
-  else { czEl.classList.remove('hidden-cz'); itEl.classList.remove('hidden-it'); }
+  const esEl = card.querySelector('.es');
+  if (currentMode === 'listening') {
+    czEl.classList.add('hidden-cz'); itEl.classList.remove('hidden-it');
+    if (esEl) esEl.classList.remove('hidden-es');
+  } else if (currentMode === 'remembering') {
+    itEl.classList.add('hidden-it'); czEl.classList.remove('hidden-cz');
+    if (esEl) esEl.classList.add('hidden-es');
+  } else {
+    czEl.classList.remove('hidden-cz'); itEl.classList.remove('hidden-it');
+    if (esEl) esEl.classList.remove('hidden-es');
+  }
 }
 
 function renderCards() {
@@ -1058,6 +1103,11 @@ async function playPhrase(p, i, gen) {
     if (gen !== playGen) return;
   }
   await speak(p.it, 'it-IT');
+  if (p.es && gen === playGen) {
+    await wait(400);
+    if (gen !== playGen) return;
+    await speak(p.es, 'es-ES');
+  }
 }
 
 // ── PLAYBACK CONTROLS ──
