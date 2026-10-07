@@ -187,8 +187,7 @@
     background: var(--accent); color: #fff; font-size: 2em; display: flex; align-items: center; justify-content: center;
     box-shadow: 0 6px 18px color-mix(in srgb, var(--accent) 40%, transparent);
   }
-  .mic.rec { background: var(--accent-2); animation: pulse 1.2s infinite; }
-  @keyframes pulse { 0%,100% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent) 45%, transparent); } 50% { box-shadow: 0 0 0 14px transparent; } }
+  .mic.rec { background: var(--accent-2); transition: box-shadow .08s linear; }
   .heard { min-height: 1.4em; color: var(--text-2); font-style: italic; }
 
   .diff { font-size: 1.1em; line-height: 1.6; }
@@ -884,17 +883,52 @@ function renderSummary() {
 // ═══════════════════════════════════════════════════════════
 const TRANSCRIBE_URL = 'https://flat-paper-f764.itsbobik.workers.dev/transcribe?lang=it';
 const MAX_REC_MS = 15000;
-let rec = null; // { mr, stream, chunks, timer, cancelled }
+let rec = null; // { mr, stream, chunks, timer, cancelled, ctx, vad }
+
+// Detekce ticha: po začátku řeči stačí ~1,2 s ticha a nahrávání se samo ukončí
+const VAD = { calibrateMs: 300, minSpeechMs: 150, silenceMs: 1200, noSpeechMs: 7000, tickMs: 50 };
 
 function stopRecognition(cancel = true) {
   if (!rec) return;
   const r = rec; rec = null;
   r.cancelled = cancel;
   clearTimeout(r.timer);
+  clearInterval(r.vad);
+  if (r.ctx) r.ctx.close().catch(() => {});
   try { if (r.mr.state !== 'inactive') r.mr.stop(); } catch {}
   r.stream.getTracks().forEach(t => t.stop()); // uvolnit mikrofon (jinak iOS ztlumí přehrávání)
   const mic = document.getElementById('mic');
-  if (mic) { mic.classList.remove('rec'); mic.textContent = '🎤'; }
+  if (mic) { mic.classList.remove('rec'); mic.textContent = '🎤'; mic.style.boxShadow = ''; }
+}
+
+function startVad(r, onSpeechEnd, onNoSpeech) {
+  const mic = document.getElementById('mic');
+  try {
+    const src = r.ctx.createMediaStreamSource(r.stream);
+    const an = r.ctx.createAnalyser();
+    an.fftSize = 1024;
+    src.connect(an);
+    if (r.ctx.state === 'suspended') r.ctx.resume();
+    const buf = new Uint8Array(an.fftSize);
+    let t = 0, floorSum = 0, floorN = 0, threshold = 0.02, loudMs = 0, quietMs = 0, started = false;
+    r.vad = setInterval(() => {
+      an.getByteTimeDomainData(buf);
+      let sum = 0;
+      for (let i = 0; i < buf.length; i++) { const v = (buf[i] - 128) / 128; sum += v * v; }
+      const rms = Math.sqrt(sum / buf.length);
+      t += VAD.tickMs;
+      if (mic) mic.style.boxShadow = `0 0 0 ${Math.min(26, Math.round(rms * 260))}px color-mix(in srgb, var(--accent) 22%, transparent)`;
+      if (t <= VAD.calibrateMs) { // hladina šumu v místnosti
+        floorSum += rms; floorN++;
+        threshold = Math.max(0.02, (floorSum / floorN) * 2.5);
+        return;
+      }
+      if (rms > threshold) { loudMs += VAD.tickMs; quietMs = 0; if (loudMs >= VAD.minSpeechMs) started = true; }
+      else { loudMs = 0; if (started) quietMs += VAD.tickMs; }
+      if (started && quietMs >= VAD.silenceMs) onSpeechEnd();
+      else if (!started && t >= VAD.noSpeechMs) onNoSpeech();
+    }, VAD.tickMs);
+  } catch { /* bez VAD zůstane ruční stop */ }
 }
 
 function pickMime() {
@@ -911,14 +945,17 @@ async function toggleRecognition(p) {
     heard.textContent = 'Tento prohlížeč neumí nahrávat – řekni to nahlas a odkryj.'; return;
   }
   stopSpeech();
+  // AudioContext vytvořit hned v klepnutí (iOS ho jinak nechá uspaný)
+  let ctx = null;
+  try { ctx = new (window.AudioContext || window.webkitAudioContext)(); ctx.resume(); } catch {}
   let stream;
   try { stream = await navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: true, noiseSuppression: true } }); }
-  catch { heard.textContent = 'Přístup k mikrofonu zamítnut – povol ho v nastavení.'; return; }
-  if (!S || S.revealed || S.queue[S.idx] !== p) { stream.getTracks().forEach(t => t.stop()); return; }
+  catch { if (ctx) ctx.close().catch(() => {}); heard.textContent = 'Přístup k mikrofonu zamítnut – povol ho v nastavení.'; return; }
+  if (!S || S.revealed || S.queue[S.idx] !== p) { stream.getTracks().forEach(t => t.stop()); if (ctx) ctx.close().catch(() => {}); return; }
 
   const mime = pickMime();
   const mr = new MediaRecorder(stream, mime ? { mimeType: mime } : undefined);
-  const r = { mr, stream, chunks: [], cancelled: false, timer: null };
+  const r = { mr, stream, chunks: [], cancelled: false, timer: null, ctx, vad: null };
   mr.ondataavailable = e => { if (e.data && e.data.size) r.chunks.push(e.data); };
   mr.onstop = () => {
     if (rec === r) stopRecognition(false); // auto-stop (časový limit)
@@ -930,7 +967,11 @@ async function toggleRecognition(p) {
   mr.start();
   r.timer = setTimeout(() => { if (rec === r) stopRecognition(false); }, MAX_REC_MS);
   mic.classList.add('rec'); mic.textContent = '⏹';
-  heard.textContent = 'Nahrávám… klepni znovu, až domluvíš';
+  heard.textContent = 'Mluv… až domluvíš, samo se to zastaví';
+  if (ctx) startVad(r,
+    () => { if (rec === r) stopRecognition(false); },
+    () => { if (rec === r) { stopRecognition(true); heard.textContent = 'Nic jsem neslyšel – klepni a zkus to znovu.'; } });
+  else heard.textContent = 'Nahrávám… klepni znovu, až domluvíš';
 }
 
 async function sendForTranscription(p, blob) {
