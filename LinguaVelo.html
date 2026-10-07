@@ -138,6 +138,7 @@
   .dlg-top small { display: block; color: var(--text-2); font-size: 0.82em; margin-top: 3px; line-height: 1.4; }
   .dlg-btns { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
   .pill-btn.ghost { background: var(--surface2); color: var(--text); }
+  .pill-btn.ghost.done { background: var(--easy-soft); color: var(--easy); }
   .scene { font-size: 0.88em; color: var(--text-2); background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 12px 14px; margin-bottom: 16px; line-height: 1.5; }
   .chat { display: flex; flex-direction: column; gap: 10px; padding-bottom: 12px; }
   .bubble { max-width: 86%; padding: 10px 14px; border-radius: 18px; background: var(--surface); border: 1px solid var(--border); box-shadow: var(--shadow); cursor: pointer; transition: transform .15s, box-shadow .15s; }
@@ -2186,9 +2187,9 @@ const STORE_KEY = 'lv2-progress';
 function loadStore() {
   try {
     const s = JSON.parse(localStorage.getItem(STORE_KEY));
-    if (s && s.cards) { s.tests ||= {}; return s; }
+    if (s && s.cards) { s.tests ||= {}; s.dialogs ||= {}; return s; }
   } catch {}
-  return { cards: {}, points: 0, days: [], tests: {} };
+  return { cards: {}, points: 0, days: [], tests: {}, dialogs: {} };
 }
 let store = loadStore();
 function saveStore() { try { localStorage.setItem(STORE_KEY, JSON.stringify(store)); } catch {} }
@@ -2409,7 +2410,7 @@ function renderLesson(lesson) {
         <div class="dlg-top"><span class="dlg-ico">🎭</span><div><b>${lesson.dialogs.length > 1 ? `Konverzace ${di + 1}/${lesson.dialogs.length}` : 'Konverzace'}: ${esc(d.title)}</b><small>${esc(d.scene)}</small></div></div>
         <div class="dlg-btns">
           <button class="pill-btn" data-go="#/l/${encodeURIComponent(lesson.id)}/dialog/${di}">▶ Poslechnout</button>
-          ${Object.entries(d.cast).map(([k, name]) => `<button class="pill-btn ghost" data-go="#/l/${encodeURIComponent(lesson.id)}/dialog/${di}/${k}">🎤 Hraj za ${esc(name)}</button>`).join('')}
+          ${Object.entries(d.cast).map(([k, name]) => roleBtn(lesson, di, k, name)).join('')}
         </div>
       </div>`).join('')}
       <div class="modes">
@@ -2869,7 +2870,7 @@ function renderDialog(lesson, di) {
       <button class="big-btn ghost" id="slowBtn">🐢</button>
       <button class="big-btn" id="playDlg">▶ Přehrát</button>
     </div>
-    <div class="wrap role-row">${Object.entries(d.cast).map(([k, name]) => `<button class="pill-btn ghost" data-go="#/l/${encodeURIComponent(lesson.id)}/dialog/${di}/${k}">🎤 Hraj za ${esc(name)}</button>`).join('')}${nextD ? `<button class="pill-btn" data-go="#/l/${encodeURIComponent(lesson.id)}/dialog/${di + 1}">Další konverzace ▶</button>` : ''}</div>
+    <div class="wrap role-row">${Object.entries(d.cast).map(([k, name]) => roleBtn(lesson, di, k, name)).join('')}${nextD ? `<button class="pill-btn" data-go="#/l/${encodeURIComponent(lesson.id)}/dialog/${di + 1}">Další konverzace ▶</button>` : ''}</div>
     </div>
   </div>`;
   bindGo();
@@ -2901,6 +2902,14 @@ function renderDialog(lesson, di) {
 }
 
 // ── Hraní rolí ──
+// nejlepší výsledek hraní role: store.dialogs["lekce:N:A"] = průměr %
+const rpKey = (lesson, di, who) => `${lesson.id}:${di}:${who}`;
+function rpBest(lesson, di, who) { return store.dialogs?.[rpKey(lesson, di, who)] ?? null; }
+function roleBtn(lesson, di, k, name, cls = 'pill-btn ghost') {
+  const b = rpBest(lesson, di, k);
+  return `<button class="${cls}${b !== null && b >= TEST_PASS ? ' done' : ''}" data-go="#/l/${encodeURIComponent(lesson.id)}/dialog/${di}/${k}">🎤 Hraj za ${esc(name)}${b !== null ? ` · ${b >= TEST_PASS ? '✅ ' : ''}${b} %` : ''}</button>`;
+}
+
 let R = null; // { lesson, d, di, me, idx, scores, gen }
 
 function startRoleplay(lesson, di, me) {
@@ -3012,9 +3021,12 @@ function rpSummary() {
   const t = today();
   if (!store.days.includes(t)) { store.days.push(t); }
   store.points += Math.round(avg / 10);
+  const prev = rpBest(lesson, di, me);
+  store.dialogs ||= {};
+  if (scores.length && (prev === null || avg > prev)) store.dialogs[rpKey(lesson, di, me)] = avg;
   saveStore();
   document.getElementById('rpFoot').innerHTML = `
-    <div class="rp-status"><b>${avg >= 85 ? '🏆 Bravissimo!' : avg >= 60 ? '💪 Bene!' : '🌱 Avanti così!'}</b> Průměr tvých replik: ${scoreBadge(avg)}</div>
+    <div class="rp-status"><b>${avg >= 85 ? '🏆 Bravissimo!' : avg >= 60 ? '💪 Bene!' : '🌱 Avanti così!'}</b> Průměr tvých replik: ${scoreBadge(avg)}<br><small>${prev !== null && avg > prev ? `Nový rekord! (dřív ${prev} %)` : prev !== null ? `Nejlepší výsledek: ${Math.max(prev, avg)} %` : 'Výsledek uložen'}</small></div>
     <div class="rp-btns">
       <button class="big-btn ghost" data-go="#/l/${encodeURIComponent(lesson.id)}">Hotovo</button>
       <button class="big-btn ghost" id="rpRestart">🔁 Znovu</button>
