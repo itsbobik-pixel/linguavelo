@@ -188,6 +188,12 @@
   .mistake { background: var(--surface); border: 1px solid var(--border); border-left: 4px solid var(--hard); border-radius: 12px; padding: 10px 12px; }
   .mistake .it { font-weight: 700; } .mistake .src { font-size: 0.82em; color: var(--text-2); margin-top: 2px; }
   .mistake .given { font-size: 0.8em; color: var(--hard); margin-top: 4px; }
+  .sync-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px 16px; box-shadow: var(--shadow); display: flex; flex-direction: column; gap: 10px; }
+  .sync-code { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 1.15em; font-weight: 700; letter-spacing: 0.02em; background: var(--surface2); border-radius: 12px; padding: 14px; text-align: center; word-break: break-all; user-select: all; }
+  .sync-card .pill-btn { align-self: center; }
+  .sync-p { font-size: 0.88em; color: var(--text-2); line-height: 1.5; }
+  .sync-status { font-size: 0.88em; text-align: center; min-height: 1.3em; }
+  .sync-btns { display: flex; gap: 10px; }
   .empty { text-align: center; color: var(--text-2); padding: 40px 16px; font-size: 0.9em; line-height: 1.5; }
 
   /* ── LESSON ── */
@@ -2192,7 +2198,7 @@ function loadStore() {
   return { cards: {}, points: 0, days: [], tests: {}, dialogs: {} };
 }
 let store = loadStore();
-function saveStore() { try { localStorage.setItem(STORE_KEY, JSON.stringify(store)); } catch {} }
+function saveStore() { try { localStorage.setItem(STORE_KEY, JSON.stringify(store)); } catch {} scheduleSync(); }
 
 function today() {
   const d = new Date();
@@ -2200,6 +2206,7 @@ function today() {
 }
 function rate(phraseId, mode, rating) {
   (store.cards[phraseId] ||= {})[mode] = rating;
+  (store.ts ||= {})[phraseId] = Date.now();
   store.points += RATING_POINTS[rating];
   const t = today();
   if (!store.days.includes(t)) store.days.push(t);
@@ -2328,6 +2335,7 @@ function route() {
   window.scrollTo(0, 0);
   const [, view, id, mode, arg, who] = location.hash.replace(/^#\/?/, '#/').split('/');
   const lesson = id && findLesson(decodeURIComponent(id));
+  if (view === 'sync') return renderSync();
   if (view === 'l' && lesson && mode === 'test') return startTest(lesson);
   if (view === 'l' && lesson && mode === 'dialog') {
     const di = +arg || 0, d = lesson.dialogs?.[di];
@@ -2350,7 +2358,7 @@ function renderHome() {
   app.innerHTML = `
     <header class="top"><div class="wrap">
       <div class="brand" style="flex:1">Bobik Speaks <span>Italian!</span></div>
-      <div class="sub">🇮🇹</div>
+      <button class="icon-btn" data-go="#/sync" aria-label="Synchronizace" title="Synchronizace">${syncCode ? (syncErr ? '⚠️' : '☁️') : '☁️'}</button>
     </div></header>
     <main><div class="wrap">
       <div class="stats">
@@ -2479,7 +2487,7 @@ function renderLesson(lesson) {
   };
   document.getElementById('resetLesson').onclick = () => {
     if (!confirm(`Opravdu vynulovat pokrok lekce „${lesson.title}“?`)) return;
-    lesson.phrases.forEach(p => delete store.cards[p.id]);
+    lesson.phrases.forEach(p => { store.cards[p.id] = {}; (store.ts ||= {})[p.id] = Date.now(); });
     saveStore(); renderLesson(lesson);
   };
 }
@@ -3293,6 +3301,165 @@ function renderTestResult() {
 }
 
 // ═══════════════════════════════════════════════════════════
+//  SYNCHRONIZACE MEZI ZAŘÍZENÍMI  (#/sync)
+//  Pokrok se ukládá na Worker (Cloudflare KV) pod tajným kódem.
+//  Kód je jen v tomhle zařízení; na serveru je uložený jako SHA-256.
+// ═══════════════════════════════════════════════════════════
+const SYNC_URL = 'https://flat-paper-f764.itsbobik.workers.dev/sync';
+const SYNC_CODE_RE = /^[a-z0-9-]{12,64}$/;
+let syncCode = null, syncLast = 0, syncErr = null, syncTimer = null, syncBusy = false, syncAgain = false;
+try { syncCode = localStorage.getItem('lv2-sync-code'); syncLast = +localStorage.getItem('lv2-sync-last') || 0; } catch {}
+
+function genSyncCode() {
+  const abc = 'abcdefghjkmnpqrstuvwxyz23456789';
+  const c = [...crypto.getRandomValues(new Uint8Array(15))].map(x => abc[x % abc.length]).join('');
+  return `bobik-${c.slice(0, 5)}-${c.slice(5, 10)}-${c.slice(10)}`;
+}
+
+// sloučení dvou stavů: u fráze vyhraje novější hodnocení, u testů a konverzací lepší výsledek
+function mergeStores(a, b) {
+  const out = { cards: {}, ts: {}, points: Math.max(a.points || 0, b.points || 0), tests: {}, dialogs: {} };
+  out.days = [...new Set([...(a.days || []), ...(b.days || [])])].sort();
+  const ids = new Set([...Object.keys(a.cards || {}), ...Object.keys(b.cards || {})]);
+  for (const id of ids) {
+    const ta = a.ts?.[id] || 0, tb = b.ts?.[id] || 0;
+    const useA = a.cards?.[id] && (!b.cards?.[id] || ta >= tb);
+    out.cards[id] = (useA ? a : b).cards[id];
+    if (ta || tb) out.ts[id] = Math.max(ta, tb);
+  }
+  for (const k of ['tests', 'dialogs'])
+    for (const src of [a[k] || {}, b[k] || {}])
+      for (const [key, v] of Object.entries(src)) out[k][key] = Math.max(out[k][key] ?? -1, v);
+  return out;
+}
+
+function setSyncCode(code) {
+  syncCode = code;
+  try { code ? localStorage.setItem('lv2-sync-code', code) : localStorage.removeItem('lv2-sync-code'); } catch {}
+}
+
+function scheduleSync() {
+  if (!syncCode) return;
+  clearTimeout(syncTimer);
+  syncTimer = setTimeout(() => syncNow(), 2500);
+}
+
+async function syncNow({ rerender = false } = {}) {
+  if (!syncCode) return;
+  if (syncBusy) { syncAgain = true; return; }
+  syncBusy = true; clearTimeout(syncTimer);
+  const code = syncCode;
+  try {
+    const res = await fetch(SYNC_URL, { headers: { 'X-Sync-Code': code } });
+    const remote = await res.json();
+    if (!res.ok || remote.error) throw new Error(remote.error || res.status);
+    if (code !== syncCode) return;
+    const before = JSON.stringify(store);
+    const merged = remote.data ? mergeStores(store, remote.data) : store;
+    store = merged;
+    try { localStorage.setItem(STORE_KEY, JSON.stringify(store)); } catch {}
+    const put = await fetch(SYNC_URL, { method: 'PUT', headers: { 'X-Sync-Code': code, 'Content-Type': 'application/json' }, body: JSON.stringify({ data: store }) });
+    if (!put.ok) throw new Error(put.status);
+    syncLast = Date.now(); syncErr = null;
+    try { localStorage.setItem('lv2-sync-last', String(syncLast)); } catch {}
+    // přišlo něco nového z jiného zařízení → překreslit domov / lekci (ne uprostřed cvičení)
+    if (rerender && JSON.stringify(store) !== before && location.hash.split('/').length <= 3) route();
+  } catch (e) {
+    syncErr = e.message || 'chyba sítě';
+  } finally {
+    syncBusy = false;
+    if (syncAgain) { syncAgain = false; scheduleSync(); }
+    if (location.hash === '#/sync') renderSyncStatus();
+  }
+}
+
+document.addEventListener('visibilitychange', () => {
+  if (!syncCode) return;
+  if (document.visibilityState === 'visible') syncNow({ rerender: true });
+  else if (syncTimer) {
+    // odcházíš z appky → odeslat hned, co čeká
+    clearTimeout(syncTimer); syncTimer = null;
+    const body = JSON.stringify({ data: store });
+    fetch(SYNC_URL, { method: 'PUT', headers: { 'X-Sync-Code': syncCode, 'Content-Type': 'application/json' }, body, keepalive: body.length < 60000 }).catch(() => {});
+  }
+});
+
+function agoText(t) {
+  if (!t) return 'zatím nikdy';
+  const s = Math.round((Date.now() - t) / 1000);
+  if (s < 60) return 'právě teď';
+  if (s < 3600) return `před ${Math.round(s / 60)} min`;
+  if (s < 86400) return `před ${Math.round(s / 3600)} h`;
+  return new Date(t).toLocaleString('cs-CZ');
+}
+
+function renderSyncStatus() {
+  const el = document.getElementById('syncStatus');
+  if (!el) return;
+  el.innerHTML = syncBusy ? '🔄 Synchronizuji…'
+    : syncErr ? `⚠️ Nepovedlo se (${esc(syncErr)}). Zkusím to znovu při další změně.`
+    : `✅ Synchronizováno ${agoText(syncLast)}`;
+}
+
+function renderSync() {
+  document.title = 'Synchronizace · Bobik Speaks Italian';
+  app.innerHTML = `
+    <header class="top"><div class="wrap">
+      <button class="icon-btn" data-go="#/" aria-label="Zpět">←</button>
+      <h1>☁️ Synchronizace</h1>
+    </div></header>
+    <main><div class="wrap">
+      ${syncCode ? `
+        <div class="sync-card">
+          <div class="section-title">Tvůj synchronizační kód</div>
+          <div class="sync-code" id="syncCode">${esc(syncCode)}</div>
+          <button class="pill-btn" id="copyCode">📋 Kopírovat</button>
+          <p class="sync-p">Na druhém zařízení otevři ☁️ Synchronizace → <b>Mám kód</b> a zadej tenhle kód. Pokrok se pak sám posílá a stahuje.</p>
+          <p class="sync-p">🔒 Kód je jako heslo – kdo ho zná, vidí tvůj pokrok. Nikomu ho neposílej.</p>
+          <div class="sync-status" id="syncStatus"></div>
+          <div class="sync-btns">
+            <button class="big-btn" id="syncNowBtn">🔄 Synchronizovat teď</button>
+          </div>
+          <button class="reset-link" id="unlink">Odpojit toto zařízení</button>
+        </div>` : `
+        <div class="sync-card">
+          <p class="sync-p" style="margin-top:0">Pokrok se teď ukládá jen v tomhle zařízení. Se synchronizací uvidíš stejný pokrok na mobilu i na počítači – a máš zálohu.</p>
+          <button class="big-btn" id="newCode" style="width:100%">✨ Vytvořit nový kód</button>
+          <p class="sync-p" style="text-align:center">nebo</p>
+          <div class="section-title">Mám kód z jiného zařízení</div>
+          <input class="write-in" id="codeIn" placeholder="bobik-xxxxx-xxxxx-xxxxx" autocomplete="off" autocapitalize="off" spellcheck="false">
+          <button class="big-btn ghost" id="joinBtn" style="width:100%;margin-top:10px">Připojit</button>
+          <div class="sync-status" id="joinMsg"></div>
+        </div>`}
+    </div></main>`;
+  bindGo();
+  if (syncCode) {
+    renderSyncStatus();
+    document.getElementById('syncNowBtn').onclick = () => { syncNow({ rerender: false }); renderSyncStatus(); };
+    document.getElementById('copyCode').onclick = async e => {
+      try { await navigator.clipboard.writeText(syncCode); e.currentTarget.textContent = '✅ Zkopírováno'; }
+      catch { const r = document.createRange(); r.selectNodeContents(document.getElementById('syncCode')); getSelection().removeAllRanges(); getSelection().addRange(r); }
+    };
+    document.getElementById('unlink').onclick = () => {
+      if (!confirm('Odpojit toto zařízení? Pokrok tady zůstane, jen se přestane synchronizovat.')) return;
+      setSyncCode(null); syncLast = 0; renderSync();
+    };
+  } else {
+    document.getElementById('newCode').onclick = () => { setSyncCode(genSyncCode()); syncLast = 0; renderSync(); syncNow(); };
+    document.getElementById('joinBtn').onclick = async () => {
+      const code = document.getElementById('codeIn').value.trim().toLowerCase().replace(/\s+/g, '');
+      const msg = document.getElementById('joinMsg');
+      if (!SYNC_CODE_RE.test(code)) { msg.textContent = '⚠️ Tohle nevypadá jako kód (např. bobik-ab3cd-ef4gh-jk5mn).'; return; }
+      msg.textContent = '🔄 Připojuji…';
+      setSyncCode(code); syncLast = 0;
+      await syncNow();
+      if (syncErr) { msg.textContent = `⚠️ Nepovedlo se (${syncErr}).`; setSyncCode(null); return; }
+      renderSync();
+    };
+  }
+}
+
+// ═══════════════════════════════════════════════════════════
 //  KLÁVESNICE
 // ═══════════════════════════════════════════════════════════
 document.addEventListener('keydown', e => {
@@ -3312,6 +3479,7 @@ function md(t) { return esc(t).replace(/\*\*(.+?)\*\*/g, '<b>$1</b>'); }
 function bindGo() { app.querySelectorAll('[data-go]').forEach(el => el.onclick = () => go(el.dataset.go)); }
 
 route();
+if (syncCode) syncNow({ rerender: true });
 </script>
 </body>
 </html>

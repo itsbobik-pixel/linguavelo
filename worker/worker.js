@@ -1,7 +1,7 @@
 const CORS = {
   'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Methods': 'POST, OPTIONS',
-  'Access-Control-Allow-Headers': 'Content-Type',
+  'Access-Control-Allow-Methods': 'GET, POST, PUT, OPTIONS',
+  'Access-Control-Allow-Headers': 'Content-Type, X-Sync-Code',
 };
 const json = (obj, status = 200) =>
   new Response(JSON.stringify(obj), { status, headers: { 'Content-Type': 'application/json', ...CORS } });
@@ -33,12 +33,38 @@ async function transcribe(request, env) {
   }
 }
 
+// GET/PUT /sync  — pokrok appky; kód v hlavičce X-Sync-Code, v KV jen jeho SHA-256
+async function sync(request, env) {
+  const code = (request.headers.get('X-Sync-Code') || '').trim().toLowerCase();
+  if (!/^[a-z0-9-]{12,64}$/.test(code)) return json({ error: 'bad code' }, 400);
+  const hash = [...new Uint8Array(await crypto.subtle.digest('SHA-256', new TextEncoder().encode('lv-sync:' + code)))]
+    .map(b => b.toString(16).padStart(2, '0')).join('');
+  const key = 'progress:' + hash;
+  if (request.method === 'GET') {
+    const v = await env.LV_SYNC.get(key);
+    return json(v ? JSON.parse(v) : { data: null, updated: 0 });
+  }
+  if (request.method === 'PUT') {
+    const body = await request.text();
+    if (body.length > 1024 * 1024) return json({ error: 'too large' }, 413);
+    let parsed;
+    try { parsed = JSON.parse(body); } catch { return json({ error: 'bad json' }, 400); }
+    if (!parsed || typeof parsed.data !== 'object') return json({ error: 'bad data' }, 400);
+    const updated = Date.now();
+    await env.LV_SYNC.put(key, JSON.stringify({ data: parsed.data, updated }));
+    return json({ ok: true, updated });
+  }
+  return json({ error: 'method' }, 405);
+}
+
 export default {
   async fetch(request, env) {
     if (request.method === 'OPTIONS') return new Response(null, { headers: CORS });
+    const path = new URL(request.url).pathname;
+    if (path === '/sync') return sync(request, env);
     if (request.method !== 'POST') return json({ ok: true });
 
-    if (new URL(request.url).pathname === '/transcribe') return transcribe(request, env);
+    if (path === '/transcribe') return transcribe(request, env);
 
     const body = await request.json();
     const isChat = body.chat === true;

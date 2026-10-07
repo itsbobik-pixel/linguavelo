@@ -6,3 +6,8 @@ keep_vars = true
 
 [ai]
 binding = "AI"
+
+# synchronizace pokroku mezi zařízeními (klíč = SHA-256 synchronizačního kódu)
+[[kv_namespaces]]
+binding = "LV_SYNC"
+id = "8965094635d245b4b0acc5ea19cb0bbb"
