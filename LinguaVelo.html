@@ -153,6 +153,7 @@
   .rp-res { margin-top: 6px; font-size: 0.82em; color: var(--text-2); display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
   .foot.sticky { position: sticky; bottom: 0; background: color-mix(in srgb, var(--bg) 94%, transparent); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-top: 1px solid var(--border); }
   .big-btn.on { background: var(--accent-soft); color: var(--accent); }
+  .loop-btn.on { background: var(--accent) !important; color: #fff !important; }
   .role-row { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-top: 10px; }
   .rp-foot { flex-direction: column; gap: 10px; }
   .rp-status { text-align: center; font-size: 0.9em; color: var(--text-2); }
@@ -2736,6 +2737,21 @@ function stopSpeech() { speakGen++; if (synth) synth.cancel(); }
 function sayIt(text, slow = false) { stopSpeech(); return speak(text, 'it-IT', slow ? 0.65 : 0.95); }
 const pause = ms => new Promise(r => setTimeout(r, ms));
 
+// 🔁 Opakovat dokola (přehrát vše / konverzace) – pamatuje se v zařízení
+let loopOn = false;
+try { loopOn = localStorage.getItem('lv2-loop') === '1'; } catch {}
+function toggleLoop(btn) {
+  loopOn = !loopOn;
+  try { localStorage.setItem('lv2-loop', loopOn ? '1' : '0'); } catch {}
+  btn.classList.toggle('on', loopOn);
+}
+// Chrome po ~15 s dlouhého mluvení někdy „usne“ – pravidelné resume ho drží vzhůru
+let keepAwakeTimer = null;
+function speechKeepAwake(on) {
+  clearInterval(keepAwakeTimer); keepAwakeTimer = null;
+  if (on && synth) keepAwakeTimer = setInterval(() => { if (synth.speaking) synth.resume(); }, 5000);
+}
+
 // ═══════════════════════════════════════════════════════════
 //  POROVNÁNÍ ODPOVĚDI (Write it / Say it)
 // ═══════════════════════════════════════════════════════════
@@ -2795,7 +2811,7 @@ try { hardOnly = localStorage.getItem('lv2-hard-only') === '1'; } catch {}
 //  ROUTER  (#/  ·  #/l/ID  ·  #/l/ID/MODE  ·  #/l/ID/test  ·  #/l/ID/dialog[/A])
 // ═══════════════════════════════════════════════════════════
 function route() {
-  stopSpeech(); stopRecognition(); playAllGen++; dlgGen++;
+  stopSpeech(); stopRecognition(); speechKeepAwake(false); playAllGen++; dlgGen++;
   R = null; T = null;
   window.scrollTo(0, 0);
   const [, view, id, mode, arg, who] = location.hash.replace(/^#\/?/, '#/').split('/');
@@ -2909,7 +2925,10 @@ function renderLesson(lesson) {
       </div>
       <div class="list-head">
         <div class="section-title">Fráze</div>
-        <button class="pill-btn" id="playAll">▶ Přehrát vše</button>
+        <div style="display:flex;gap:6px">
+          <button class="pill-btn ghost loop-btn${loopOn ? ' on' : ''}" id="loopAll" title="Opakovat dokola">🔁 Opakovat</button>
+          <button class="pill-btn" id="playAll">▶ Přehrát vše</button>
+        </div>
       </div>
       ${lesson.phrases.map((p, i) => `
         <div class="phrase" id="ph-${i}">
@@ -2936,19 +2955,24 @@ function renderLesson(lesson) {
     sayIt(lesson.phrases[+b.dataset.play].it);
   });
   const playBtn = document.getElementById('playAll');
+  document.getElementById('loopAll').onclick = e => toggleLoop(e.currentTarget);
   playBtn.onclick = async () => {
-    if (playBtn.dataset.on) { playAllGen++; stopSpeech(); setPlaying(null); playBtn.textContent = '▶ Přehrát vše'; delete playBtn.dataset.on; return; }
+    if (playBtn.dataset.on) { playAllGen++; stopSpeech(); speechKeepAwake(false); setPlaying(null); playBtn.textContent = '▶ Přehrát vše'; delete playBtn.dataset.on; return; }
     const gen = ++playAllGen; stopSpeech();
     playBtn.dataset.on = '1'; playBtn.textContent = '⏸ Zastavit';
-    for (let i = 0; i < lesson.phrases.length && gen === playAllGen; i++) {
-      const p = lesson.phrases[i];
-      setPlaying(i);
-      await speak(p.src, srcLang(p)); if (gen !== playAllGen) break;
-      await pause(500); if (gen !== playAllGen) break;
-      await speak(p.it); if (gen !== playAllGen) break;
-      await pause(900);
-    }
-    if (gen === playAllGen) { setPlaying(null); playBtn.textContent = '▶ Přehrát vše'; delete playBtn.dataset.on; }
+    speechKeepAwake(true);
+    do {
+      for (let i = 0; i < lesson.phrases.length && gen === playAllGen; i++) {
+        const p = lesson.phrases[i];
+        setPlaying(i);
+        await speak(p.src, srcLang(p)); if (gen !== playAllGen) break;
+        await pause(500); if (gen !== playAllGen) break;
+        await speak(p.it); if (gen !== playAllGen) break;
+        await pause(900);
+      }
+      if (gen === playAllGen && loopOn) await pause(1500); // krátká pauza před dalším kolem
+    } while (gen === playAllGen && loopOn);
+    if (gen === playAllGen) { speechKeepAwake(false); setPlaying(null); playBtn.textContent = '▶ Přehrát vše'; delete playBtn.dataset.on; }
   };
   document.getElementById('resetLesson').onclick = () => {
     if (!confirm(`Opravdu vynulovat pokrok lekce „${lesson.title}“?`)) return;
@@ -3341,6 +3365,7 @@ function renderDialog(lesson, di) {
     <div class="foot sticky"><div class="wrap">
       <button class="big-btn ghost" id="czBtn">${dlgShowCz ? '🇨🇿 Skrýt' : '🇨🇿 Ukázat'}</button>
       <button class="big-btn ghost" id="slowBtn">🐢</button>
+      <button class="big-btn ghost loop-btn${loopOn ? ' on' : ''}" id="loopDlg" title="Opakovat dokola">🔁</button>
       <button class="big-btn" id="playDlg">▶ Přehrát</button>
     </div>
     <div class="wrap role-row">${Object.entries(d.cast).map(([k, name]) => roleBtn(lesson, di, k, name)).join('')}${nextD ? `<button class="pill-btn" data-go="#/l/${encodeURIComponent(lesson.id)}/dialog/${di + 1}">Další konverzace ▶</button>` : ''}</div>
@@ -3350,20 +3375,25 @@ function renderDialog(lesson, di) {
   let slow = false;
   const playBtn = document.getElementById('playDlg');
   const mark = i => { app.querySelectorAll('.bubble.playing').forEach(b => b.classList.remove('playing')); const el = document.getElementById(`ln-${i}`); if (el) { el.classList.add('playing'); el.scrollIntoView({ behavior: 'smooth', block: 'center' }); } };
-  const stop = () => { dlgGen++; stopSpeech(); app.querySelectorAll('.bubble.playing').forEach(b => b.classList.remove('playing')); playBtn.textContent = '▶ Přehrát'; delete playBtn.dataset.on; };
+  const stop = () => { dlgGen++; stopSpeech(); speechKeepAwake(false); app.querySelectorAll('.bubble.playing').forEach(b => b.classList.remove('playing')); playBtn.textContent = '▶ Přehrát'; delete playBtn.dataset.on; };
   playBtn.onclick = async () => {
     if (playBtn.dataset.on) return stop();
     stopSpeech();
     const g = ++dlgGen;
     playBtn.dataset.on = '1'; playBtn.textContent = '⏸ Zastavit';
-    for (let i = 0; i < d.lines.length && g === dlgGen; i++) {
-      mark(i);
-      await speakAs(d.cast, d.lines[i].s, d.lines[i].it, slow);
-      if (g !== dlgGen) return;
-      await pause(450);
-    }
+    speechKeepAwake(true);
+    do {
+      for (let i = 0; i < d.lines.length && g === dlgGen; i++) {
+        mark(i);
+        await speakAs(d.cast, d.lines[i].s, d.lines[i].it, slow);
+        if (g !== dlgGen) return;
+        await pause(450);
+      }
+      if (g === dlgGen && loopOn) await pause(1500);
+    } while (g === dlgGen && loopOn);
     if (g === dlgGen) stop();
   };
+  document.getElementById('loopDlg').onclick = e => toggleLoop(e.currentTarget);
   app.querySelectorAll('[data-line]').forEach(b => b.onclick = () => { stop(); mark(+b.dataset.line); speakAs(d.cast, d.lines[+b.dataset.line].s, d.lines[+b.dataset.line].it, slow); });
   document.getElementById('czBtn').onclick = e => {
     dlgShowCz = !dlgShowCz;
