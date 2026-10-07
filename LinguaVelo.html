@@ -495,9 +495,15 @@ const pause = ms => new Promise(r => setTimeout(r, ms));
 //  POROVNÁNÍ ODPOVĚDI (Write it / Say it)
 // ═══════════════════════════════════════════════════════════
 const stripAcc = s => s.normalize('NFD').replace(/[̀-ͯ]/g, '');
-const tokens = s => s.replace(/[’`]/g, "'").replace(/[.,!?;:"«»()¿¡…–-]/g, ' ').replace(/'/g, "' ").split(/\s+/).filter(Boolean);
+const tokens = s => s.replace(/[’`]/g, "'").replace(/[.,!?;:"«»()¿¡…–\/-]/g, ' ').replace(/'/g, "' ").split(/\s+/).filter(Boolean);
 
+// "Mio / Mia" = stačí jedna z variant (nebo obě) → bere se nejlepší shoda
 function compare(expected, given) {
+  const variants = expected.includes('/') ? [...expected.split('/').map(v => v.trim()).filter(Boolean), expected] : [expected];
+  return variants.map(v => compareOne(v, given)).reduce((best, x) => (x.score > best.score ? x : best));
+}
+
+function compareOne(expected, given) {
   const exp = tokens(expected), giv = tokens(given);
   const norm = w => stripAcc(w.toLowerCase());
   const e = exp.map(norm), g = giv.map(norm);
