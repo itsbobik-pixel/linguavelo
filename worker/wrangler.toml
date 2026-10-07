@@ -1,0 +1,8 @@
+name = "flat-paper-f764"
+main = "worker.js"
+compatibility_date = "2026-10-01"
+# nepřepisovat proměnné nastavené v dashboardu (ANTHROPIC_API_KEY je secret, ten zůstává vždy)
+keep_vars = true
+
+[ai]
+binding = "AI"
