@@ -306,7 +306,7 @@
 // ═══════════════════════════════════════════════════════════
 //  OBSAH — úrovně, lekce a fráze
 //  notes = krátký úvod / gramatika k lekci (**tučně**)
-//  dialog = rozhovor dvou postav (cast A/B) z frází této a předchozích lekcí
+//  dialogs = samostatné rozhovory (každý = jedna souvislá scéna), postavy cast A/B, jen z frází této a předchozích lekcí
 //  src  = česká nebo anglická fráze (jazyk se pozná sám, nebo lang: 'cs' / 'en')
 //  it   = italský překlad
 //  hint = česká nápověda k zadání, když je angličtina dvojznačná (See you → na brzy / uvidíme se…)
@@ -345,20 +345,28 @@ const LESSONS = [
       { id: "pozdravy-10", src: "Have a nice day!", it: "Buona giornata!" },
       { id: "pozdravy-11", src: "Have a nice evening!", it: "Buona serata!" },
     ],
-    dialog: {
-      title: "Ráno a večer v hostelu", scene: "Bob potkává kamarádku Giulii ráno a pak večer.", cast: {"A": "Bob", "B": "Giulia"},
-      lines: [
-        { s: "A", it: "Buongiorno, Giulia!", cz: "Dobré ráno, Giulie!" },
-        { s: "B", it: "Ciao Bob! Buongiorno!", cz: "Ahoj Bobe! Dobré ráno!" },
-        { s: "A", it: "Buona giornata!", cz: "Hezký den!" },
-        { s: "B", it: "A dopo!", cz: "Zatím!" },
-        { s: "B", it: "Buonasera, Bob!", cz: "Dobrý večer, Bobe!" },
-        { s: "A", it: "Ciao Giulia! Bentornata!", cz: "Ahoj Giulie! Vítej zpátky!" },
-        { s: "B", it: "Ciao a tutti!", cz: "Ahoj všichni!" },
-        { s: "A", it: "Buonanotte! A domani!", cz: "Dobrou noc! Tak zítra!" },
-        { s: "B", it: "Buonanotte! Ci vediamo!", cz: "Dobrou noc! Uvidíme se!" },
-      ],
-    },
+    dialogs: [
+      {
+        title: "Ráno v hostelu", scene: "Ráno. Bob přichází do práce a na recepci potká Giulii, která zrovna odchází.", cast: {"A": "Bob", "B": "Giulia"},
+        lines: [
+          { s: "A", it: "Buongiorno, Giulia!", cz: "Dobré ráno, Giulie!" },
+          { s: "B", it: "Ciao Bob! Buongiorno!", cz: "Ahoj Bobe! Dobré ráno!" },
+          { s: "A", it: "Vai via?", cz: "Odcházíš?" },
+          { s: "B", it: "Sì. Buona giornata!", cz: "Jo. Hezký den!" },
+          { s: "A", it: "Grazie! A dopo!", cz: "Díky! Zatím!" },
+        ],
+      },
+      {
+        title: "Večer v hostelu", scene: "Večer. Giulia se vrací do hostelu, kde zrovna sedí pár hostů.", cast: {"A": "Bob", "B": "Giulia"},
+        lines: [
+          { s: "B", it: "Buonasera, Bob! Ciao a tutti!", cz: "Dobrý večer, Bobe! Ahoj všichni!" },
+          { s: "A", it: "Ciao Giulia! Bentornata!", cz: "Ahoj Giulie! Vítej zpátky!" },
+          { s: "B", it: "Grazie! Buona serata!", cz: "Díky! Hezký večer!" },
+          { s: "A", it: "Buonanotte! A domani!", cz: "Dobrou noc! Tak zítra!" },
+          { s: "B", it: "Buonanotte! Ci vediamo!", cz: "Dobrou noc! Uvidíme se!" },
+        ],
+      },
+    ],
   },
   {
     id: "zdvorilost", level: "l1", title: "Prosím, děkuju, promiň", icon: "🙏",
@@ -383,19 +391,21 @@ const LESSONS = [
       { id: "zdvorilost-9", src: "Of course, no problem", it: "Certo, nessun problema", hint: "jistě, žádný problém" },
       { id: "zdvorilost-10", src: "May I come in? / Excuse me (to pass)", it: "Permesso?" },
     ],
-    dialog: {
-      title: "Kafe na recepci", scene: "Host Marco přijde k recepci.", cast: {"A": "Bob", "B": "Marco"},
-      lines: [
-        { s: "B", it: "Scusa!", cz: "Promiň!" },
-        { s: "A", it: "Sì?", cz: "Ano?" },
-        { s: "B", it: "Un caffè, per favore.", cz: "Jedno kafe, prosím." },
-        { s: "A", it: "Certo, nessun problema! Prego!", cz: "Jasně, žádný problém! Prosím!" },
-        { s: "B", it: "Grazie mille!", cz: "Moc děkuju!" },
-        { s: "A", it: "Di niente!", cz: "Není zač!" },
-        { s: "B", it: "Oh, scusa, mi dispiace!", cz: "Jé, promiň, je mi to líto!" },
-        { s: "A", it: "Va bene, nessun problema!", cz: "To je v pohodě, žádný problém!" },
-      ],
-    },
+    dialogs: [
+      {
+        title: "Kafe na recepci", scene: "Host Marco si přijde k recepci pro kafe – a hned ho trochu rozlije na pult.", cast: {"A": "Bob", "B": "Marco"},
+        lines: [
+          { s: "B", it: "Scusa!", cz: "Promiň!" },
+          { s: "A", it: "Sì?", cz: "Ano?" },
+          { s: "B", it: "Un caffè, per favore.", cz: "Jedno kafe, prosím." },
+          { s: "A", it: "Certo, nessun problema! Prego!", cz: "Jasně, žádný problém! Prosím!" },
+          { s: "B", it: "Grazie mille!", cz: "Moc děkuju!" },
+          { s: "A", it: "Di niente!", cz: "Není zač!" },
+          { s: "B", it: "Oh, scusa, mi dispiace!", cz: "Jé, promiň, je mi to líto!" },
+          { s: "A", it: "Va bene, nessun problema!", cz: "To je v pohodě, žádný problém!" },
+        ],
+      },
+    ],
   },
   {
     id: "essere", level: "l1", title: "Já, ty, on – zájmena", icon: "🧍",
@@ -418,17 +428,19 @@ const LESSONS = [
       { id: "essere-9", src: "I am Italian", it: "Sono italiano", hint: "muž (žena: italiana)" },
       { id: "essere-10", src: "And you?", it: "E tu?" },
     ],
-    dialog: {
-      title: "Kdo jsi?", scene: "Bob se seznamuje s Annou v kuchyni hostelu.", cast: {"A": "Bob", "B": "Anna"},
-      lines: [
-        { s: "B", it: "Ciao! Sei Bob?", cz: "Ahoj! Jsi Bob?" },
-        { s: "A", it: "Sì, sono Bob. E tu?", cz: "Ano, jsem Bob. A ty?" },
-        { s: "B", it: "Io sono Anna.", cz: "Já jsem Anna." },
-        { s: "A", it: "Sei italiana?", cz: "Jsi Italka?" },
-        { s: "B", it: "No, sono tedesca. E tu?", cz: "Ne, jsem Němka. A ty?" },
-        { s: "A", it: "Io sono ceco.", cz: "Já jsem Čech." },
-      ],
-    },
+    dialogs: [
+      {
+        title: "Kdo jsi?", scene: "Bob se seznamuje s Annou v kuchyni hostelu.", cast: {"A": "Bob", "B": "Anna"},
+        lines: [
+          { s: "B", it: "Ciao! Sei Bob?", cz: "Ahoj! Jsi Bob?" },
+          { s: "A", it: "Sì, sono Bob. E tu?", cz: "Ano, jsem Bob. A ty?" },
+          { s: "B", it: "Io sono Anna.", cz: "Já jsem Anna." },
+          { s: "A", it: "Sei italiana?", cz: "Jsi Italka?" },
+          { s: "B", it: "No, sono tedesca. E tu?", cz: "Ne, jsem Němka. A ty?" },
+          { s: "A", it: "Io sono ceco.", cz: "Já jsem Čech." },
+        ],
+      },
+    ],
   },
   {
     id: "essere2", level: "l1", title: "My, vy, oni – sloveso být", icon: "👥",
@@ -447,18 +459,20 @@ const LESSONS = [
       { id: "essere2-1", src: "We are friends", it: "Siamo amici" },
       { id: "essere2-2", src: "Is he Italian?", it: "Lui è italiano?" },
     ],
-    dialog: {
-      title: "Kamarádi a turisti", scene: "Bob představuje Giulii hostovi Marcovi.", cast: {"A": "Bob", "B": "Marco"},
-      lines: [
-        { s: "A", it: "Lei è Giulia. È molto simpatica!", cz: "Tohle je Giulia. Je moc milá!" },
-        { s: "B", it: "Ciao Giulia! Siete amici?", cz: "Ahoj Giulie! Jste kamarádi?" },
-        { s: "A", it: "Sì, siamo amici.", cz: "Ano, jsme kamarádi." },
-        { s: "B", it: "Di dove siete?", cz: "Odkud jste?" },
-        { s: "A", it: "Io sono ceco, lei è italiana. Siamo a La Spezia!", cz: "Já jsem Čech, ona je Italka. Jsme v La Spezii!" },
-        { s: "B", it: "E loro? Sono italiani?", cz: "A oni? Jsou to Italové?" },
-        { s: "A", it: "No, sono turisti.", cz: "Ne, jsou to turisti." },
-      ],
-    },
+    dialogs: [
+      {
+        title: "Kamarádi a turisti", scene: "Bob představuje Giulii hostovi Marcovi.", cast: {"A": "Bob", "B": "Marco"},
+        lines: [
+          { s: "A", it: "Lei è Giulia. È molto simpatica!", cz: "Tohle je Giulia. Je moc milá!" },
+          { s: "B", it: "Ciao Giulia! Siete amici?", cz: "Ahoj Giulie! Jste kamarádi?" },
+          { s: "A", it: "Sì, siamo amici.", cz: "Ano, jsme kamarádi." },
+          { s: "B", it: "Di dove siete?", cz: "Odkud jste?" },
+          { s: "A", it: "Io sono ceco, lei è italiana. Siamo a La Spezia!", cz: "Já jsem Čech, ona je Italka. Jsme v La Spezii!" },
+          { s: "B", it: "E loro? Sono italiani?", cz: "A oni? Jsou to Italové?" },
+          { s: "A", it: "No, sono turisti.", cz: "Ne, jsou to turisti." },
+        ],
+      },
+    ],
   },
   {
     id: "otazky", level: "l1", title: "Otázky: kdo, co, kde, kdy", icon: "❓",
@@ -479,19 +493,21 @@ const LESSONS = [
       { id: "otazky-2", src: "Where is it?", it: "Dov'è?" },
       { id: "otazky-3", src: "Who is it?", it: "Chi è?" },
     ],
-    dialog: {
-      title: "Kdo je to?", scene: "Anna se ptá na nového hosta.", cast: {"A": "Bob", "B": "Anna"},
-      lines: [
-        { s: "B", it: "Chi è?", cz: "Kdo je to?" },
-        { s: "A", it: "È Marco.", cz: "To je Marco." },
-        { s: "B", it: "Di dov'è?", cz: "Odkud je?" },
-        { s: "A", it: "È italiano.", cz: "Je to Ital." },
-        { s: "B", it: "E dov'è adesso?", cz: "A kde je teď?" },
-        { s: "A", it: "È a La Spezia.", cz: "Je v La Spezii." },
-        { s: "B", it: "Perché?", cz: "Proč?" },
-        { s: "A", it: "Perché è un turista!", cz: "Protože je turista!" },
-      ],
-    },
+    dialogs: [
+      {
+        title: "Kdo je to?", scene: "Anna se ptá na nového hosta.", cast: {"A": "Bob", "B": "Anna"},
+        lines: [
+          { s: "B", it: "Chi è?", cz: "Kdo je to?" },
+          { s: "A", it: "È Marco.", cz: "To je Marco." },
+          { s: "B", it: "Di dov'è?", cz: "Odkud je?" },
+          { s: "A", it: "È italiano.", cz: "Je to Ital." },
+          { s: "B", it: "E dov'è adesso?", cz: "A kde je teď?" },
+          { s: "A", it: "È a La Spezia.", cz: "Je v La Spezii." },
+          { s: "B", it: "Perché?", cz: "Proč?" },
+          { s: "A", it: "Perché è un turista!", cz: "Protože je turista!" },
+        ],
+      },
+    ],
   },
   {
     id: "slovicka", level: "l1", title: "Malá slovíčka, co lepí věty", icon: "🧱",
@@ -514,17 +530,19 @@ const LESSONS = [
       { id: "slovicka-8", src: "Now", it: "Adesso", hint: "teď" },
       { id: "slovicka-9", src: "Then / afterwards", it: "Poi", hint: "pak / potom" },
     ],
-    dialog: {
-      title: "Kafe, nebo čaj?", scene: "Giulia nabízí Bobovi něco k pití.", cast: {"A": "Bob", "B": "Giulia"},
-      lines: [
-        { s: "B", it: "Un caffè o un tè?", cz: "Kafe, nebo čaj?" },
-        { s: "A", it: "Un caffè, per favore. E anche un'acqua.", cz: "Kafe, prosím. A taky vodu." },
-        { s: "B", it: "Adesso?", cz: "Teď?" },
-        { s: "A", it: "Sì, adesso. Poi un tè.", cz: "Jo, teď. Potom čaj." },
-        { s: "B", it: "Questo caffè è molto buono!", cz: "Tohle kafe je moc dobré!" },
-        { s: "A", it: "Ovviamente! È italiano!", cz: "Samozřejmě! Je italské!" },
-      ],
-    },
+    dialogs: [
+      {
+        title: "Kafe, nebo čaj?", scene: "Giulia nabízí Bobovi něco k pití.", cast: {"A": "Bob", "B": "Giulia"},
+        lines: [
+          { s: "B", it: "Un caffè o un tè?", cz: "Kafe, nebo čaj?" },
+          { s: "A", it: "Un caffè, per favore. E anche un'acqua.", cz: "Kafe, prosím. A taky vodu." },
+          { s: "B", it: "Adesso?", cz: "Teď?" },
+          { s: "A", it: "Sì, adesso. Poi un tè.", cz: "Jo, teď. Potom čaj." },
+          { s: "B", it: "Questo caffè è molto buono!", cz: "Tohle kafe je moc dobré!" },
+          { s: "A", it: "Ovviamente! È italiano!", cz: "Samozřejmě! Je italské!" },
+        ],
+      },
+    ],
   },
   {
     id: "cisla", level: "l1", title: "Čísla 0–20", icon: "🔢",
@@ -547,17 +565,19 @@ const LESSONS = [
       { id: "cisla-11", src: "Room number six", it: "La camera numero sei" },
       { id: "cisla-12", src: "Bed number three", it: "Il letto numero tre" },
     ],
-    dialog: {
-      title: "Pokoj číslo šest", scene: "Host se ptá, kde spí.", cast: {"A": "Bob", "B": "Anna"},
-      lines: [
-        { s: "B", it: "Il mio letto?", cz: "Moje postel?" },
-        { s: "A", it: "Il letto numero tre.", cz: "Postel číslo tři." },
-        { s: "B", it: "E la camera?", cz: "A pokoj?" },
-        { s: "A", it: "La camera numero sei.", cz: "Pokoj číslo šest." },
-        { s: "B", it: "Sei?", cz: "Šest?" },
-        { s: "A", it: "Sì, sei. Uno, due, tre, quattro, cinque, sei!", cz: "Jo, šest. Jedna, dva, tři, čtyři, pět, šest!" },
-      ],
-    },
+    dialogs: [
+      {
+        title: "Pokoj číslo šest", scene: "Host se ptá, kde spí.", cast: {"A": "Bob", "B": "Anna"},
+        lines: [
+          { s: "B", it: "Il mio letto?", cz: "Moje postel?" },
+          { s: "A", it: "Il letto numero tre.", cz: "Postel číslo tři." },
+          { s: "B", it: "E la camera?", cz: "A pokoj?" },
+          { s: "A", it: "La camera numero sei.", cz: "Pokoj číslo šest." },
+          { s: "B", it: "Sei?", cz: "Šest?" },
+          { s: "A", it: "Sì, sei. Uno, due, tre, quattro, cinque, sei!", cz: "Jo, šest. Jedna, dva, tři, čtyři, pět, šest!" },
+        ],
+      },
+    ],
   },
   {
     id: "cisla2", level: "l1", title: "Kolik to stojí?", icon: "💶",
@@ -576,17 +596,19 @@ const LESSONS = [
       { id: "cisla-9", src: "It's twenty-five euros a night", it: "Sono venticinque euro a notte" },
       { id: "cisla-10", src: "The tourist tax is two euros", it: "La tassa di soggiorno è di due euro" },
     ],
-    dialog: {
-      title: "Platba za noc", scene: "Host se ptá na cenu.", cast: {"A": "Bob", "B": "Anna"},
-      lines: [
-        { s: "B", it: "Quanto costa una notte?", cz: "Kolik stojí jedna noc?" },
-        { s: "A", it: "Sono venticinque euro a notte.", cz: "Je to dvacet pět eur za noc." },
-        { s: "B", it: "Per tre notti?", cz: "Na tři noci?" },
-        { s: "A", it: "Settantacinque euro. E la tassa di soggiorno è di due euro a notte.", cz: "Sedmdesát pět eur. A turistická taxa je dvě eura na noc." },
-        { s: "B", it: "Quant'è in tutto?", cz: "Kolik to je celkem?" },
-        { s: "A", it: "Ottantuno euro.", cz: "Osmdesát jedna eur." },
-      ],
-    },
+    dialogs: [
+      {
+        title: "Platba za noc", scene: "Host se ptá na cenu.", cast: {"A": "Bob", "B": "Anna"},
+        lines: [
+          { s: "B", it: "Quanto costa una notte?", cz: "Kolik stojí jedna noc?" },
+          { s: "A", it: "Sono venticinque euro a notte.", cz: "Je to dvacet pět eur za noc." },
+          { s: "B", it: "Per tre notti?", cz: "Na tři noci?" },
+          { s: "A", it: "Settantacinque euro. E la tassa di soggiorno è di due euro a notte.", cz: "Sedmdesát pět eur. A turistická taxa je dvě eura na noc." },
+          { s: "B", it: "Quant'è in tutto?", cz: "Kolik to je celkem?" },
+          { s: "A", it: "Ottantuno euro.", cz: "Osmdesát jedna eur." },
+        ],
+      },
+    ],
   },
   {
     id: "jaksemas", level: "l2", title: "Jak se máš? – krátce", icon: "😊",
@@ -605,17 +627,19 @@ const LESSONS = [
       { id: "jaksemas-8", src: "All good!", it: "Tutto a posto!", hint: "všechno na svém místě" },
       { id: "jaksemas-9", src: "Great! (really well)", it: "Alla grande!", hint: "doslova: ve velkém stylu" },
     ],
-    dialog: {
-      title: "Jak to jde?", scene: "Bob potká Giulii na terase.", cast: {"A": "Bob", "B": "Giulia"},
-      lines: [
-        { s: "A", it: "Ciao Giulia! Come va?", cz: "Ahoj Giulie! Jak to jde?" },
-        { s: "B", it: "Bene, grazie. E tu?", cz: "Dobře, díky. A ty?" },
-        { s: "A", it: "Benissimo! Tutto bene?", cz: "Výborně! Všechno v pohodě?" },
-        { s: "B", it: "Mah, così così…", cz: "No, tak napůl…" },
-        { s: "A", it: "Così così? Perché?", cz: "Napůl? Proč?" },
-        { s: "B", it: "No, scherzo! Tutto a posto. Alla grande!", cz: "Ne, dělám si legraci! Všechno v pořádku. Skvěle!" },
-      ],
-    },
+    dialogs: [
+      {
+        title: "Jak to jde?", scene: "Bob potká Giulii na terase.", cast: {"A": "Bob", "B": "Giulia"},
+        lines: [
+          { s: "A", it: "Ciao Giulia! Come va?", cz: "Ahoj Giulie! Jak to jde?" },
+          { s: "B", it: "Bene, grazie. E tu?", cz: "Dobře, díky. A ty?" },
+          { s: "A", it: "Benissimo! Tutto bene?", cz: "Výborně! Všechno v pohodě?" },
+          { s: "B", it: "Mah, così così…", cz: "No, tak napůl…" },
+          { s: "A", it: "Così così? Perché?", cz: "Napůl? Proč?" },
+          { s: "B", it: "No, scherzo! Tutto a posto. Alla grande!", cz: "Ne, dělám si legraci! Všechno v pořádku. Skvěle!" },
+        ],
+      },
+    ],
   },
   {
     id: "jaksemas2", level: "l2", title: "Jak se cítím", icon: "🤒",
@@ -636,17 +660,19 @@ const LESSONS = [
       { id: "jaksemas2-4", src: "I'm happy", it: "Sono contento", hint: "muž (žena: contenta)" },
       { id: "jaksemas-2", src: "How are you? (formal)", it: "Come sta?", hint: "vykání" },
     ],
-    dialog: {
-      title: "Nejsem ve své kůži", scene: "Giulia není ve formě.", cast: {"A": "Bob", "B": "Giulia"},
-      lines: [
-        { s: "B", it: "Ciao Bob, come stai?", cz: "Ahoj Bobe, jak se máš?" },
-        { s: "A", it: "Sono stanchissimo! E tu? Stai bene?", cz: "Jsem strašně unavený! A ty? Máš se dobře?" },
-        { s: "B", it: "Non sto bene. Sono un po' malata.", cz: "Není mi dobře. Jsem trochu nemocná." },
-        { s: "A", it: "Oh, mi dispiace!", cz: "Jé, to mě mrzí!" },
-        { s: "B", it: "Ma adesso mi sento meglio.", cz: "Ale teď už se cítím líp." },
-        { s: "A", it: "Bene! Sono contento.", cz: "Dobře! To jsem rád." },
-      ],
-    },
+    dialogs: [
+      {
+        title: "Nejsem ve své kůži", scene: "Giulia není ve formě.", cast: {"A": "Bob", "B": "Giulia"},
+        lines: [
+          { s: "B", it: "Ciao Bob, come stai?", cz: "Ahoj Bobe, jak se máš?" },
+          { s: "A", it: "Sono stanchissimo! E tu? Stai bene?", cz: "Jsem strašně unavený! A ty? Máš se dobře?" },
+          { s: "B", it: "Non sto bene. Sono un po' malata.", cz: "Není mi dobře. Jsem trochu nemocná." },
+          { s: "A", it: "Oh, mi dispiace!", cz: "Jé, to mě mrzí!" },
+          { s: "B", it: "Ma adesso mi sento meglio.", cz: "Ale teď už se cítím líp." },
+          { s: "A", it: "Bene! Sono contento.", cz: "Dobře! To jsem rád." },
+        ],
+      },
+    ],
   },
   {
     id: "seznameni", level: "l2", title: "Jméno a odkud jsi", icon: "🤝",
@@ -666,17 +692,19 @@ const LESSONS = [
       { id: "zaklad-10", src: "My", it: "Mio / Mia" },
       { id: "zaklad-11", src: "Your", it: "Tuo / Tua" },
     ],
-    dialog: {
-      title: "Seznámení v kuchyni", scene: "Anna právě přijela.", cast: {"A": "Bob", "B": "Anna"},
-      lines: [
-        { s: "B", it: "Ciao! Mi chiamo Anna. E tu, come ti chiami?", cz: "Ahoj! Jmenuju se Anna. A ty, jak se jmenuješ?" },
-        { s: "A", it: "Mi chiamo Bob. Piacere!", cz: "Jmenuju se Bob. Těší mě!" },
-        { s: "B", it: "Piacere! Di dove sei?", cz: "Těší mě! Odkud jsi?" },
-        { s: "A", it: "Sono della Repubblica Ceca. E tu?", cz: "Jsem z České republiky. A ty?" },
-        { s: "B", it: "Sono di Berlino.", cz: "Jsem z Berlína." },
-        { s: "A", it: "Io abito a La Spezia.", cz: "Já bydlím v La Spezii." },
-      ],
-    },
+    dialogs: [
+      {
+        title: "Seznámení v kuchyni", scene: "Anna právě přijela.", cast: {"A": "Bob", "B": "Anna"},
+        lines: [
+          { s: "B", it: "Ciao! Mi chiamo Anna. E tu, come ti chiami?", cz: "Ahoj! Jmenuju se Anna. A ty, jak se jmenuješ?" },
+          { s: "A", it: "Mi chiamo Bob. Piacere!", cz: "Jmenuju se Bob. Těší mě!" },
+          { s: "B", it: "Piacere! Di dove sei?", cz: "Těší mě! Odkud jsi?" },
+          { s: "A", it: "Sono della Repubblica Ceca. E tu?", cz: "Jsem z České republiky. A ty?" },
+          { s: "B", it: "Sono di Berlino.", cz: "Jsem z Berlína." },
+          { s: "A", it: "Io abito a La Spezia.", cz: "Já bydlím v La Spezii." },
+        ],
+      },
+    ],
   },
   {
     id: "seznameni2", level: "l2", title: "Práce a cestování", icon: "🧳",
@@ -694,20 +722,22 @@ const LESSONS = [
       { id: "seznameni-13", src: "Are you travelling alone?", it: "Viaggi da solo?" },
       { id: "seznameni-11", src: "How long are you staying?", it: "Quanto tempo rimani?" },
     ],
-    dialog: {
-      title: "Na dovolené", scene: "Bob se ptá Anny na cestu.", cast: {"A": "Bob", "B": "Anna"},
-      lines: [
-        { s: "B", it: "Che lavoro fai?", cz: "Co děláš za práci?" },
-        { s: "A", it: "Lavoro in un ostello, alla reception. E tu?", cz: "Pracuju v hostelu, na recepci. A ty?" },
-        { s: "B", it: "Io sono in vacanza!", cz: "Já jsem na dovolené!" },
-        { s: "A", it: "È la tua prima volta in Italia?", cz: "Jsi v Itálii poprvé?" },
-        { s: "B", it: "Sì!", cz: "Jo!" },
-        { s: "A", it: "Viaggi da sola?", cz: "Cestuješ sama?" },
-        { s: "B", it: "No, con un'amica.", cz: "Ne, s kamarádkou." },
-        { s: "A", it: "Quanto tempo rimani?", cz: "Jak dlouho zůstaneš?" },
-        { s: "B", it: "Una settimana.", cz: "Týden." },
-      ],
-    },
+    dialogs: [
+      {
+        title: "Na dovolené", scene: "Bob se ptá Anny na cestu.", cast: {"A": "Bob", "B": "Anna"},
+        lines: [
+          { s: "B", it: "Che lavoro fai?", cz: "Co děláš za práci?" },
+          { s: "A", it: "Lavoro in un ostello, alla reception. E tu?", cz: "Pracuju v hostelu, na recepci. A ty?" },
+          { s: "B", it: "Io sono in vacanza!", cz: "Já jsem na dovolené!" },
+          { s: "A", it: "È la tua prima volta in Italia?", cz: "Jsi v Itálii poprvé?" },
+          { s: "B", it: "Sì!", cz: "Jo!" },
+          { s: "A", it: "Viaggi da sola?", cz: "Cestuješ sama?" },
+          { s: "B", it: "No, con un'amica.", cz: "Ne, s kamarádkou." },
+          { s: "A", it: "Quanto tempo rimani?", cz: "Jak dlouho zůstaneš?" },
+          { s: "B", it: "Una settimana.", cz: "Týden." },
+        ],
+      },
+    ],
   },
   {
     id: "seznameni3", level: "l2", title: "Jak dlouho už…?", icon: "⏳",
@@ -725,16 +755,18 @@ const LESSONS = [
       { id: "seznameni3-4", src: "How long have you been working here?", it: "Da quanto tempo lavori qui?" },
       { id: "seznameni3-5", src: "I've been working here since May", it: "Lavoro qui da maggio" },
     ],
-    dialog: {
-      title: "Jak dlouho tu jsi?", scene: "Anna se vyptává Boba.", cast: {"A": "Bob", "B": "Anna"},
-      lines: [
-        { s: "B", it: "Da quanto tempo sei qui?", cz: "Jak dlouho už tu jsi?" },
-        { s: "A", it: "Sono qui da due mesi.", cz: "Jsem tu dva měsíce." },
-        { s: "B", it: "E da quanto tempo lavori qui?", cz: "A jak dlouho tu pracuješ?" },
-        { s: "A", it: "Lavoro qui da maggio. E tu, da quanto tempo sei a La Spezia?", cz: "Pracuju tu od května. A ty, jak dlouho jsi v La Spezii?" },
-        { s: "B", it: "Da ieri!", cz: "Od včera!" },
-      ],
-    },
+    dialogs: [
+      {
+        title: "Jak dlouho tu jsi?", scene: "Anna se vyptává Boba.", cast: {"A": "Bob", "B": "Anna"},
+        lines: [
+          { s: "B", it: "Da quanto tempo sei qui?", cz: "Jak dlouho už tu jsi?" },
+          { s: "A", it: "Sono qui da due mesi.", cz: "Jsem tu dva měsíce." },
+          { s: "B", it: "E da quanto tempo lavori qui?", cz: "A jak dlouho tu pracuješ?" },
+          { s: "A", it: "Lavoro qui da maggio. E tu, da quanto tempo sei a La Spezia?", cz: "Pracuju tu od května. A ty, jak dlouho jsi v La Spezii?" },
+          { s: "B", it: "Da ieri!", cz: "Od včera!" },
+        ],
+      },
+    ],
   },
   {
     id: "avere", level: "l2", title: "Mám hlad, je mi zima", icon: "🥶",
@@ -752,17 +784,19 @@ const LESSONS = [
       { id: "avere-5", src: "I'm sleepy", it: "Ho sonno" },
       { id: "avere-12", src: "You're right", it: "Hai ragione" },
     ],
-    dialog: {
-      title: "Hlad a žízeň", scene: "Bob a Giulia po dlouhém dni.", cast: {"A": "Bob", "B": "Giulia"},
-      lines: [
-        { s: "B", it: "Ho fame!", cz: "Mám hlad!" },
-        { s: "A", it: "Anche io! E ho sete.", cz: "Já taky! A mám žízeň." },
-        { s: "B", it: "Hai freddo?", cz: "Je ti zima?" },
-        { s: "A", it: "No, ho caldo!", cz: "Ne, je mi horko!" },
-        { s: "B", it: "E io ho sonno…", cz: "A já jsem ospalá…" },
-        { s: "A", it: "Hai ragione, anche io!", cz: "Máš pravdu, já taky!" },
-      ],
-    },
+    dialogs: [
+      {
+        title: "Hlad a žízeň", scene: "Bob a Giulia po dlouhém dni.", cast: {"A": "Bob", "B": "Giulia"},
+        lines: [
+          { s: "B", it: "Ho fame!", cz: "Mám hlad!" },
+          { s: "A", it: "Anche io! E ho sete.", cz: "Já taky! A mám žízeň." },
+          { s: "B", it: "Hai freddo?", cz: "Je ti zima?" },
+          { s: "A", it: "No, ho caldo!", cz: "Ne, je mi horko!" },
+          { s: "B", it: "E io ho sonno…", cz: "A já jsem ospalá…" },
+          { s: "A", it: "Hai ragione, anche io!", cz: "Máš pravdu, já taky!" },
+        ],
+      },
+    ],
   },
   {
     id: "avere2", level: "l2", title: "Mám čas, mám otázku", icon: "🙋",
@@ -780,17 +814,19 @@ const LESSONS = [
       { id: "avere2-1", src: "I'm thirty", it: "Ho trent'anni" },
       { id: "avere-11", src: "I need help", it: "Ho bisogno di aiuto", hint: "mám potřebu…" },
     ],
-    dialog: {
-      title: "Mám otázku", scene: "Host potřebuje poradit.", cast: {"A": "Bob", "B": "Marco"},
-      lines: [
-        { s: "B", it: "Scusa, hai tempo? Ho una domanda.", cz: "Promiň, máš čas? Mám otázku." },
-        { s: "A", it: "Certo!", cz: "Jasně!" },
-        { s: "B", it: "Ho bisogno di aiuto.", cz: "Potřebuju pomoct." },
-        { s: "A", it: "Nessun problema. Hai una prenotazione?", cz: "Žádný problém. Máš rezervaci?" },
-        { s: "B", it: "Sì, per tre notti.", cz: "Ano, na tři noci." },
-        { s: "A", it: "Perfetto!", cz: "Výborně!" },
-      ],
-    },
+    dialogs: [
+      {
+        title: "Mám otázku", scene: "Host potřebuje poradit.", cast: {"A": "Bob", "B": "Marco"},
+        lines: [
+          { s: "B", it: "Scusa, hai tempo? Ho una domanda.", cz: "Promiň, máš čas? Mám otázku." },
+          { s: "A", it: "Certo!", cz: "Jasně!" },
+          { s: "B", it: "Ho bisogno di aiuto.", cz: "Potřebuju pomoct." },
+          { s: "A", it: "Nessun problema. Hai una prenotazione?", cz: "Žádný problém. Máš rezervaci?" },
+          { s: "B", it: "Sì, per tre notti.", cz: "Ano, na tři noci." },
+          { s: "A", it: "Perfetto!", cz: "Výborně!" },
+        ],
+      },
+    ],
   },
   {
     id: "modalni", level: "l2", title: "Můžu, chci, potřebuju", icon: "🙋",
@@ -810,17 +846,19 @@ const LESSONS = [
       { id: "modalni-17", src: "I need a towel", it: "Mi serve un asciugamano" },
       { id: "modalni-5", src: "Do you want…?", it: "Vuoi…?" },
     ],
-    dialog: {
-      title: "V baru", scene: "Bob si objednává u Giulie, která pracuje v baru.", cast: {"A": "Bob", "B": "Giulia"},
-      lines: [
-        { s: "A", it: "Ciao! Posso entrare?", cz: "Ahoj! Můžu dál?" },
-        { s: "B", it: "Certo! Cosa vuoi?", cz: "Jasně! Co chceš?" },
-        { s: "A", it: "Vorrei un caffè, per favore.", cz: "Dal bych si kafe, prosím." },
-        { s: "B", it: "Vuoi anche un'acqua?", cz: "Chceš i vodu?" },
-        { s: "A", it: "Sì, grazie. E mi serve un asciugamano!", cz: "Jo, díky. A potřebuju ručník!" },
-        { s: "B", it: "Un asciugamano? Questo è un bar!", cz: "Ručník? Tohle je bar!" },
-      ],
-    },
+    dialogs: [
+      {
+        title: "V baru", scene: "Bob si objednává u Giulie, která pracuje v baru.", cast: {"A": "Bob", "B": "Giulia"},
+        lines: [
+          { s: "A", it: "Ciao! Posso entrare?", cz: "Ahoj! Můžu dál?" },
+          { s: "B", it: "Certo! Cosa vuoi?", cz: "Jasně! Co chceš?" },
+          { s: "A", it: "Vorrei un caffè, per favore.", cz: "Dal bych si kafe, prosím." },
+          { s: "B", it: "Vuoi anche un'acqua?", cz: "Chceš i vodu?" },
+          { s: "A", it: "Sì, grazie. E mi serve un asciugamano!", cz: "Jo, díky. A potřebuju ručník!" },
+          { s: "B", it: "Un asciugamano? Questo è un bar!", cz: "Ručník? Tohle je bar!" },
+        ],
+      },
+    ],
   },
   {
     id: "modalni2", level: "l2", title: "Musím, pojďme, doufám", icon: "🚶",
@@ -841,17 +879,19 @@ const LESSONS = [
       { id: "modalni-9", src: "I hope so", it: "Lo spero" },
       { id: "modalni-10", src: "I thought", it: "Pensavo" },
     ],
-    dialog: {
-      title: "Pojďme!", scene: "Giulia potřebuje pomoct.", cast: {"A": "Bob", "B": "Giulia"},
-      lines: [
-        { s: "B", it: "Bob, puoi aiutarmi?", cz: "Bobe, můžeš mi pomoct?" },
-        { s: "A", it: "Certo! Posso aiutarti.", cz: "Jasně! Můžu ti pomoct." },
-        { s: "B", it: "Devo andare alla stazione.", cz: "Musím jít na nádraží." },
-        { s: "A", it: "Andiamo! Va bene?", cz: "Pojďme! Jo?" },
-        { s: "B", it: "Va bene! Spero di arrivare in tempo…", cz: "Dobře! Doufám, že to stihnu…" },
-        { s: "A", it: "Lo spero!", cz: "Doufám!" },
-      ],
-    },
+    dialogs: [
+      {
+        title: "Pojďme!", scene: "Giulia potřebuje pomoct.", cast: {"A": "Bob", "B": "Giulia"},
+        lines: [
+          { s: "B", it: "Bob, puoi aiutarmi?", cz: "Bobe, můžeš mi pomoct?" },
+          { s: "A", it: "Certo! Posso aiutarti.", cz: "Jasně! Můžu ti pomoct." },
+          { s: "B", it: "Devo andare alla stazione.", cz: "Musím jít na nádraží." },
+          { s: "A", it: "Andiamo! Va bene?", cz: "Pojďme! Jo?" },
+          { s: "B", it: "Va bene! Spero di arrivare in tempo…", cz: "Dobře! Doufám, že to stihnu…" },
+          { s: "A", it: "Lo spero!", cz: "Doufám!" },
+        ],
+      },
+    ],
   },
   {
     id: "italstina", level: "l2", title: "Nerozumím", icon: "🤔",
@@ -869,18 +909,20 @@ const LESSONS = [
       { id: "italstina-13", src: "Do you speak English?", it: "Parli inglese?" },
       { id: "italstina-16", src: "Is that correct?", it: "È giusto?" },
     ],
-    dialog: {
-      title: "Pomaleji, prosím!", scene: "Marco mluví moc rychle.", cast: {"A": "Bob", "B": "Marco"},
-      lines: [
-        { s: "B", it: "Ciao! Come ti chiami e di dove sei?", cz: "Ahoj! Jak se jmenuješ a odkud jsi?" },
-        { s: "A", it: "Scusa, non capisco. Più piano, per favore!", cz: "Promiň, nerozumím. Pomaleji, prosím!" },
-        { s: "B", it: "Come… ti… chiami?", cz: "Jak… se… jmenuješ?" },
-        { s: "A", it: "Ah! Mi chiamo Bob. Come si dice „towel“ in italiano?", cz: "Aha! Jmenuju se Bob. Jak se řekne „towel“ italsky?" },
-        { s: "B", it: "Asciugamano.", cz: "Asciugamano." },
-        { s: "A", it: "Asciugamano. È giusto?", cz: "Asciugamano. Je to správně?" },
-        { s: "B", it: "Sì, perfetto!", cz: "Jo, perfektní!" },
-      ],
-    },
+    dialogs: [
+      {
+        title: "Pomaleji, prosím!", scene: "Marco mluví moc rychle.", cast: {"A": "Bob", "B": "Marco"},
+        lines: [
+          { s: "B", it: "Ciao! Come ti chiami e di dove sei?", cz: "Ahoj! Jak se jmenuješ a odkud jsi?" },
+          { s: "A", it: "Scusa, non capisco. Più piano, per favore!", cz: "Promiň, nerozumím. Pomaleji, prosím!" },
+          { s: "B", it: "Come… ti… chiami?", cz: "Jak… se… jmenuješ?" },
+          { s: "A", it: "Ah! Mi chiamo Bob. Come si dice „towel“ in italiano?", cz: "Aha! Jmenuju se Bob. Jak se řekne „towel“ italsky?" },
+          { s: "B", it: "Asciugamano.", cz: "Asciugamano." },
+          { s: "A", it: "Asciugamano. È giusto?", cz: "Asciugamano. Je to správně?" },
+          { s: "B", it: "Sì, perfetto!", cz: "Jo, perfektní!" },
+        ],
+      },
+    ],
   },
   {
     id: "italstina2", level: "l2", title: "Učím se italsky", icon: "📚",
@@ -898,16 +940,18 @@ const LESSONS = [
       { id: "italstina-3", src: "I have to practice my Italian", it: "Devo esercitarmi con l'italiano" },
       { id: "italstina-4", src: "I need to practice my Italian", it: "Ho bisogno di esercitarmi con l'italiano" },
     ],
-    dialog: {
-      title: "Mluvíš anglicky?", scene: "Turistka chce mluvit anglicky.", cast: {"A": "Bob", "B": "Anna"},
-      lines: [
-        { s: "B", it: "Parli inglese?", cz: "Mluvíš anglicky?" },
-        { s: "A", it: "Sì, ma sto imparando l'italiano.", cz: "Jo, ale učím se italsky." },
-        { s: "B", it: "Parli molto bene l'italiano!", cz: "Mluvíš italsky moc dobře!" },
-        { s: "A", it: "Grazie! Parlo un po' di italiano. Devo esercitarmi.", cz: "Díky! Mluvím trochu italsky. Musím cvičit." },
-        { s: "B", it: "Allora parliamo italiano!", cz: "Tak mluvme italsky!" },
-      ],
-    },
+    dialogs: [
+      {
+        title: "Mluvíš anglicky?", scene: "Turistka chce mluvit anglicky.", cast: {"A": "Bob", "B": "Anna"},
+        lines: [
+          { s: "B", it: "Parli inglese?", cz: "Mluvíš anglicky?" },
+          { s: "A", it: "Sì, ma sto imparando l'italiano.", cz: "Jo, ale učím se italsky." },
+          { s: "B", it: "Parli molto bene l'italiano!", cz: "Mluvíš italsky moc dobře!" },
+          { s: "A", it: "Grazie! Parlo un po' di italiano. Devo esercitarmi.", cz: "Díky! Mluvím trochu italsky. Musím cvičit." },
+          { s: "B", it: "Allora parliamo italiano!", cz: "Tak mluvme italsky!" },
+        ],
+      },
+    ],
   },
   {
     id: "italstina3", level: "l2", title: "Učím se italsky – delší věty", icon: "✍️",
@@ -925,16 +969,18 @@ const LESSONS = [
       { id: "italstina-6", src: "My Italian is better than yours", it: "Il mio italiano è meglio del tuo" },
       { id: "italstina-9", src: "I thought you could speak English", it: "Pensavo che parlassi inglese" },
     ],
-    dialog: {
-      title: "Lepší než ty!", scene: "Giulia se diví, jak Bob mluví.", cast: {"A": "Bob", "B": "Giulia"},
-      lines: [
-        { s: "B", it: "Pensavo che parlassi solo inglese!", cz: "Myslela jsem, že mluvíš jen anglicky!" },
-        { s: "A", it: "No! Mi scrivo tutto quello che voglio dire in italiano.", cz: "Ne! Píšu si všechno, co chci říct italsky." },
-        { s: "B", it: "Bravo!", cz: "Šikula!" },
-        { s: "A", it: "Adesso il mio italiano è meglio del tuo!", cz: "Teď je moje italština lepší než tvoje!" },
-        { s: "B", it: "Ah sì? Cosa vuoi dire?", cz: "Jo? Jak to myslíš?" },
-      ],
-    },
+    dialogs: [
+      {
+        title: "Lepší než ty!", scene: "Giulia se diví, jak Bob mluví.", cast: {"A": "Bob", "B": "Giulia"},
+        lines: [
+          { s: "B", it: "Pensavo che parlassi solo inglese!", cz: "Myslela jsem, že mluvíš jen anglicky!" },
+          { s: "A", it: "No! Mi scrivo tutto quello che voglio dire in italiano.", cz: "Ne! Píšu si všechno, co chci říct italsky." },
+          { s: "B", it: "Bravo!", cz: "Šikula!" },
+          { s: "A", it: "Adesso il mio italiano è meglio del tuo!", cz: "Teď je moje italština lepší než tvoje!" },
+          { s: "B", it: "Ah sì? Cosa vuoi dire?", cz: "Jo? Jak to myslíš?" },
+        ],
+      },
+    ],
   },
   {
     id: "cas", level: "l2", title: "Kolik je hodin?", icon: "⏰",
@@ -953,16 +999,18 @@ const LESSONS = [
       { id: "denni-10", src: "In two minutes", it: "Tra due minuti" },
       { id: "cas-8", src: "Later", it: "Più tardi", hint: "později" },
     ],
-    dialog: {
-      title: "V kolik?", scene: "Bob a Giulia se domlouvají.", cast: {"A": "Bob", "B": "Giulia"},
-      lines: [
-        { s: "B", it: "Che ore sono?", cz: "Kolik je hodin?" },
-        { s: "A", it: "Sono le otto e mezza.", cz: "Je půl deváté." },
-        { s: "B", it: "A che ora andiamo?", cz: "V kolik jdeme?" },
-        { s: "A", it: "Alle nove. Tra trenta minuti!", cz: "V devět. Za třicet minut!" },
-        { s: "B", it: "Va bene, a più tardi!", cz: "Dobře, tak později!" },
-      ],
-    },
+    dialogs: [
+      {
+        title: "V kolik?", scene: "Bob a Giulia se domlouvají.", cast: {"A": "Bob", "B": "Giulia"},
+        lines: [
+          { s: "B", it: "Che ore sono?", cz: "Kolik je hodin?" },
+          { s: "A", it: "Sono le otto e mezza.", cz: "Je půl deváté." },
+          { s: "B", it: "A che ora andiamo?", cz: "V kolik jdeme?" },
+          { s: "A", it: "Alle nove. Tra trenta minuti!", cz: "V devět. Za třicet minut!" },
+          { s: "B", it: "Va bene, a più tardi!", cz: "Dobře, tak později!" },
+        ],
+      },
+    ],
   },
   {
     id: "cas2", level: "l2", title: "Dny a kdy", icon: "📆",
@@ -982,17 +1030,19 @@ const LESSONS = [
       { id: "cas-13", src: "This weekend", it: "Questo fine settimana" },
       { id: "cas2-1", src: "I'm free on Saturday", it: "Sabato sono libero" },
     ],
-    dialog: {
-      title: "Kdy pracuješ?", scene: "Giulia chce s Bobem někam vyrazit.", cast: {"A": "Bob", "B": "Giulia"},
-      lines: [
-        { s: "B", it: "Lavori oggi?", cz: "Pracuješ dneska?" },
-        { s: "A", it: "Oggi sì, domani no.", cz: "Dneska jo, zítra ne." },
-        { s: "B", it: "E stasera?", cz: "A dnes večer?" },
-        { s: "A", it: "Stasera no. Lavoro sempre la mattina.", cz: "Dnes večer ne. Pracuju vždycky ráno." },
-        { s: "B", it: "E questo fine settimana?", cz: "A tenhle víkend?" },
-        { s: "A", it: "Sabato sono libero!", cz: "V sobotu mám volno!" },
-      ],
-    },
+    dialogs: [
+      {
+        title: "Kdy pracuješ?", scene: "Giulia chce s Bobem někam vyrazit.", cast: {"A": "Bob", "B": "Giulia"},
+        lines: [
+          { s: "B", it: "Lavori oggi?", cz: "Pracuješ dneska?" },
+          { s: "A", it: "Oggi sì, domani no.", cz: "Dneska jo, zítra ne." },
+          { s: "B", it: "E stasera?", cz: "A dnes večer?" },
+          { s: "A", it: "Stasera no. Lavoro sempre la mattina.", cz: "Dnes večer ne. Pracuju vždycky ráno." },
+          { s: "B", it: "E questo fine settimana?", cz: "A tenhle víkend?" },
+          { s: "A", it: "Sabato sono libero!", cz: "V sobotu mám volno!" },
+        ],
+      },
+    ],
   },
   {
     id: "smalltalk", level: "l3", title: "Co děláš?", icon: "💬",
@@ -1011,18 +1061,20 @@ const LESSONS = [
       { id: "smalltalk-6", src: "Nothing special", it: "Niente di speciale" },
       { id: "smalltalk-11", src: "Where are you going next?", it: "Dove vai dopo?" },
     ],
-    dialog: {
-      title: "Plány na dnešek", scene: "Ranní kafe s Giulií.", cast: {"A": "Bob", "B": "Giulia"},
-      lines: [
-        { s: "B", it: "Ciao Bob! Cosa fai oggi?", cz: "Ahoj Bobe! Co dneska děláš?" },
-        { s: "A", it: "Oggi lavoro. E tu?", cz: "Dneska pracuju. A ty?" },
-        { s: "B", it: "Vado al mare. Cosa fai stasera?", cz: "Jdu k moři. Co děláš večer?" },
-        { s: "A", it: "Stasera esco! Hai programmi per il weekend?", cz: "Večer jdu ven! Máš plány na víkend?" },
-        { s: "B", it: "Niente di speciale.", cz: "Nic zvláštního." },
-        { s: "A", it: "E dove vai dopo?", cz: "A kam jdeš potom?" },
-        { s: "B", it: "Al bar!", cz: "Do baru!" },
-      ],
-    },
+    dialogs: [
+      {
+        title: "Plány na dnešek", scene: "Ranní kafe s Giulií.", cast: {"A": "Bob", "B": "Giulia"},
+        lines: [
+          { s: "B", it: "Ciao Bob! Cosa fai oggi?", cz: "Ahoj Bobe! Co dneska děláš?" },
+          { s: "A", it: "Oggi lavoro. E tu?", cz: "Dneska pracuju. A ty?" },
+          { s: "B", it: "Vado al mare. Cosa fai stasera?", cz: "Jdu k moři. Co děláš večer?" },
+          { s: "A", it: "Stasera esco! Hai programmi per il weekend?", cz: "Večer jdu ven! Máš plány na víkend?" },
+          { s: "B", it: "Niente di speciale.", cz: "Nic zvláštního." },
+          { s: "A", it: "E dove vai dopo?", cz: "A kam jdeš potom?" },
+          { s: "B", it: "Al bar!", cz: "Do baru!" },
+        ],
+      },
+    ],
   },
   {
     id: "smalltalk2", level: "l3", title: "Reakce a novinky", icon: "😮",
@@ -1045,19 +1097,21 @@ const LESSONS = [
       { id: "denni-17", src: "Something new in your life?", it: "Qualcosa di nuovo nella tua vita?" },
       { id: "denni-21", src: "My goals", it: "I miei obiettivi" },
     ],
-    dialog: {
-      title: "Co je nového?", scene: "Giulia má novinky.", cast: {"A": "Bob", "B": "Giulia"},
-      lines: [
-        { s: "A", it: "Novità?", cz: "Co nového?" },
-        { s: "B", it: "Sì! Ho un lavoro nuovo!", cz: "Jo! Mám novou práci!" },
-        { s: "A", it: "Davvero? Che figata!", cz: "Fakt? To je pecka!" },
-        { s: "B", it: "E una casa nuova a La Spezia.", cz: "A nový byt v La Spezii." },
-        { s: "A", it: "Sul serio? Che fortuna! Qualcosa di nuovo nella tua vita!", cz: "Vážně? To je štěstí! Něco nového v tvém životě!" },
-        { s: "B", it: "E tu? Novità?", cz: "A ty? Co nového?" },
-        { s: "A", it: "Niente… I miei obiettivi: parlare italiano!", cz: "Nic… Moje cíle: mluvit italsky!" },
-        { s: "B", it: "Interessante!", cz: "Zajímavé!" },
-      ],
-    },
+    dialogs: [
+      {
+        title: "Co je nového?", scene: "Giulia má novinky.", cast: {"A": "Bob", "B": "Giulia"},
+        lines: [
+          { s: "A", it: "Novità?", cz: "Co nového?" },
+          { s: "B", it: "Sì! Ho un lavoro nuovo!", cz: "Jo! Mám novou práci!" },
+          { s: "A", it: "Davvero? Che figata!", cz: "Fakt? To je pecka!" },
+          { s: "B", it: "E una casa nuova a La Spezia.", cz: "A nový byt v La Spezii." },
+          { s: "A", it: "Sul serio? Che fortuna! Qualcosa di nuovo nella tua vita!", cz: "Vážně? To je štěstí! Něco nového v tvém životě!" },
+          { s: "B", it: "E tu? Novità?", cz: "A ty? Co nového?" },
+          { s: "A", it: "Niente… I miei obiettivi: parlare italiano!", cz: "Nic… Moje cíle: mluvit italsky!" },
+          { s: "B", it: "Interessante!", cz: "Zajímavé!" },
+        ],
+      },
+    ],
   },
   {
     id: "pocasi", level: "l3", title: "Počasí – krátce", icon: "⛅",
@@ -1075,16 +1129,18 @@ const LESSONS = [
       { id: "pocasi-9", src: "It's windy", it: "C'è vento" },
       { id: "pocasi-13", src: "It's nice weather", it: "Fa bel tempo" },
     ],
-    dialog: {
-      title: "Jaké je počasí?", scene: "Host se ptá na výlet.", cast: {"A": "Bob", "B": "Anna"},
-      lines: [
-        { s: "B", it: "Che tempo fa oggi?", cz: "Jaké je dneska počasí?" },
-        { s: "A", it: "Fa caldo e c'è il sole!", cz: "Je horko a svítí slunce!" },
-        { s: "B", it: "E domani?", cz: "A zítra?" },
-        { s: "A", it: "Domani piove… e c'è vento.", cz: "Zítra prší… a fouká vítr." },
-        { s: "B", it: "Che peccato!", cz: "To je škoda!" },
-      ],
-    },
+    dialogs: [
+      {
+        title: "Jaké je počasí?", scene: "Host se ptá na výlet.", cast: {"A": "Bob", "B": "Anna"},
+        lines: [
+          { s: "B", it: "Che tempo fa oggi?", cz: "Jaké je dneska počasí?" },
+          { s: "A", it: "Fa caldo e c'è il sole!", cz: "Je horko a svítí slunce!" },
+          { s: "B", it: "E domani?", cz: "A zítra?" },
+          { s: "A", it: "Domani piove… e c'è vento.", cz: "Zítra prší… a fouká vítr." },
+          { s: "B", it: "Che peccato!", cz: "To je škoda!" },
+        ],
+      },
+    ],
   },
   {
     id: "pocasi2", level: "l3", title: "Počasí – věty", icon: "☀️",
@@ -1102,18 +1158,20 @@ const LESSONS = [
       { id: "denni-16", src: "The bugs are horrible", it: "Gli insetti sono terribili" },
       { id: "pocasi-12", src: "The mosquitoes are biting me", it: "Le zanzare mi pungono" },
     ],
-    dialog: {
-      title: "Jdeme k moři?", scene: "Horký den v La Spezii.", cast: {"A": "Bob", "B": "Giulia"},
-      lines: [
-        { s: "A", it: "Che caldo oggi!", cz: "To je dneska vedro!" },
-        { s: "B", it: "Sì! Che bel tempo! Andiamo al mare?", cz: "Jo! To je nádherně! Půjdeme k moři?" },
-        { s: "A", it: "Sì! Oggi il mare è calmo.", cz: "Jo! Dneska je moře klidné." },
-        { s: "B", it: "Ma domani piove?", cz: "Ale zítra prší?" },
-        { s: "A", it: "Sì. Prendi l'ombrello!", cz: "Jo. Vezmi si deštník!" },
-        { s: "B", it: "Ah, e le zanzare mi pungono!", cz: "Jé, a komáři mě štípou!" },
-        { s: "A", it: "Gli insetti sono terribili!", cz: "Ten hmyz je strašný!" },
-      ],
-    },
+    dialogs: [
+      {
+        title: "Jdeme k moři?", scene: "Horký den v La Spezii.", cast: {"A": "Bob", "B": "Giulia"},
+        lines: [
+          { s: "A", it: "Che caldo oggi!", cz: "To je dneska vedro!" },
+          { s: "B", it: "Sì! Che bel tempo! Andiamo al mare?", cz: "Jo! To je nádherně! Půjdeme k moři?" },
+          { s: "A", it: "Sì! Oggi il mare è calmo.", cz: "Jo! Dneska je moře klidné." },
+          { s: "B", it: "Ma domani piove?", cz: "Ale zítra prší?" },
+          { s: "A", it: "Sì. Prendi l'ombrello!", cz: "Jo. Vezmi si deštník!" },
+          { s: "B", it: "Ah, e le zanzare mi pungono!", cz: "Jé, a komáři mě štípou!" },
+          { s: "A", it: "Gli insetti sono terribili!", cz: "Ten hmyz je strašný!" },
+        ],
+      },
+    ],
   },
   {
     id: "libise", level: "l3", title: "Líbí se mi", icon: "👍",
@@ -1133,16 +1191,18 @@ const LESSONS = [
       { id: "zaklad-25", src: "Star", it: "Stella" },
       { id: "zaklad-26", src: "Song / track", it: "Brano" },
     ],
-    dialog: {
-      title: "Líbí se ti tu?", scene: "Na terase hraje hudba.", cast: {"A": "Bob", "B": "Giulia"},
-      lines: [
-        { s: "B", it: "Ti piace La Spezia?", cz: "Líbí se ti La Spezia?" },
-        { s: "A", it: "Sì, mi piace molto qui!", cz: "Jo, moc se mi tu líbí!" },
-        { s: "B", it: "Anche a me! Ti piace questo brano?", cz: "Mně taky! Líbí se ti tahle písnička?" },
-        { s: "A", it: "No, non mi piace.", cz: "Ne, nelíbí se mi." },
-        { s: "B", it: "Neanche a me!", cz: "Mně taky ne!" },
-      ],
-    },
+    dialogs: [
+      {
+        title: "Líbí se ti tu?", scene: "Na terase hraje hudba.", cast: {"A": "Bob", "B": "Giulia"},
+        lines: [
+          { s: "B", it: "Ti piace La Spezia?", cz: "Líbí se ti La Spezia?" },
+          { s: "A", it: "Sì, mi piace molto qui!", cz: "Jo, moc se mi tu líbí!" },
+          { s: "B", it: "Anche a me! Ti piace questo brano?", cz: "Mně taky! Líbí se ti tahle písnička?" },
+          { s: "A", it: "No, non mi piace.", cz: "Ne, nelíbí se mi." },
+          { s: "B", it: "Neanche a me!", cz: "Mně taky ne!" },
+        ],
+      },
+    ],
   },
   {
     id: "libise2", level: "l3", title: "Zbožňuju, mám radši", icon: "❤️",
@@ -1160,16 +1220,18 @@ const LESSONS = [
       { id: "libise-7", src: "It's very beautiful", it: "È bellissimo", hint: "je to nádherné" },
       { id: "libise-8", src: "I prefer the sea", it: "Preferisco il mare" },
     ],
-    dialog: {
-      title: "Co tě baví?", scene: "Bob a Anna u snídaně.", cast: {"A": "Bob", "B": "Anna"},
-      lines: [
-        { s: "B", it: "Cosa ti piace fare?", cz: "Co tě baví dělat?" },
-        { s: "A", it: "Mi piace andare in palestra. E adoro il mare!", cz: "Rád chodím do posilovny. A zbožňuju moře!" },
-        { s: "B", it: "Io preferisco la montagna. Ma mi piacciono le Cinque Terre!", cz: "Já mám radši hory. Ale Cinque Terre se mi líbí!" },
-        { s: "A", it: "Che bello! Riomaggiore è bellissima.", cz: "Super! Riomaggiore je nádherné." },
-        { s: "B", it: "Adoro questo posto!", cz: "Zbožňuju tohle místo!" },
-      ],
-    },
+    dialogs: [
+      {
+        title: "Co tě baví?", scene: "Bob a Anna u snídaně.", cast: {"A": "Bob", "B": "Anna"},
+        lines: [
+          { s: "B", it: "Cosa ti piace fare?", cz: "Co tě baví dělat?" },
+          { s: "A", it: "Mi piace andare in palestra. E adoro il mare!", cz: "Rád chodím do posilovny. A zbožňuju moře!" },
+          { s: "B", it: "Io preferisco la montagna. Ma mi piacciono le Cinque Terre!", cz: "Já mám radši hory. Ale Cinque Terre se mi líbí!" },
+          { s: "A", it: "Che bello! Riomaggiore è bellissima.", cz: "Super! Riomaggiore je nádherné." },
+          { s: "B", it: "Adoro questo posto!", cz: "Zbožňuju tohle místo!" },
+        ],
+      },
+    ],
   },
   {
     id: "minuly", level: "l3", title: "Minulý čas – krátce", icon: "⏪",
@@ -1189,17 +1251,19 @@ const LESSONS = [
       { id: "minuly-11", src: "I didn't understand", it: "Non ho capito" },
       { id: "zaklad-22", src: "Finally", it: "Finalmente" },
     ],
-    dialog: {
-      title: "Už jsi jedl?", scene: "Giulia kontroluje Boba po noční směně.", cast: {"A": "Bob", "B": "Giulia"},
-      lines: [
-        { s: "B", it: "Hai mangiato?", cz: "Jedl jsi?" },
-        { s: "A", it: "Sì, ho mangiato una pizza.", cz: "Jo, snědl jsem pizzu." },
-        { s: "B", it: "Hai dormito?", cz: "Spal jsi?" },
-        { s: "A", it: "Sì, ho dormito molto!", cz: "Jo, spal jsem hodně!" },
-        { s: "B", it: "E sei andato al mare?", cz: "A byl jsi u moře?" },
-        { s: "A", it: "No, ho dimenticato!", cz: "Ne, zapomněl jsem!" },
-      ],
-    },
+    dialogs: [
+      {
+        title: "Už jsi jedl?", scene: "Giulia kontroluje Boba po noční směně.", cast: {"A": "Bob", "B": "Giulia"},
+        lines: [
+          { s: "B", it: "Hai mangiato?", cz: "Jedl jsi?" },
+          { s: "A", it: "Sì, ho mangiato una pizza.", cz: "Jo, snědl jsem pizzu." },
+          { s: "B", it: "Hai dormito?", cz: "Spal jsi?" },
+          { s: "A", it: "Sì, ho dormito molto!", cz: "Jo, spal jsem hodně!" },
+          { s: "B", it: "E sei andato al mare?", cz: "A byl jsi u moře?" },
+          { s: "A", it: "No, ho dimenticato!", cz: "Ne, zapomněl jsem!" },
+        ],
+      },
+    ],
   },
   {
     id: "minuly2", level: "l3", title: "Co jsi dělal?", icon: "🗓️",
@@ -1217,17 +1281,19 @@ const LESSONS = [
       { id: "minuly-7", src: "I slept badly", it: "Ho dormito male" },
       { id: "minuly-8", src: "When did you arrive?", it: "Quando sei arrivato?" },
     ],
-    dialog: {
-      title: "Jak šel den?", scene: "Večer na terase.", cast: {"A": "Bob", "B": "Giulia"},
-      lines: [
-        { s: "B", it: "Com'è andata la giornata?", cz: "Jak šel den?" },
-        { s: "A", it: "Bene! E tu, cosa hai fatto oggi?", cz: "Dobře! A ty, co jsi dneska dělala?" },
-        { s: "B", it: "Niente di speciale. Hai dormito bene?", cz: "Nic zvláštního. Vyspal ses dobře?" },
-        { s: "A", it: "No, ho dormito male.", cz: "Ne, spal jsem špatně." },
-        { s: "B", it: "Quando sei arrivato ieri?", cz: "Kdy jsi včera přišel?" },
-        { s: "A", it: "Alle undici.", cz: "V jedenáct." },
-      ],
-    },
+    dialogs: [
+      {
+        title: "Jak šel den?", scene: "Večer na terase.", cast: {"A": "Bob", "B": "Giulia"},
+        lines: [
+          { s: "B", it: "Com'è andata la giornata?", cz: "Jak šel den?" },
+          { s: "A", it: "Bene! E tu, cosa hai fatto oggi?", cz: "Dobře! A ty, co jsi dneska dělala?" },
+          { s: "B", it: "Niente di speciale. Hai dormito bene?", cz: "Nic zvláštního. Vyspal ses dobře?" },
+          { s: "A", it: "No, ho dormito male.", cz: "Ne, spal jsem špatně." },
+          { s: "B", it: "Quando sei arrivato ieri?", cz: "Kdy jsi včera přišel?" },
+          { s: "A", it: "Alle undici.", cz: "V jedenáct." },
+        ],
+      },
+    ],
   },
   {
     id: "minuly3", level: "l3", title: "Bylo to super!", icon: "📸",
@@ -1245,16 +1311,18 @@ const LESSONS = [
       { id: "minuly3-1", src: "We went to the beach", it: "Siamo andati al mare" },
       { id: "minuly-9", src: "I've already been there", it: "Ci sono già stato" },
     ],
-    dialog: {
-      title: "Výlet do Riomaggiore", scene: "Bob vypráví o volném dni.", cast: {"A": "Bob", "B": "Anna"},
-      lines: [
-        { s: "B", it: "Cosa hai fatto ieri?", cz: "Co jsi dělal včera?" },
-        { s: "A", it: "Sono andato a Riomaggiore.", cz: "Jel jsem do Riomaggiore." },
-        { s: "B", it: "Com'è stato?", cz: "Jaké to bylo?" },
-        { s: "A", it: "È stato bellissimo! Abbiamo mangiato benissimo e ho visto il tramonto.", cz: "Bylo to nádherné! Skvěle jsme se najedli a viděl jsem západ slunce." },
-        { s: "B", it: "Ci sono già stata! È stato fantastico.", cz: "Už jsem tam byla! Bylo to fantastické." },
-      ],
-    },
+    dialogs: [
+      {
+        title: "Výlet do Riomaggiore", scene: "Bob vypráví o volném dni.", cast: {"A": "Bob", "B": "Anna"},
+        lines: [
+          { s: "B", it: "Cosa hai fatto ieri?", cz: "Co jsi dělal včera?" },
+          { s: "A", it: "Sono andato a Riomaggiore.", cz: "Jel jsem do Riomaggiore." },
+          { s: "B", it: "Com'è stato?", cz: "Jaké to bylo?" },
+          { s: "A", it: "È stato bellissimo! Abbiamo mangiato benissimo e ho visto il tramonto.", cz: "Bylo to nádherné! Skvěle jsme se najedli a viděl jsem západ slunce." },
+          { s: "B", it: "Ci sono già stata! È stato fantastico.", cz: "Už jsem tam byla! Bylo to fantastické." },
+        ],
+      },
+    ],
   },
   {
     id: "jidlo", level: "l3", title: "V baru", icon: "🍹",
@@ -1273,17 +1341,19 @@ const LESSONS = [
       { id: "mesto-3", src: "Takeaway", it: "Da portare via" },
       { id: "jidlo-7", src: "A table for two?", it: "Un tavolo per due?" },
     ],
-    dialog: {
-      title: "Spritz na terase", scene: "Bob s Giulií v baru.", cast: {"A": "Bob", "B": "Giulia"},
-      lines: [
-        { s: "B", it: "Cosa prendi?", cz: "Co si dáš?" },
-        { s: "A", it: "Prendo uno spritz. E tu?", cz: "Dám si spritz. A ty?" },
-        { s: "B", it: "Per me una birra.", cz: "Pro mě pivo." },
-        { s: "A", it: "Salute!", cz: "Na zdraví!" },
-        { s: "B", it: "Cin cin!", cz: "Čin čin!" },
-        { s: "A", it: "Scusi, il conto, per favore!", cz: "Promiňte, účet, prosím!" },
-      ],
-    },
+    dialogs: [
+      {
+        title: "Spritz na terase", scene: "Bob s Giulií v baru.", cast: {"A": "Bob", "B": "Giulia"},
+        lines: [
+          { s: "B", it: "Cosa prendi?", cz: "Co si dáš?" },
+          { s: "A", it: "Prendo uno spritz. E tu?", cz: "Dám si spritz. A ty?" },
+          { s: "B", it: "Per me una birra.", cz: "Pro mě pivo." },
+          { s: "A", it: "Salute!", cz: "Na zdraví!" },
+          { s: "B", it: "Cin cin!", cz: "Čin čin!" },
+          { s: "A", it: "Scusi, il conto, per favore!", cz: "Promiňte, účet, prosím!" },
+        ],
+      },
+    ],
   },
   {
     id: "jidlo2", level: "l3", title: "Jídlo a aperitivo", icon: "🍝",
@@ -1302,17 +1372,19 @@ const LESSONS = [
       { id: "jidlo-9", src: "Is there any coffee left?", it: "C'è ancora del caffè?" },
       { id: "jidlo-10", src: "I'm full", it: "Sono pieno" },
     ],
-    dialog: {
-      title: "Aperitivo", scene: "Večer v hostelu.", cast: {"A": "Bob", "B": "Giulia"},
-      lines: [
-        { s: "B", it: "Stasera facciamo un aperitivo!", cz: "Dneska večer si dáme aperitivo!" },
-        { s: "A", it: "Che bello! Buon appetito!", cz: "Super! Dobrou chuť!" },
-        { s: "B", it: "Grazie, altrettanto!", cz: "Díky, nápodobně!" },
-        { s: "A", it: "Mmm, è buonissimo!", cz: "Mmm, to je výborné!" },
-        { s: "B", it: "Sei vegetariano?", cz: "Jsi vegetarián?" },
-        { s: "A", it: "No. Ma adesso sono pieno!", cz: "Ne. Ale teď jsem plný!" },
-      ],
-    },
+    dialogs: [
+      {
+        title: "Aperitivo", scene: "Večer v hostelu.", cast: {"A": "Bob", "B": "Giulia"},
+        lines: [
+          { s: "B", it: "Stasera facciamo un aperitivo!", cz: "Dneska večer si dáme aperitivo!" },
+          { s: "A", it: "Che bello! Buon appetito!", cz: "Super! Dobrou chuť!" },
+          { s: "B", it: "Grazie, altrettanto!", cz: "Díky, nápodobně!" },
+          { s: "A", it: "Mmm, è buonissimo!", cz: "Mmm, to je výborné!" },
+          { s: "B", it: "Sei vegetariano?", cz: "Jsi vegetarián?" },
+          { s: "A", it: "No. Ma adesso sono pieno!", cz: "Ne. Ale teď jsem plný!" },
+        ],
+      },
+    ],
   },
   {
     id: "plany", level: "l3", title: "Pozvání", icon: "🎉",
@@ -1330,17 +1402,19 @@ const LESSONS = [
       { id: "plany-5", src: "Why not?", it: "Perché no?" },
       { id: "plany-6", src: "Maybe another time", it: "Magari un'altra volta" },
     ],
-    dialog: {
-      title: "Půjdeš s námi?", scene: "Bob zve Annu.", cast: {"A": "Bob", "B": "Anna"},
-      lines: [
-        { s: "A", it: "Ti va di prendere un caffè?", cz: "Nechceš zajít na kafe?" },
-        { s: "B", it: "Volentieri!", cz: "Ráda!" },
-        { s: "A", it: "E stasera andiamo in spiaggia, vieni?", cz: "A večer jdeme na pláž, přijdeš?" },
-        { s: "B", it: "Mmm… magari un'altra volta.", cz: "Hmm… možná jindy." },
-        { s: "A", it: "Perché no?", cz: "Proč ne?" },
-        { s: "B", it: "Sono stanchissima!", cz: "Jsem strašně unavená!" },
-      ],
-    },
+    dialogs: [
+      {
+        title: "Půjdeš s námi?", scene: "Bob zve Annu.", cast: {"A": "Bob", "B": "Anna"},
+        lines: [
+          { s: "A", it: "Ti va di prendere un caffè?", cz: "Nechceš zajít na kafe?" },
+          { s: "B", it: "Volentieri!", cz: "Ráda!" },
+          { s: "A", it: "E stasera andiamo in spiaggia, vieni?", cz: "A večer jdeme na pláž, přijdeš?" },
+          { s: "B", it: "Mmm… magari un'altra volta.", cz: "Hmm… možná jindy." },
+          { s: "A", it: "Perché no?", cz: "Proč ne?" },
+          { s: "B", it: "Sono stanchissima!", cz: "Jsem strašně unavená!" },
+        ],
+      },
+    ],
   },
   {
     id: "plany2", level: "l3", title: "Kde a kdy se sejdeme", icon: "📍",
@@ -1359,18 +1433,28 @@ const LESSONS = [
       { id: "plany-10", src: "I'm running late", it: "Sono in ritardo" },
       { id: "plany-11", src: "Wait for me!", it: "Aspettami!" },
     ],
-    dialog: {
-      title: "Sraz v osm", scene: "Bob a Giulia jdou ven.", cast: {"A": "Bob", "B": "Giulia"},
-      lines: [
-        { s: "B", it: "Dove ci vediamo?", cz: "Kde se sejdeme?" },
-        { s: "A", it: "Davanti all'ostello.", cz: "Před hostelem." },
-        { s: "B", it: "A che ora?", cz: "V kolik?" },
-        { s: "A", it: "Ci vediamo alle otto.", cz: "Sejdeme se v osm." },
-        { s: "B", it: "Sono in ritardo! Aspettami!", cz: "Mám zpoždění! Počkej na mě!" },
-        { s: "A", it: "Nessun problema. Sei pronta?", cz: "Žádný problém. Jsi připravená?" },
-        { s: "B", it: "Sono pronta! Andiamo!", cz: "Jsem připravená! Jdeme!" },
-      ],
-    },
+    dialogs: [
+      {
+        title: "Domluva", scene: "Odpoledne v kuchyni. Bob a Giulia se domlouvají na večer.", cast: {"A": "Bob", "B": "Giulia"},
+        lines: [
+          { s: "B", it: "Stasera usciamo? Dove ci vediamo?", cz: "Půjdeme večer ven? Kde se sejdeme?" },
+          { s: "A", it: "Davanti all'ostello.", cz: "Před hostelem." },
+          { s: "B", it: "A che ora?", cz: "V kolik?" },
+          { s: "A", it: "Ci vediamo alle otto.", cz: "Sejdeme se v osm." },
+          { s: "B", it: "Perfetto! A dopo!", cz: "Super! Tak zatím!" },
+        ],
+      },
+      {
+        title: "Sraz před hostelem", scene: "Je osm večer. Bob čeká před hostelem a Giulia mu volá.", cast: {"A": "Bob", "B": "Giulia"},
+        lines: [
+          { s: "A", it: "Pronto? Giulia, dove sei?", cz: "Haló? Giulie, kde jsi?" },
+          { s: "B", it: "Scusa, sono in ritardo! Aspettami!", cz: "Promiň, mám zpoždění! Počkej na mě!" },
+          { s: "A", it: "Nessun problema. Sei pronta?", cz: "Žádný problém. Jsi připravená?" },
+          { s: "B", it: "Sono pronta! Tra due minuti sono lì.", cz: "Jsem připravená! Za dvě minuty jsem tam." },
+          { s: "A", it: "Va bene, ti aspetto!", cz: "Dobře, čekám na tebe!" },
+        ],
+      },
+    ],
   },
   {
     id: "hslova", level: "l4", title: "Hostel 1 – slovíčka", icon: "🔑",
@@ -1401,17 +1485,19 @@ const LESSONS = [
       { id: "hslova-19", src: "A glass of water", it: "Un bicchiere d'acqua" },
       { id: "hslova-20", src: "Fruit juice", it: "Il succo di frutta" },
     ],
-    dialog: {
-      title: "Na recepci", scene: "Přichází nový host. Bob zatím mluví hlavně slovíčky.", cast: {"A": "Bob", "B": "Marco"},
-      lines: [
-        { s: "B", it: "Ciao! Una camera, per favore.", cz: "Ahoj! Pokoj, prosím." },
-        { s: "A", it: "Una camera e un letto. Il passaporto, per favore.", cz: "Pokoj a postel. Pas, prosím." },
-        { s: "B", it: "Il passaporto… ecco.", cz: "Pas… tady." },
-        { s: "A", it: "Grazie. La chiave e l'asciugamano.", cz: "Díky. Klíč a ručník." },
-        { s: "B", it: "E la colazione?", cz: "A snídaně?" },
-        { s: "A", it: "La colazione è in cucina.", cz: "Snídaně je v kuchyni." },
-      ],
-    },
+    dialogs: [
+      {
+        title: "Na recepci", scene: "Přichází nový host. Bob zatím mluví hlavně slovíčky.", cast: {"A": "Bob", "B": "Marco"},
+        lines: [
+          { s: "B", it: "Ciao! Una camera, per favore.", cz: "Ahoj! Pokoj, prosím." },
+          { s: "A", it: "Una camera e un letto. Il passaporto, per favore.", cz: "Pokoj a postel. Pas, prosím." },
+          { s: "B", it: "Il passaporto… ecco.", cz: "Pas… tady." },
+          { s: "A", it: "Grazie. La chiave e l'asciugamano.", cz: "Díky. Klíč a ručník." },
+          { s: "B", it: "E la colazione?", cz: "A snídaně?" },
+          { s: "A", it: "La colazione è in cucina.", cz: "Snídaně je v kuchyni." },
+        ],
+      },
+    ],
   },
   {
     id: "hzaklad", level: "l4", title: "Hostel 2 – krátké věty", icon: "🛎️",
@@ -1437,19 +1523,21 @@ const LESSONS = [
       { id: "hzaklad-14", src: "Follow me", it: "Seguimi" },
       { id: "hzaklad-15", src: "The room is ready", it: "La camera è pronta" },
     ],
-    dialog: {
-      title: "Ukážu ti to tu", scene: "Bob provádí hosta krátkými větami.", cast: {"A": "Bob", "B": "Marco"},
-      lines: [
-        { s: "A", it: "Benvenuto! Il passaporto, per favore.", cz: "Vítej! Pas, prosím." },
-        { s: "B", it: "Ecco.", cz: "Tady." },
-        { s: "A", it: "Grazie! Ecco la chiave. Vieni con me.", cz: "Díky! Tady je klíč. Pojď se mnou." },
-        { s: "A", it: "Questa è la cucina. Questo è il bagno.", cz: "Tohle je kuchyň. Tohle je koupelna." },
-        { s: "A", it: "La tua camera… e il tuo letto.", cz: "Tvůj pokoj… a tvoje postel." },
-        { s: "B", it: "Un asciugamano?", cz: "Ručník?" },
-        { s: "A", it: "Sì! È gratis.", cz: "Jo! Je zdarma." },
-        { s: "B", it: "Grazie mille!", cz: "Moc díky!" },
-      ],
-    },
+    dialogs: [
+      {
+        title: "Ukážu ti to tu", scene: "Bob provádí hosta krátkými větami.", cast: {"A": "Bob", "B": "Marco"},
+        lines: [
+          { s: "A", it: "Benvenuto! Il passaporto, per favore.", cz: "Vítej! Pas, prosím." },
+          { s: "B", it: "Ecco.", cz: "Tady." },
+          { s: "A", it: "Grazie! Ecco la chiave. Vieni con me.", cz: "Díky! Tady je klíč. Pojď se mnou." },
+          { s: "A", it: "Questa è la cucina. Questo è il bagno.", cz: "Tohle je kuchyň. Tohle je koupelna." },
+          { s: "A", it: "La tua camera… e il tuo letto.", cz: "Tvůj pokoj… a tvoje postel." },
+          { s: "B", it: "Un asciugamano?", cz: "Ručník?" },
+          { s: "A", it: "Sì! È gratis.", cz: "Jo! Je zdarma." },
+          { s: "B", it: "Grazie mille!", cz: "Moc díky!" },
+        ],
+      },
+    ],
   },
   {
     id: "hnabidky", level: "l4", title: "Hostel 3 – nabídky a otázky", icon: "☕",
@@ -1474,19 +1562,21 @@ const LESSONS = [
       { id: "hnabidky-13", src: "Why are you in La Spezia?", it: "Perché sei a La Spezia?" },
       { id: "hnabidky-14", src: "Are you tired?", it: "Sei stanco?" },
     ],
-    dialog: {
-      title: "Dáš si něco?", scene: "Unavený host právě dorazil.", cast: {"A": "Bob", "B": "Marco"},
-      lines: [
-        { s: "A", it: "Ciao! Sei stanco? Siediti qui.", cz: "Ahoj! Jsi unavený? Sedni si sem." },
-        { s: "B", it: "Grazie!", cz: "Díky!" },
-        { s: "A", it: "Metti i bagagli qui. Acqua, succo o caffè?", cz: "Dej si zavazadla sem. Vodu, džus, nebo kafe?" },
-        { s: "B", it: "Un caffè, per favore.", cz: "Kafe, prosím." },
-        { s: "A", it: "Perché sei a La Spezia? Sei qui per le Cinque Terre?", cz: "Proč jsi v La Spezii? Jsi tu kvůli Cinque Terre?" },
-        { s: "B", it: "Sì!", cz: "Jo!" },
-        { s: "A", it: "Vuoi pagare con la carta?", cz: "Chceš platit kartou?" },
-        { s: "B", it: "Sì, grazie.", cz: "Jo, díky." },
-      ],
-    },
+    dialogs: [
+      {
+        title: "Dáš si něco?", scene: "Unavený host právě dorazil.", cast: {"A": "Bob", "B": "Marco"},
+        lines: [
+          { s: "A", it: "Ciao! Sei stanco? Siediti qui.", cz: "Ahoj! Jsi unavený? Sedni si sem." },
+          { s: "B", it: "Grazie!", cz: "Díky!" },
+          { s: "A", it: "Metti i bagagli qui. Acqua, succo o caffè?", cz: "Dej si zavazadla sem. Vodu, džus, nebo kafe?" },
+          { s: "B", it: "Un caffè, per favore.", cz: "Kafe, prosím." },
+          { s: "A", it: "Perché sei a La Spezia? Sei qui per le Cinque Terre?", cz: "Proč jsi v La Spezii? Jsi tu kvůli Cinque Terre?" },
+          { s: "B", it: "Sì!", cz: "Jo!" },
+          { s: "A", it: "Vuoi pagare con la carta?", cz: "Chceš platit kartou?" },
+          { s: "B", it: "Sì, grazie.", cz: "Jo, díky." },
+        ],
+      },
+    ],
   },
   {
     id: "hprohlidka", level: "l4", title: "Hostel 4 – prohlídka", icon: "🚪",
@@ -1513,19 +1603,21 @@ const LESSONS = [
       { id: "hprohlidka-15", src: "Let me know", it: "Fammi sapere" },
       { id: "hprohlidka-16", src: "If you need anything, tell me", it: "Se hai bisogno di qualcosa, dimmi" },
     ],
-    dialog: {
-      title: "Prohlídka hostelu", scene: "Bob provází hosta.", cast: {"A": "Bob", "B": "Marco"},
-      lines: [
-        { s: "A", it: "Ti faccio vedere l'ostello. Ecco il frigorifero e la lavastoviglie.", cz: "Ukážu ti hostel. Tady je lednička a myčka." },
-        { s: "B", it: "E il caffè?", cz: "A kafe?" },
-        { s: "A", it: "Il caffè è gratis! Questo è il tavolo della colazione.", cz: "Kafe je zdarma! Tohle je stůl na snídani." },
-        { s: "B", it: "E la terrazza?", cz: "A terasa?" },
-        { s: "A", it: "La terrazza è aperta dalle 8 alle 11.", cz: "Terasa je otevřená od 8 do 11." },
-        { s: "B", it: "Ogni camera ha un bagno?", cz: "Má každý pokoj koupelnu?" },
-        { s: "A", it: "Sì, ogni camera ha una doccia. La tua camera è di sopra.", cz: "Jo, každý pokoj má sprchu. Tvůj pokoj je nahoře." },
-        { s: "A", it: "Se hai bisogno di qualcosa, dimmi!", cz: "Kdybys něco potřeboval, řekni!" },
-      ],
-    },
+    dialogs: [
+      {
+        title: "Prohlídka hostelu", scene: "Bob provází hosta.", cast: {"A": "Bob", "B": "Marco"},
+        lines: [
+          { s: "A", it: "Ti faccio vedere l'ostello. Ecco il frigorifero e la lavastoviglie.", cz: "Ukážu ti hostel. Tady je lednička a myčka." },
+          { s: "B", it: "E il caffè?", cz: "A kafe?" },
+          { s: "A", it: "Il caffè è gratis! Questo è il tavolo della colazione.", cz: "Kafe je zdarma! Tohle je stůl na snídani." },
+          { s: "B", it: "E la terrazza?", cz: "A terasa?" },
+          { s: "A", it: "La terrazza è aperta dalle 8 alle 11.", cz: "Terasa je otevřená od 8 do 11." },
+          { s: "B", it: "Ogni camera ha un bagno?", cz: "Má každý pokoj koupelnu?" },
+          { s: "A", it: "Sì, ogni camera ha una doccia. La tua camera è di sopra.", cz: "Jo, každý pokoj má sprchu. Tvůj pokoj je nahoře." },
+          { s: "A", it: "Se hai bisogno di qualcosa, dimmi!", cz: "Kdybys něco potřeboval, řekni!" },
+        ],
+      },
+    ],
   },
   {
     id: "hprichod", level: "l4", title: "Hostel 5 – příchod hosta (celé věty)", icon: "🧳",
@@ -1545,20 +1637,22 @@ const LESSONS = [
       { id: "hotel-8", src: "Are you here for the Cinque Terre?", it: "Siete qui per le Cinque Terre?", hint: "víc lidí (vy)" },
       { id: "hotel-14", src: "Thank you very much.", it: "Grazie mille", hint: "doslova: tisíceré díky" },
     ],
-    dialog: {
-      title: "Vítej v hostelu!", scene: "Celý příchod hosta – tvoje věty.", cast: {"A": "Bob", "B": "Marco"},
-      lines: [
-        { s: "A", it: "Benvenuti all'ostello, mi chiamo Bob! Come ti chiami?", cz: "Vítejte v hostelu, jmenuju se Bob! Jak se jmenuješ?" },
-        { s: "B", it: "Ciao, sono Marco.", cz: "Ahoj, já jsem Marco." },
-        { s: "A", it: "Come stai, Marco? Posso aiutarti con i bagagli?", cz: "Jak se máš, Marco? Můžu ti pomoct se zavazadly?" },
-        { s: "B", it: "Sì, grazie!", cz: "Jo, díky!" },
-        { s: "A", it: "Puoi sederti qui e appoggiare i tuoi bagagli.", cz: "Můžeš si sem sednout a odložit si zavazadla." },
-        { s: "A", it: "Posso portarti un bicchiere d'acqua, un succo di frutta o un caffè?", cz: "Můžu ti přinést sklenici vody, džus, nebo kafe?" },
-        { s: "B", it: "Un caffè, grazie mille!", cz: "Kafe, moc díky!" },
-        { s: "A", it: "Cosa ti porta a La Spezia?", cz: "Co tě přivádí do La Spezie?" },
-        { s: "B", it: "Le Cinque Terre! Domani vado a Riomaggiore.", cz: "Cinque Terre! Zítra jedu do Riomaggiore." },
-      ],
-    },
+    dialogs: [
+      {
+        title: "Vítej v hostelu!", scene: "Celý příchod hosta – tvoje věty.", cast: {"A": "Bob", "B": "Marco"},
+        lines: [
+          { s: "A", it: "Benvenuti all'ostello, mi chiamo Bob! Come ti chiami?", cz: "Vítejte v hostelu, jmenuju se Bob! Jak se jmenuješ?" },
+          { s: "B", it: "Ciao, sono Marco.", cz: "Ahoj, já jsem Marco." },
+          { s: "A", it: "Come stai, Marco? Posso aiutarti con i bagagli?", cz: "Jak se máš, Marco? Můžu ti pomoct se zavazadly?" },
+          { s: "B", it: "Sì, grazie!", cz: "Jo, díky!" },
+          { s: "A", it: "Puoi sederti qui e appoggiare i tuoi bagagli.", cz: "Můžeš si sem sednout a odložit si zavazadla." },
+          { s: "A", it: "Posso portarti un bicchiere d'acqua, un succo di frutta o un caffè?", cz: "Můžu ti přinést sklenici vody, džus, nebo kafe?" },
+          { s: "B", it: "Un caffè, grazie mille!", cz: "Kafe, moc díky!" },
+          { s: "A", it: "Cosa ti porta a La Spezia?", cz: "Co tě přivádí do La Spezie?" },
+          { s: "B", it: "Le Cinque Terre! Domani vado a Riomaggiore.", cz: "Cinque Terre! Zítra jedu do Riomaggiore." },
+        ],
+      },
+    ],
   },
   {
     id: "hotel", level: "l4", title: "Hostel 6 – prohlídka a check-in (celé věty)", icon: "🏨",
@@ -1582,21 +1676,23 @@ const LESSONS = [
       { id: "hotel-21", src: "Do you want to pay by card or cash?", it: "Vuoi pagare con la carta o in contanti?", hint: "doslova: chceš…?" },
       { id: "hotel-22", src: "The rooms are ready", it: "Le stanze sono pronte" },
     ],
-    dialog: {
-      title: "Check-in", scene: "Bob dokončuje check-in.", cast: {"A": "Bob", "B": "Marco"},
-      lines: [
-        { s: "A", it: "Puoi darmi un documento d'identità o il passaporto?", cz: "Můžeš mi dát občanku nebo pas?" },
-        { s: "B", it: "Ecco il passaporto.", cz: "Tady je pas." },
-        { s: "A", it: "Grazie mille. Preferisci pagare con carta o in contanti?", cz: "Moc díky. Platíš radši kartou, nebo hotově?" },
-        { s: "B", it: "Con la carta.", cz: "Kartou." },
-        { s: "A", it: "Desideri un asciugamano? È gratuito.", cz: "Přeješ si ručník? Je zdarma." },
-        { s: "B", it: "Sì, grazie!", cz: "Jo, díky!" },
-        { s: "A", it: "Lasciami prendere le lenzuola e mostrarti la tua stanza.", cz: "Dovol, ať vezmu povlečení a ukážu ti pokoj." },
-        { s: "A", it: "Questa è la terrazza. È aperta dalle 8 alle 11.", cz: "Tohle je terasa. Je otevřená od 8 do 11." },
-        { s: "A", it: "Se hai bisogno di qualcosa, fammelo sapere.", cz: "Kdybys cokoli potřeboval, dej mi vědět." },
-        { s: "B", it: "Perfetto, grazie!", cz: "Perfektní, díky!" },
-      ],
-    },
+    dialogs: [
+      {
+        title: "Check-in", scene: "Bob dokončuje check-in.", cast: {"A": "Bob", "B": "Marco"},
+        lines: [
+          { s: "A", it: "Puoi darmi un documento d'identità o il passaporto?", cz: "Můžeš mi dát občanku nebo pas?" },
+          { s: "B", it: "Ecco il passaporto.", cz: "Tady je pas." },
+          { s: "A", it: "Grazie mille. Preferisci pagare con carta o in contanti?", cz: "Moc díky. Platíš radši kartou, nebo hotově?" },
+          { s: "B", it: "Con la carta.", cz: "Kartou." },
+          { s: "A", it: "Desideri un asciugamano? È gratuito.", cz: "Přeješ si ručník? Je zdarma." },
+          { s: "B", it: "Sì, grazie!", cz: "Jo, díky!" },
+          { s: "A", it: "Lasciami prendere le lenzuola e mostrarti la tua stanza.", cz: "Dovol, ať vezmu povlečení a ukážu ti pokoj." },
+          { s: "A", it: "Questa è la terrazza. È aperta dalle 8 alle 11.", cz: "Tohle je terasa. Je otevřená od 8 do 11." },
+          { s: "A", it: "Se hai bisogno di qualcosa, fammelo sapere.", cz: "Kdybys cokoli potřeboval, dej mi vědět." },
+          { s: "B", it: "Perfetto, grazie!", cz: "Perfektní, díky!" },
+        ],
+      },
+    ],
   },
   {
     id: "pravidla", level: "l4", title: "Hostel 7 – pokoj, snídaně a pravidla", icon: "🛏️",
@@ -1620,21 +1716,23 @@ const LESSONS = [
       { id: "pravidla-12", src: "Please wash your dishes", it: "Per favore, lava i tuoi piatti" },
       { id: "pravidla-13", src: "Do you need anything else?", it: "Ti serve altro?" },
     ],
-    dialog: {
-      title: "Pravidla domu", scene: "Host se ptá na snídani a check-out.", cast: {"A": "Bob", "B": "Anna"},
-      lines: [
-        { s: "B", it: "A che ora è la colazione?", cz: "V kolik je snídaně?" },
-        { s: "A", it: "La colazione è dalle 8 alle 10. Il check-out è entro le 10.", cz: "Snídaně je od 8 do 10. Check-out je do 10." },
-        { s: "B", it: "Posso lasciare i bagagli qui dopo?", cz: "Můžu tu potom nechat zavazadla?" },
-        { s: "A", it: "Sì, puoi lasciare i bagagli qui.", cz: "Jo, můžeš tu nechat zavazadla." },
-        { s: "B", it: "E il Wi-Fi?", cz: "A wifi?" },
-        { s: "A", it: "La password del Wi-Fi è sul muro. Ecco la tua chiave. Il tuo letto è quello sopra.", cz: "Heslo na wifi je na zdi. Tady je tvůj klíč. Tvoje postel je ta nahoře." },
-        { s: "B", it: "Posso usare la cucina?", cz: "Můžu používat kuchyň?" },
-        { s: "A", it: "Sì! Per favore, lava i tuoi piatti. E silenzio dopo le undici, per favore.", cz: "Jo! Prosím, umyj si nádobí. A po jedenácté klid, prosím." },
-        { s: "A", it: "Ti serve altro?", cz: "Potřebuješ ještě něco?" },
-        { s: "B", it: "No, grazie!", cz: "Ne, díky!" },
-      ],
-    },
+    dialogs: [
+      {
+        title: "Pravidla domu", scene: "Host se ptá na snídani a check-out.", cast: {"A": "Bob", "B": "Anna"},
+        lines: [
+          { s: "B", it: "A che ora è la colazione?", cz: "V kolik je snídaně?" },
+          { s: "A", it: "La colazione è dalle 8 alle 10. Il check-out è entro le 10.", cz: "Snídaně je od 8 do 10. Check-out je do 10." },
+          { s: "B", it: "Posso lasciare i bagagli qui dopo?", cz: "Můžu tu potom nechat zavazadla?" },
+          { s: "A", it: "Sì, puoi lasciare i bagagli qui.", cz: "Jo, můžeš tu nechat zavazadla." },
+          { s: "B", it: "E il Wi-Fi?", cz: "A wifi?" },
+          { s: "A", it: "La password del Wi-Fi è sul muro. Ecco la tua chiave. Il tuo letto è quello sopra.", cz: "Heslo na wifi je na zdi. Tady je tvůj klíč. Tvoje postel je ta nahoře." },
+          { s: "B", it: "Posso usare la cucina?", cz: "Můžu používat kuchyň?" },
+          { s: "A", it: "Sì! Per favore, lava i tuoi piatti. E silenzio dopo le undici, per favore.", cz: "Jo! Prosím, umyj si nádobí. A po jedenácté klid, prosím." },
+          { s: "A", it: "Ti serve altro?", cz: "Potřebuješ ještě něco?" },
+          { s: "B", it: "No, grazie!", cz: "Ne, díky!" },
+        ],
+      },
+    ],
   },
   {
     id: "telefon", level: "l4", title: "Hostel 8 – telefon a rezervace", icon: "📞",
@@ -1658,22 +1756,24 @@ const LESSONS = [
       { id: "telefon-11", src: "Can you call back later?", it: "Puoi richiamare più tardi?" },
       { id: "telefon-12", src: "One moment, please", it: "Un attimo, per favore" },
     ],
-    dialog: {
-      title: "Telefonát", scene: "Někdo volá kvůli posteli.", cast: {"A": "Bob", "B": "Anna"},
-      lines: [
-        { s: "A", it: "Pronto? Ostello Costello, buongiorno!", cz: "Haló? Hostel Costello, dobrý den!" },
-        { s: "B", it: "Buongiorno! Avete posto per stasera?", cz: "Dobrý den! Máte místo na dnešek?" },
-        { s: "A", it: "Un attimo, per favore… Per quante persone?", cz: "Moment, prosím… Pro kolik lidí?" },
-        { s: "B", it: "Per due persone, per tre notti.", cz: "Pro dva lidi, na tři noci." },
-        { s: "A", it: "Mi dispiace, stasera siamo al completo. Domani abbiamo un letto in dormitorio.", cz: "Je mi líto, dnes máme plno. Zítra máme postel na pokoji." },
-        { s: "B", it: "Va bene, domani!", cz: "Dobře, tak zítra!" },
-        { s: "A", it: "A che nome?", cz: "Na jaké jméno?" },
-        { s: "B", it: "Schmidt.", cz: "Schmidt." },
-        { s: "A", it: "Puoi fare lo spelling, per favore?", cz: "Můžeš to hláskovat, prosím?" },
-        { s: "B", it: "S-C-H-M-I-D-T.", cz: "S-C-H-M-I-D-T." },
-        { s: "A", it: "Perfetto! Ti mando una conferma via email.", cz: "Perfektní! Pošlu ti potvrzení e-mailem." },
-      ],
-    },
+    dialogs: [
+      {
+        title: "Telefonát", scene: "Někdo volá kvůli posteli.", cast: {"A": "Bob", "B": "Anna"},
+        lines: [
+          { s: "A", it: "Pronto? Ostello Costello, buongiorno!", cz: "Haló? Hostel Costello, dobrý den!" },
+          { s: "B", it: "Buongiorno! Avete posto per stasera?", cz: "Dobrý den! Máte místo na dnešek?" },
+          { s: "A", it: "Un attimo, per favore… Per quante persone?", cz: "Moment, prosím… Pro kolik lidí?" },
+          { s: "B", it: "Per due persone, per tre notti.", cz: "Pro dva lidi, na tři noci." },
+          { s: "A", it: "Mi dispiace, stasera siamo al completo. Domani abbiamo un letto in dormitorio.", cz: "Je mi líto, dnes máme plno. Zítra máme postel na pokoji." },
+          { s: "B", it: "Va bene, domani!", cz: "Dobře, tak zítra!" },
+          { s: "A", it: "A che nome?", cz: "Na jaké jméno?" },
+          { s: "B", it: "Schmidt.", cz: "Schmidt." },
+          { s: "A", it: "Puoi fare lo spelling, per favore?", cz: "Můžeš to hláskovat, prosím?" },
+          { s: "B", it: "S-C-H-M-I-D-T.", cz: "S-C-H-M-I-D-T." },
+          { s: "A", it: "Perfetto! Ti mando una conferma via email.", cz: "Perfektní! Pošlu ti potvrzení e-mailem." },
+        ],
+      },
+    ],
   },
   {
     id: "problemy", level: "l4", title: "Hostel 9 – problémy a řešení", icon: "🔧",
@@ -1697,19 +1797,30 @@ const LESSONS = [
       { id: "problemy-12", src: "Don't worry", it: "Non ti preoccupare" },
       { id: "problemy-13", src: "It's all sorted now", it: "Adesso è tutto a posto", hint: "teď už je všechno na svém místě" },
     ],
-    dialog: {
-      title: "Nefunguje sprcha", scene: "Host přichází s problémem.", cast: {"A": "Bob", "B": "Marco"},
-      lines: [
-        { s: "B", it: "Scusa, c'è un problema. La doccia non funziona.", cz: "Promiň, je tu problém. Nefunguje sprcha." },
-        { s: "A", it: "Mi dispiace per il disagio! Fammi controllare.", cz: "Omlouvám se za potíže! Ukaž, mrknu na to." },
-        { s: "B", it: "E non c'è acqua calda.", cz: "A neteče teplá voda." },
-        { s: "A", it: "Ci penso io. Chiamo il tecnico.", cz: "To vyřeším. Zavolám technika." },
-        { s: "B", it: "E… ho perso la chiave.", cz: "A… ztratil jsem klíč." },
-        { s: "A", it: "Non ti preoccupare! Ti porto un'altra chiave.", cz: "Neboj se! Přinesu ti jiný klíč." },
-        { s: "A", it: "Adesso è tutto a posto!", cz: "Teď už je všechno v pořádku!" },
-        { s: "B", it: "Grazie mille!", cz: "Moc děkuju!" },
-      ],
-    },
+    dialogs: [
+      {
+        title: "Nefunguje sprcha", scene: "Ráno přijde k recepci host s problémem v koupelně.", cast: {"A": "Bob", "B": "Marco"},
+        lines: [
+          { s: "B", it: "Scusa, c'è un problema. La doccia non funziona.", cz: "Promiň, je tu problém. Nefunguje sprcha." },
+          { s: "A", it: "Mi dispiace per il disagio! Fammi controllare.", cz: "Omlouvám se za potíže! Ukaž, mrknu na to." },
+          { s: "B", it: "E non c'è acqua calda.", cz: "A neteče teplá voda." },
+          { s: "A", it: "Ci penso io. Chiamo il tecnico.", cz: "To vyřeším. Zavolám technika." },
+          { s: "B", it: "Grazie!", cz: "Díky!" },
+          { s: "A", it: "Non ti preoccupare!", cz: "Neboj se!" },
+        ],
+      },
+      {
+        title: "Ztracený klíč", scene: "Večer. Anna stojí u recepce a hledá klíč po kapsách.", cast: {"A": "Bob", "B": "Anna"},
+        lines: [
+          { s: "B", it: "Scusa… ho perso la chiave!", cz: "Promiň… ztratila jsem klíč!" },
+          { s: "A", it: "Hai perso la chiave? Non ti preoccupare! Ti porto un'altra chiave.", cz: "Ztratila jsi klíč? Neboj se! Přinesu ti jiný." },
+          { s: "B", it: "Grazie! E il Wi-Fi non funziona.", cz: "Díky! A nefunguje wifi." },
+          { s: "A", it: "Fammi controllare… Adesso è tutto a posto!", cz: "Ukaž, mrknu na to… Teď už je všechno v pořádku!" },
+          { s: "B", it: "Grazie mille!", cz: "Moc díky!" },
+          { s: "A", it: "Di niente!", cz: "Není zač!" },
+        ],
+      },
+    ],
   },
   {
     id: "kdeje", level: "l5", title: "Kde je…? – krátce", icon: "📍",
@@ -1728,15 +1839,17 @@ const LESSONS = [
       { id: "kdeje-8", src: "Five minutes on foot", it: "Cinque minuti a piedi" },
       { id: "kdeje-10", src: "I'm looking for the beach", it: "Cerco la spiaggia" },
     ],
-    dialog: {
-      title: "Hledám pláž", scene: "Host se ptá na cestu.", cast: {"A": "Bob", "B": "Anna"},
-      lines: [
-        { s: "B", it: "Cerco la spiaggia. È lontano?", cz: "Hledám pláž. Je to daleko?" },
-        { s: "A", it: "No, è vicinissimo! Cinque minuti a piedi.", cz: "Ne, je to úplně blízko! Pět minut pěšky." },
-        { s: "B", it: "E dov'è il bagno?", cz: "A kde je záchod?" },
-        { s: "A", it: "Il bagno è qui vicino.", cz: "Záchod je tady kousek." },
-      ],
-    },
+    dialogs: [
+      {
+        title: "Hledám pláž", scene: "Host se ptá na cestu.", cast: {"A": "Bob", "B": "Anna"},
+        lines: [
+          { s: "B", it: "Cerco la spiaggia. È lontano?", cz: "Hledám pláž. Je to daleko?" },
+          { s: "A", it: "No, è vicinissimo! Cinque minuti a piedi.", cz: "Ne, je to úplně blízko! Pět minut pěšky." },
+          { s: "B", it: "E dov'è il bagno?", cz: "A kde je záchod?" },
+          { s: "A", it: "Il bagno è qui vicino.", cz: "Záchod je tady kousek." },
+        ],
+      },
+    ],
   },
   {
     id: "kdeje2", level: "l5", title: "Pomoz někomu najít cestu", icon: "🗺️",
@@ -1755,18 +1868,20 @@ const LESSONS = [
       { id: "kdeje-13", src: "I'll show you on the map", it: "Te lo faccio vedere sulla mappa" },
       { id: "kdeje-1", src: "Excuse me, where is the station?", it: "Scusi, dov'è la stazione?", hint: "vykání" },
     ],
-    dialog: {
-      title: "Ztracený turista", scene: "Bob na ulici potká ztraceného turistu.", cast: {"A": "Bob", "B": "Marco"},
-      lines: [
-        { s: "A", it: "Posso aiutarti? Ti sei perso?", cz: "Můžu ti pomoct? Ztratil ses?" },
-        { s: "B", it: "Sì! C'è un supermercato qui vicino?", cz: "Jo! Je tu blízko supermarket?" },
-        { s: "A", it: "Sì! Te lo faccio vedere sulla mappa.", cz: "Jo! Ukážu ti to na mapě." },
-        { s: "B", it: "Quanto ci vuole a piedi?", cz: "Jak dlouho to trvá pěšky?" },
-        { s: "A", it: "Dieci minuti.", cz: "Deset minut." },
-        { s: "B", it: "E c'è una farmacia qui vicino?", cz: "A je tu blízko lékárna?" },
-        { s: "A", it: "Sì, vicino al supermercato.", cz: "Jo, u supermarketu." },
-      ],
-    },
+    dialogs: [
+      {
+        title: "Ztracený turista", scene: "Bob na ulici potká ztraceného turistu.", cast: {"A": "Bob", "B": "Marco"},
+        lines: [
+          { s: "A", it: "Posso aiutarti? Ti sei perso?", cz: "Můžu ti pomoct? Ztratil ses?" },
+          { s: "B", it: "Sì! C'è un supermercato qui vicino?", cz: "Jo! Je tu blízko supermarket?" },
+          { s: "A", it: "Sì! Te lo faccio vedere sulla mappa.", cz: "Jo! Ukážu ti to na mapě." },
+          { s: "B", it: "Quanto ci vuole a piedi?", cz: "Jak dlouho to trvá pěšky?" },
+          { s: "A", it: "Dieci minuti.", cz: "Deset minut." },
+          { s: "B", it: "E c'è una farmacia qui vicino?", cz: "A je tu blízko lékárna?" },
+          { s: "A", it: "Sì, vicino al supermercato.", cz: "Jo, u supermarketu." },
+        ],
+      },
+    ],
   },
   {
     id: "cesta", level: "l5", title: "Doprava, doleva, rovně", icon: "↔️",
@@ -1783,16 +1898,18 @@ const LESSONS = [
       { id: "cesta-2", src: "Turn right", it: "Gira a destra" },
       { id: "cesta-3", src: "Turn left", it: "Gira a sinistra" },
     ],
-    dialog: {
-      title: "Kudy?", scene: "Anna se ptá na nádraží.", cast: {"A": "Bob", "B": "Anna"},
-      lines: [
-        { s: "B", it: "Dov'è la stazione?", cz: "Kde je nádraží?" },
-        { s: "A", it: "Vai dritto… e gira a destra.", cz: "Jdi rovně… a zahni doprava." },
-        { s: "B", it: "A destra?", cz: "Doprava?" },
-        { s: "A", it: "Sì, a destra. Poi gira a sinistra.", cz: "Jo, doprava. Potom zahni doleva." },
-        { s: "B", it: "Grazie!", cz: "Díky!" },
-      ],
-    },
+    dialogs: [
+      {
+        title: "Kudy?", scene: "Anna se ptá na nádraží.", cast: {"A": "Bob", "B": "Anna"},
+        lines: [
+          { s: "B", it: "Dov'è la stazione?", cz: "Kde je nádraží?" },
+          { s: "A", it: "Vai dritto… e gira a destra.", cz: "Jdi rovně… a zahni doprava." },
+          { s: "B", it: "A destra?", cz: "Doprava?" },
+          { s: "A", it: "Sì, a destra. Poi gira a sinistra.", cz: "Jo, doprava. Potom zahni doleva." },
+          { s: "B", it: "Grazie!", cz: "Díky!" },
+        ],
+      },
+    ],
   },
   {
     id: "cesta2", level: "l5", title: "Popis cesty", icon: "🧭",
@@ -1809,16 +1926,18 @@ const LESSONS = [
       { id: "cesta-12", src: "Go straight, then turn right at the square", it: "Vai dritto, poi gira a destra in piazza" },
       { id: "cesta-11", src: "You can't miss it", it: "Non puoi sbagliare" },
     ],
-    dialog: {
-      title: "Na nádraží", scene: "Turista se ptá Boba na ulici.", cast: {"A": "Bob", "B": "Marco"},
-      lines: [
-        { s: "B", it: "Scusa, dov'è la stazione?", cz: "Promiň, kde je nádraží?" },
-        { s: "A", it: "Vai dritto, poi gira a destra in piazza.", cz: "Jdi rovně, potom na náměstí zahni doprava." },
-        { s: "A", it: "Al semaforo gira a sinistra e attraversa la strada.", cz: "Na semaforu zahni doleva a přejdi silnici." },
-        { s: "A", it: "Poi prendi la prima a destra. Non puoi sbagliare!", cz: "Pak vezmi první doprava. Nemůžeš to minout!" },
-        { s: "B", it: "Grazie mille!", cz: "Moc díky!" },
-      ],
-    },
+    dialogs: [
+      {
+        title: "Na nádraží", scene: "Turista se ptá Boba na ulici.", cast: {"A": "Bob", "B": "Marco"},
+        lines: [
+          { s: "B", it: "Scusa, dov'è la stazione?", cz: "Promiň, kde je nádraží?" },
+          { s: "A", it: "Vai dritto, poi gira a destra in piazza.", cz: "Jdi rovně, potom na náměstí zahni doprava." },
+          { s: "A", it: "Al semaforo gira a sinistra e attraversa la strada.", cz: "Na semaforu zahni doleva a přejdi silnici." },
+          { s: "A", it: "Poi prendi la prima a destra. Non puoi sbagliare!", cz: "Pak vezmi první doprava. Nemůžeš to minout!" },
+          { s: "B", it: "Grazie mille!", cz: "Moc díky!" },
+        ],
+      },
+    ],
   },
   {
     id: "cesta3", level: "l5", title: "Kde přesně?", icon: "🏛️",
@@ -1835,17 +1954,19 @@ const LESSONS = [
       { id: "cesta-10", src: "It's behind the station", it: "È dietro la stazione" },
       { id: "cesta3-2", src: "Between the bar and the pharmacy", it: "Tra il bar e la farmacia" },
     ],
-    dialog: {
-      title: "Kde je supermarket?", scene: "Host hledá obchody.", cast: {"A": "Bob", "B": "Anna"},
-      lines: [
-        { s: "B", it: "Dov'è il supermercato?", cz: "Kde je supermarket?" },
-        { s: "A", it: "È in fondo alla strada, accanto al bar.", cz: "Je na konci ulice, vedle baru." },
-        { s: "B", it: "E la farmacia?", cz: "A lékárna?" },
-        { s: "A", it: "È di fronte alla chiesa.", cz: "Je naproti kostelu." },
-        { s: "B", it: "E la fermata dell'autobus?", cz: "A zastávka autobusu?" },
-        { s: "A", it: "È dietro la stazione.", cz: "Je za nádražím." },
-      ],
-    },
+    dialogs: [
+      {
+        title: "Kde je supermarket?", scene: "Host hledá obchody.", cast: {"A": "Bob", "B": "Anna"},
+        lines: [
+          { s: "B", it: "Dov'è il supermercato?", cz: "Kde je supermarket?" },
+          { s: "A", it: "È in fondo alla strada, accanto al bar.", cz: "Je na konci ulice, vedle baru." },
+          { s: "B", it: "E la farmacia?", cz: "A lékárna?" },
+          { s: "A", it: "È di fronte alla chiesa.", cz: "Je naproti kostelu." },
+          { s: "B", it: "E la fermata dell'autobus?", cz: "A zastávka autobusu?" },
+          { s: "A", it: "È dietro la stazione.", cz: "Je za nádražím." },
+        ],
+      },
+    ],
   },
   {
     id: "doprava", level: "l5", title: "Vlak a lístky", icon: "🚆",
@@ -1864,17 +1985,19 @@ const LESSONS = [
       { id: "doprava-5", src: "You have to validate the ticket", it: "Devi convalidare il biglietto" },
       { id: "doprava-8", src: "The train is late", it: "Il treno è in ritardo" },
     ],
-    dialog: {
-      title: "Na nádraží", scene: "Bob kupuje lístek do Riomaggiore.", cast: {"A": "Bob", "B": "Giulia"},
-      lines: [
-        { s: "A", it: "Dove si comprano i biglietti?", cz: "Kde se kupují lístky?" },
-        { s: "B", it: "Lì, alla biglietteria.", cz: "Tamhle, v pokladně." },
-        { s: "A", it: "Un biglietto per Riomaggiore, per favore.", cz: "Jeden lístek do Riomaggiore, prosím." },
-        { s: "B", it: "Ecco. Devi convalidare il biglietto!", cz: "Tady. Musíš si lístek označit!" },
-        { s: "A", it: "A che ora parte il treno? Da quale binario?", cz: "V kolik jede vlak? Z jaké koleje?" },
-        { s: "B", it: "Alle dieci, binario due. Ma il treno è in ritardo…", cz: "V deset, kolej dvě. Ale vlak má zpoždění…" },
-      ],
-    },
+    dialogs: [
+      {
+        title: "Na nádraží", scene: "Bob kupuje lístek do Riomaggiore.", cast: {"A": "Bob", "B": "Giulia"},
+        lines: [
+          { s: "A", it: "Dove si comprano i biglietti?", cz: "Kde se kupují lístky?" },
+          { s: "B", it: "Lì, alla biglietteria.", cz: "Tamhle, v pokladně." },
+          { s: "A", it: "Un biglietto per Riomaggiore, per favore.", cz: "Jeden lístek do Riomaggiore, prosím." },
+          { s: "B", it: "Ecco. Devi convalidare il biglietto!", cz: "Tady. Musíš si lístek označit!" },
+          { s: "A", it: "A che ora parte il treno? Da quale binario?", cz: "V kolik jede vlak? Z jaké koleje?" },
+          { s: "B", it: "Alle dieci, binario due. Ma il treno è in ritardo…", cz: "V deset, kolej dvě. Ale vlak má zpoždění…" },
+        ],
+      },
+    ],
   },
   {
     id: "doprava2", level: "l5", title: "Autobus, kolo, parkování", icon: "🚌",
@@ -1895,17 +2018,28 @@ const LESSONS = [
       { id: "mesto-6", src: "Driveway – keep clear", it: "Passo carrabile" },
       { id: "mesto-7", src: "Waiting", it: "Attesa" },
     ],
-    dialog: {
-      title: "Do Bivio Cento", scene: "Bob v autobuse a pak v půjčovně kol.", cast: {"A": "Bob", "B": "Giulia"},
-      lines: [
-        { s: "A", it: "Scusi, questo va a Bivio Cento?", cz: "Promiňte, jede tohle do Bivio Cento?" },
-        { s: "B", it: "Sì! Scendi alla prossima fermata.", cz: "Jo! Vystup na příští zastávce." },
-        { s: "A", it: "Grazie! L'autobus passa spesso?", cz: "Díky! Jezdí autobus často?" },
-        { s: "B", it: "L'autobus passa ogni venti minuti.", cz: "Autobus jezdí každých dvacet minut." },
-        { s: "A", it: "Ciao! Sono qui per la bici. Dove posso parcheggiare?", cz: "Ahoj! Jdu pro kolo. Kde můžu zaparkovat?" },
-        { s: "B", it: "Qui, ma non lì: è un passo carrabile!", cz: "Tady, ale ne tamhle: to je vjezd!" },
-      ],
-    },
+    dialogs: [
+      {
+        title: "V autobuse", scene: "Bob nastoupí do autobusu a není si jistý, jestli jede správně. Zeptá se paní vedle sebe.", cast: {"A": "Bob", "B": "Signora"},
+        lines: [
+          { s: "A", it: "Scusi, questo va a Bivio Cento?", cz: "Promiňte, jede tohle do Bivio Cento?" },
+          { s: "B", it: "Sì! Scendi alla prossima fermata.", cz: "Jo! Vystup na příští zastávce." },
+          { s: "A", it: "Grazie! L'autobus passa spesso?", cz: "Díky! Jezdí autobus často?" },
+          { s: "B", it: "L'autobus passa ogni venti minuti.", cz: "Autobus jezdí každých dvacet minut." },
+          { s: "A", it: "Perfetto, grazie mille!", cz: "Super, moc díky!" },
+        ],
+      },
+      {
+        title: "V půjčovně kol", scene: "Bob přijede autem do půjčovny kol.", cast: {"A": "Bob", "B": "Luca"},
+        lines: [
+          { s: "A", it: "Ciao! Sono qui per la bici.", cz: "Ahoj! Jdu pro kolo." },
+          { s: "B", it: "Ciao! Ah sì, la bici è pronta.", cz: "Ahoj! Jo, kolo je připravené." },
+          { s: "A", it: "Dove posso parcheggiare?", cz: "Kde můžu zaparkovat?" },
+          { s: "B", it: "Qui, ma non lì: è un passo carrabile!", cz: "Tady, ale ne tamhle: to je vjezd!" },
+          { s: "A", it: "Va bene, grazie!", cz: "Dobře, díky!" },
+        ],
+      },
+    ],
   },
   {
     id: "obchod", level: "l5", title: "Nakupování", icon: "🛍️",
@@ -1927,18 +2061,20 @@ const LESSONS = [
       { id: "obchod-8", src: "Is it open on Sunday?", it: "È aperto la domenica?" },
       { id: "obchod-9", src: "What time do you close?", it: "A che ora chiudete?" },
     ],
-    dialog: {
-      title: "V obchodě", scene: "Bob nakupuje.", cast: {"A": "Bob", "B": "Giulia"},
-      lines: [
-        { s: "B", it: "Buongiorno!", cz: "Dobrý den!" },
-        { s: "A", it: "Buongiorno! Do solo un'occhiata, grazie.", cz: "Dobrý den! Jen se dívám, díky." },
-        { s: "A", it: "Quanto costano?", cz: "Kolik stojí?" },
-        { s: "B", it: "Dieci euro.", cz: "Deset eur." },
-        { s: "A", it: "Lo prendo! Posso pagare con la carta?", cz: "Beru to! Můžu platit kartou?" },
-        { s: "B", it: "Certo. Sacchetto?", cz: "Jasně. Tašku?" },
-        { s: "A", it: "Niente sacchetto, grazie.", cz: "Tašku ne, díky." },
-      ],
-    },
+    dialogs: [
+      {
+        title: "V obchodě", scene: "Bob nakupuje.", cast: {"A": "Bob", "B": "Giulia"},
+        lines: [
+          { s: "B", it: "Buongiorno!", cz: "Dobrý den!" },
+          { s: "A", it: "Buongiorno! Do solo un'occhiata, grazie.", cz: "Dobrý den! Jen se dívám, díky." },
+          { s: "A", it: "Quanto costano?", cz: "Kolik stojí?" },
+          { s: "B", it: "Dieci euro.", cz: "Deset eur." },
+          { s: "A", it: "Lo prendo! Posso pagare con la carta?", cz: "Beru to! Můžu platit kartou?" },
+          { s: "B", it: "Certo. Sacchetto?", cz: "Jasně. Tašku?" },
+          { s: "A", it: "Niente sacchetto, grazie.", cz: "Tašku ne, díky." },
+        ],
+      },
+    ],
   },
   {
     id: "gym", level: "l6", title: "V posilovně", icon: "🏋️",
@@ -1957,18 +2093,20 @@ const LESSONS = [
       { id: "gym-5", src: "Do you train here often?", it: "Ti alleni spesso qui?" },
       { id: "gym-6", src: "I train three times a week", it: "Mi alleno tre volte a settimana" },
     ],
-    dialog: {
-      title: "Můžu se střídat?", scene: "Bob v posilovně potká Lucu.", cast: {"A": "Bob", "B": "Luca"},
-      lines: [
-        { s: "A", it: "Ciao! Stai usando questo?", cz: "Ahoj! Používáš tohle?" },
-        { s: "B", it: "Sì, ma ho quasi finito.", cz: "Jo, ale už skoro končím." },
-        { s: "A", it: "Posso alternarmi con te? Quante serie ti mancano?", cz: "Můžu se s tebou střídat? Kolik sérií ti zbývá?" },
-        { s: "B", it: "Due. Certo!", cz: "Dvě. Jasně!" },
-        { s: "A", it: "Va bene se faccio gli stacchi qui?", cz: "Nevadí, když tu budu dělat mrtvý tahy?" },
-        { s: "B", it: "Nessun problema. Ti alleni spesso qui?", cz: "Žádný problém. Trénuješ tu často?" },
-        { s: "A", it: "Mi alleno tre volte a settimana.", cz: "Trénuju třikrát týdně." },
-      ],
-    },
+    dialogs: [
+      {
+        title: "Můžu se střídat?", scene: "Bob v posilovně potká Lucu.", cast: {"A": "Bob", "B": "Luca"},
+        lines: [
+          { s: "A", it: "Ciao! Stai usando questo?", cz: "Ahoj! Používáš tohle?" },
+          { s: "B", it: "Sì, ma ho quasi finito.", cz: "Jo, ale už skoro končím." },
+          { s: "A", it: "Posso alternarmi con te? Quante serie ti mancano?", cz: "Můžu se s tebou střídat? Kolik sérií ti zbývá?" },
+          { s: "B", it: "Due. Certo!", cz: "Dvě. Jasně!" },
+          { s: "A", it: "Va bene se faccio gli stacchi qui?", cz: "Nevadí, když tu budu dělat mrtvý tahy?" },
+          { s: "B", it: "Nessun problema. Ti alleni spesso qui?", cz: "Žádný problém. Trénuješ tu často?" },
+          { s: "A", it: "Mi alleno tre volte a settimana.", cz: "Trénuju třikrát týdně." },
+        ],
+      },
+    ],
   },
   {
     id: "gym2", level: "l6", title: "Bolí mě…", icon: "🤕",
@@ -1986,16 +2124,18 @@ const LESSONS = [
       { id: "gym-3", src: "My body is very fucked up", it: "Ho il corpo a pezzi", hint: "…je na kusy" },
       { id: "gym2-2", src: "I need to rest", it: "Devo riposare" },
     ],
-    dialog: {
-      title: "Po tréninku", scene: "Den po těžkém tréninku.", cast: {"A": "Bob", "B": "Luca"},
-      lines: [
-        { s: "B", it: "Come stai?", cz: "Jak se máš?" },
-        { s: "A", it: "Ho ancora i dolori dell'allenamento di ieri!", cz: "Ještě mě bolí všechno ze včerejšího tréninku!" },
-        { s: "B", it: "Anche io. Mi fa male la schiena.", cz: "Mě taky. Bolí mě záda." },
-        { s: "A", it: "E mi fa male il ginocchio. Ho il ginocchio a pezzi!", cz: "A bolí mě koleno. Mám koleno na kusy!" },
-        { s: "B", it: "Ho il corpo a pezzi! Oggi devo riposare.", cz: "Mám celé tělo na kusy! Dneska musím odpočívat." },
-      ],
-    },
+    dialogs: [
+      {
+        title: "Po tréninku", scene: "Den po těžkém tréninku.", cast: {"A": "Bob", "B": "Luca"},
+        lines: [
+          { s: "B", it: "Come stai?", cz: "Jak se máš?" },
+          { s: "A", it: "Ho ancora i dolori dell'allenamento di ieri!", cz: "Ještě mě bolí všechno ze včerejšího tréninku!" },
+          { s: "B", it: "Anche io. Mi fa male la schiena.", cz: "Mě taky. Bolí mě záda." },
+          { s: "A", it: "E mi fa male il ginocchio. Ho il ginocchio a pezzi!", cz: "A bolí mě koleno. Mám koleno na kusy!" },
+          { s: "B", it: "Ho il corpo a pezzi! Oggi devo riposare.", cz: "Mám celé tělo na kusy! Dneska musím odpočívat." },
+        ],
+      },
+    ],
   },
   {
     id: "sproste", level: "l6", title: "Sprostá slovíčka", icon: "🤬",
@@ -2012,16 +2152,18 @@ const LESSONS = [
       { id: "sproste-5", src: "What a mess!", it: "Che casino!", hint: "to je bordel!" },
       { id: "sproste-6", src: "Thank goodness!", it: "Meno male!" },
     ],
-    dialog: {
-      title: "Kde je klíč?!", scene: "Giulia hledá klíč.", cast: {"A": "Bob", "B": "Giulia"},
-      lines: [
-        { s: "B", it: "Merda! Ho perso la chiave!", cz: "Do prdele! Ztratila jsem klíč!" },
-        { s: "A", it: "Porca miseria!", cz: "Do háje!" },
-        { s: "B", it: "Che casino!", cz: "To je bordel!" },
-        { s: "A", it: "Cavolo… ah, eccola!", cz: "Sakra… á, tady je!" },
-        { s: "B", it: "Meno male!", cz: "Zaplaťpánbůh!" },
-      ],
-    },
+    dialogs: [
+      {
+        title: "Kde je klíč?!", scene: "Giulia hledá klíč.", cast: {"A": "Bob", "B": "Giulia"},
+        lines: [
+          { s: "B", it: "Merda! Ho perso la chiave!", cz: "Do prdele! Ztratila jsem klíč!" },
+          { s: "A", it: "Porca miseria!", cz: "Do háje!" },
+          { s: "B", it: "Che casino!", cz: "To je bordel!" },
+          { s: "A", it: "Cavolo… ah, eccola!", cz: "Sakra… á, tady je!" },
+          { s: "B", it: "Meno male!", cz: "Zaplaťpánbůh!" },
+        ],
+      },
+    ],
   },
 ];
 
@@ -2183,10 +2325,13 @@ function route() {
   stopSpeech(); stopRecognition(); playAllGen++; dlgGen++;
   R = null; T = null;
   window.scrollTo(0, 0);
-  const [, view, id, mode, arg] = location.hash.replace(/^#\/?/, '#/').split('/');
+  const [, view, id, mode, arg, who] = location.hash.replace(/^#\/?/, '#/').split('/');
   const lesson = id && findLesson(decodeURIComponent(id));
   if (view === 'l' && lesson && mode === 'test') return startTest(lesson);
-  if (view === 'l' && lesson && mode === 'dialog' && lesson.dialog) return arg && lesson.dialog.cast[arg] ? startRoleplay(lesson, arg) : renderDialog(lesson);
+  if (view === 'l' && lesson && mode === 'dialog') {
+    const di = +arg || 0, d = lesson.dialogs?.[di];
+    if (d) return who && d.cast[who] ? startRoleplay(lesson, di, who) : renderDialog(lesson, di);
+  }
   if (view === 'l' && lesson && mode && findMode(mode)) return startSession(lesson, mode);
   if (view === 'l' && lesson) return renderLesson(lesson);
   renderHome();
@@ -2260,13 +2405,13 @@ function renderLesson(lesson) {
         <summary>📖 Než začneš</summary>
         <ul>${lesson.notes.map(n => `<li>${md(n)}</li>`).join('')}</ul>
       </details>` : ''}
-      ${lesson.dialog ? `<div class="dlg-card">
-        <div class="dlg-top"><span class="dlg-ico">🎭</span><div><b>Konverzace: ${esc(lesson.dialog.title)}</b><small>${esc(lesson.dialog.scene)}</small></div></div>
+      ${(lesson.dialogs || []).map((d, di) => `<div class="dlg-card">
+        <div class="dlg-top"><span class="dlg-ico">🎭</span><div><b>${lesson.dialogs.length > 1 ? `Konverzace ${di + 1}/${lesson.dialogs.length}` : 'Konverzace'}: ${esc(d.title)}</b><small>${esc(d.scene)}</small></div></div>
         <div class="dlg-btns">
-          <button class="pill-btn" data-go="#/l/${encodeURIComponent(lesson.id)}/dialog">▶ Poslechnout</button>
-          ${Object.entries(lesson.dialog.cast).map(([k, name]) => `<button class="pill-btn ghost" data-go="#/l/${encodeURIComponent(lesson.id)}/dialog/${k}">🎤 Hraj za ${esc(name)}</button>`).join('')}
+          <button class="pill-btn" data-go="#/l/${encodeURIComponent(lesson.id)}/dialog/${di}">▶ Poslechnout</button>
+          ${Object.entries(d.cast).map(([k, name]) => `<button class="pill-btn ghost" data-go="#/l/${encodeURIComponent(lesson.id)}/dialog/${di}/${k}">🎤 Hraj za ${esc(name)}</button>`).join('')}
         </div>
-      </div>` : ''}
+      </div>`).join('')}
       <div class="modes">
         ${MODES.map((m, i) => `
           <button class="mode${i === 0 ? ' first' : ''}" data-go="#/l/${encodeURIComponent(lesson.id)}/${m.id}">
@@ -2676,8 +2821,8 @@ async function sendForTranscription(p, blob, valid) {
 
 // ═══════════════════════════════════════════════════════════
 //  KONVERZACE — poslech celého rozhovoru + hraní rolí
-//  #/l/ID/dialog      = poslech
-//  #/l/ID/dialog/A    = hraješ za postavu A (druhou mluví appka)
+//  #/l/ID/dialog/N      = poslech N-té konverzace lekce
+//  #/l/ID/dialog/N/A    = hraješ za postavu A (druhou mluví appka)
 // ═══════════════════════════════════════════════════════════
 let dlgGen = 0;
 let dlgShowCz = true;
@@ -2700,19 +2845,20 @@ function bubbleHtml(d, ln, idx, side = ln.s === Object.keys(d.cast)[0] ? 'me' : 
   </div>`;
 }
 
-function dialogHeader(lesson, sub) {
+function dialogHeader(lesson, d, sub) {
   return `<header class="top"><div class="wrap">
     <button class="icon-btn" data-go="#/l/${encodeURIComponent(lesson.id)}" aria-label="Zavřít">✕</button>
-    <div style="flex:1;min-width:0"><h1>🎭 ${esc(lesson.dialog.title)}</h1><div class="sub">${esc(sub)}</div></div>
+    <div style="flex:1;min-width:0"><h1>🎭 ${esc(d.title)}</h1><div class="sub">${esc(sub)}</div></div>
   </div></header>`;
 }
 
-function renderDialog(lesson) {
-  const d = lesson.dialog;
+function renderDialog(lesson, di) {
+  const d = lesson.dialogs[di];
+  const nextD = lesson.dialogs[di + 1];
   dlgGen++;
   document.title = `${d.title} · ${lesson.title}`;
   app.innerHTML = `<div class="session">
-    ${dialogHeader(lesson, 'Konverzace · ' + lesson.title)}
+    ${dialogHeader(lesson, d, (lesson.dialogs.length > 1 ? `Konverzace ${di + 1}/${lesson.dialogs.length} · ` : 'Konverzace · ') + lesson.title)}
     <main style="flex:1"><div class="wrap">
       <div class="scene">${esc(d.scene)}</div>
       <div class="chat">${d.lines.map((ln, i) => bubbleHtml(d, ln, i)).join('')}</div>
@@ -2723,7 +2869,7 @@ function renderDialog(lesson) {
       <button class="big-btn ghost" id="slowBtn">🐢</button>
       <button class="big-btn" id="playDlg">▶ Přehrát</button>
     </div>
-    <div class="wrap role-row">${Object.entries(d.cast).map(([k, name]) => `<button class="pill-btn ghost" data-go="#/l/${encodeURIComponent(lesson.id)}/dialog/${k}">🎤 Hraj za ${esc(name)}</button>`).join('')}</div>
+    <div class="wrap role-row">${Object.entries(d.cast).map(([k, name]) => `<button class="pill-btn ghost" data-go="#/l/${encodeURIComponent(lesson.id)}/dialog/${di}/${k}">🎤 Hraj za ${esc(name)}</button>`).join('')}${nextD ? `<button class="pill-btn" data-go="#/l/${encodeURIComponent(lesson.id)}/dialog/${di + 1}">Další konverzace ▶</button>` : ''}</div>
     </div>
   </div>`;
   bindGo();
@@ -2755,14 +2901,14 @@ function renderDialog(lesson) {
 }
 
 // ── Hraní rolí ──
-let R = null; // { lesson, me, idx, scores, gen }
+let R = null; // { lesson, d, di, me, idx, scores, gen }
 
-function startRoleplay(lesson, me) {
-  const d = lesson.dialog;
-  R = { lesson, me, idx: 0, scores: [], gen: ++dlgGen };
+function startRoleplay(lesson, di, me) {
+  const d = lesson.dialogs[di];
+  R = { lesson, d, di, me, idx: 0, scores: [], gen: ++dlgGen };
   document.title = `Hraj za ${d.cast[me]} · ${lesson.title}`;
   app.innerHTML = `<div class="session">
-    ${dialogHeader(lesson, `Hraješ za ${d.cast[me]}`)}
+    ${dialogHeader(lesson, d, `Hraješ za ${d.cast[me]}`)}
     <main style="flex:1"><div class="wrap">
       <div class="scene">${esc(d.scene)} Ty jsi <b>${esc(d.cast[me])}</b> – appka mluví za ostatní. Až budeš na řadě, řekni svou repliku italsky.</div>
       <div class="chat" id="chat"></div>
@@ -2782,7 +2928,7 @@ function rpChatAppend(html) {
 
 async function rpStep() {
   if (!R) return;
-  const g = R.gen, d = R.lesson.dialog;
+  const g = R.gen, d = R.d;
   const foot = document.getElementById('rpFoot');
   if (R.idx >= d.lines.length) return rpSummary();
   const ln = d.lines[R.idx];
@@ -2859,8 +3005,8 @@ async function rpStep() {
 }
 
 function rpSummary() {
-  const { lesson, me, scores } = R;
-  const d = lesson.dialog;
+  const { lesson, d, di, me, scores } = R;
+  const nextD = lesson.dialogs[di + 1];
   const avg = scores.length ? Math.round(scores.reduce((a, b) => a + b, 0) / scores.length) : 0;
   const other = Object.keys(d.cast).find(k => k !== me);
   const t = today();
@@ -2872,10 +3018,11 @@ function rpSummary() {
     <div class="rp-btns">
       <button class="big-btn ghost" data-go="#/l/${encodeURIComponent(lesson.id)}">Hotovo</button>
       <button class="big-btn ghost" id="rpRestart">🔁 Znovu</button>
-      ${other ? `<button class="big-btn" data-go="#/l/${encodeURIComponent(lesson.id)}/dialog/${other}">Hraj za ${esc(d.cast[other])}</button>` : ''}
+      ${other ? `<button class="big-btn${nextD ? ' ghost' : ''}" data-go="#/l/${encodeURIComponent(lesson.id)}/dialog/${di}/${other}">Hraj za ${esc(d.cast[other])}</button>` : ''}
+      ${nextD ? `<button class="big-btn" data-go="#/l/${encodeURIComponent(lesson.id)}/dialog/${di + 1}">Další ▶</button>` : ''}
     </div>`;
   bindGo();
-  document.getElementById('rpRestart').onclick = () => startRoleplay(lesson, me);
+  document.getElementById('rpRestart').onclick = () => startRoleplay(lesson, di, me);
 }
 
 // ═══════════════════════════════════════════════════════════
