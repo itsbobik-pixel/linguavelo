@@ -5,63 +5,51 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, interactive-widget=resizes-content">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="apple-mobile-web-app-title" content="LinguaVelo">
-<meta name="theme-color" content="#F7F8FC">
-<title>LinguaVelo</title>
+<meta name="apple-mobile-web-app-title" content="Bobik Speaks Italian">
+<meta name="theme-color" content="#CE2B37">
+<title>Bobik Speaks Italian</title>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
 
   :root {
-    --bg: #F7F8FC;
+    --bg: #FBF7F6;
     --surface: #FFFFFF;
-    --surface2: #F0F2F9;
-    --border: #E4E7F0;
-    --text: #0F1123;
-    --text-2: #6B7280;
-    --text-3: #9CA3AF;
-    --accent: #059669;
-    --accent-2: #047857;
-    --accent-soft: #ECFDF5;
+    --surface2: #FBEDEC;
+    --border: #F1E1DF;
+    --text: #1F1214;
+    --text-2: #6E5D5F;
+    --text-3: #A8989A;
+    --accent: #CE2B37;
+    --accent-2: #A51F2A;
+    --accent-soft: #FDECEC;
+    --bar: #CE2B37;
     --easy: #059669;
     --easy-soft: #ECFDF5;
     --good: #2563EB;
     --good-soft: #EFF6FF;
-    --hard: #DC2626;
-    --hard-soft: #FEF2F2;
+    --hard: #EA580C;
+    --hard-soft: #FFF4ED;
     --warn: #D97706;
-    --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
-    --shadow-lg: 0 8px 24px rgba(15,17,35,0.08);
+    --shadow: 0 1px 3px rgba(80,20,20,0.06), 0 1px 2px rgba(80,20,20,0.04);
+    --shadow-lg: 0 8px 24px rgba(80,20,20,0.10);
     --radius: 16px;
   }
   @media (prefers-color-scheme: dark) {
     :root:not([data-theme="light"]) {
-      --bg: #0E1016;
-      --surface: #171A23;
-      --surface2: #1F2330;
-      --border: #2A2F3E;
-      --text: #ECEEF4;
-      --text-2: #A3A9B8;
-      --text-3: #6B7280;
-      --accent: #34D399;
-      --accent-2: #10B981;
-      --accent-soft: #0F2A22;
-      --easy: #34D399;
-      --easy-soft: #0F2A22;
-      --good: #60A5FA;
-      --good-soft: #13213A;
-      --hard: #F87171;
-      --hard-soft: #351818;
-      --warn: #FBBF24;
-      --shadow: 0 1px 3px rgba(0,0,0,0.4);
-      --shadow-lg: 0 8px 24px rgba(0,0,0,0.4);
+      --bg: #12100F; --surface: #1C1817; --surface2: #2A2221; --border: #3A2E2C;
+      --text: #F3ECEB; --text-2: #B9A9A7; --text-3: #7A6A68;
+      --accent: #F0525C; --accent-2: #D93A45; --accent-soft: #3A1A1D; --bar: #9E1F29;
+      --easy: #34D399; --easy-soft: #0F2A22; --good: #60A5FA; --good-soft: #13213A;
+      --hard: #FB923C; --hard-soft: #3A2312; --warn: #FBBF24;
+      --shadow: 0 1px 3px rgba(0,0,0,0.4); --shadow-lg: 0 8px 24px rgba(0,0,0,0.4);
     }
   }
   :root[data-theme="dark"] {
-    --bg: #0E1016; --surface: #171A23; --surface2: #1F2330; --border: #2A2F3E;
-    --text: #ECEEF4; --text-2: #A3A9B8; --text-3: #6B7280;
-    --accent: #34D399; --accent-2: #10B981; --accent-soft: #0F2A22;
+    --bg: #12100F; --surface: #1C1817; --surface2: #2A2221; --border: #3A2E2C;
+    --text: #F3ECEB; --text-2: #B9A9A7; --text-3: #7A6A68;
+    --accent: #F0525C; --accent-2: #D93A45; --accent-soft: #3A1A1D; --bar: #9E1F29;
     --easy: #34D399; --easy-soft: #0F2A22; --good: #60A5FA; --good-soft: #13213A;
-    --hard: #F87171; --hard-soft: #351818; --warn: #FBBF24;
+    --hard: #FB923C; --hard-soft: #3A2312; --warn: #FBBF24;
     --shadow: 0 1px 3px rgba(0,0,0,0.4); --shadow-lg: 0 8px 24px rgba(0,0,0,0.4);
   }
 
@@ -79,21 +67,21 @@
   /* ── TOP BAR ── */
   .top {
     position: sticky; top: 0; z-index: 10;
-    background: color-mix(in srgb, var(--bg) 90%, transparent);
-    backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-    border-bottom: 1px solid var(--border);
+    background: var(--bar); color: #fff;
+    box-shadow: 0 2px 10px rgba(120,20,25,0.18);
     padding-top: env(safe-area-inset-top);
   }
   .top .wrap { display: flex; align-items: center; gap: 12px; height: 56px; }
   .top h1 { font-size: 1.05em; font-weight: 700; flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .top .sub { font-size: 0.75em; color: var(--text-2); font-weight: 500; }
+  .top .sub { font-size: 0.75em; color: rgba(255,255,255,0.82); font-weight: 500; }
+  .top .icon-btn { background: rgba(255,255,255,0.18); color: #fff; }
   .icon-btn {
     width: 38px; height: 38px; border-radius: 10px; flex-shrink: 0;
     display: flex; align-items: center; justify-content: center;
     background: var(--surface2); font-size: 1.05em;
   }
-  .brand { font-weight: 800; letter-spacing: -0.02em; font-size: 1.25em; }
-  .brand span { color: var(--accent); }
+  .brand { font-weight: 800; letter-spacing: -0.02em; font-size: 1.2em; }
+  .brand span { font-weight: 600; opacity: 0.9; }
 
   main { padding: 20px 0 calc(40px + env(safe-area-inset-bottom)); }
 
@@ -163,8 +151,8 @@
   /* ── SESSION ── */
   .session { display: flex; flex-direction: column; min-height: 100dvh; }
   .session .top { position: static; }
-  .sbar { height: 4px; background: var(--surface2); }
-  .sbar > i { display: block; height: 100%; background: var(--accent); transition: width .3s; }
+  .sbar { height: 4px; background: rgba(255,255,255,0.25); }
+  .sbar > i { display: block; height: 100%; background: #fff; transition: width .3s; }
   .stage { flex: 1; display: flex; flex-direction: column; justify-content: center; padding: 20px 0; }
   .card {
     background: var(--surface); border: 1px solid var(--border); border-radius: 22px;
@@ -194,8 +182,8 @@
     background: var(--accent); color: #fff; font-size: 2em; display: flex; align-items: center; justify-content: center;
     box-shadow: 0 6px 18px color-mix(in srgb, var(--accent) 40%, transparent);
   }
-  .mic.rec { background: var(--hard); animation: pulse 1.2s infinite; }
-  @keyframes pulse { 0%,100% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--hard) 45%, transparent); } 50% { box-shadow: 0 0 0 14px transparent; } }
+  .mic.rec { background: var(--accent-2); animation: pulse 1.2s infinite; }
+  @keyframes pulse { 0%,100% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent) 45%, transparent); } 50% { box-shadow: 0 0 0 14px transparent; } }
   .heard { min-height: 1.4em; color: var(--text-2); font-style: italic; }
 
   .diff { font-size: 1.1em; line-height: 1.6; }
@@ -431,12 +419,12 @@ function go(hash) { location.hash = hash; }
 //  HOME
 // ═══════════════════════════════════════════════════════════
 function renderHome() {
-  document.title = 'LinguaVelo';
+  document.title = 'Bobik Speaks Italian';
   const total = LESSONS.reduce((a, l) => a + l.phrases.length, 0);
   app.innerHTML = `
     <header class="top"><div class="wrap">
-      <div class="brand" style="flex:1">Lingua<span>Velo</span></div>
-      <div class="sub">🇮🇹 italština</div>
+      <div class="brand" style="flex:1">Bobik Speaks <span>Italian!</span></div>
+      <div class="sub">🇮🇹</div>
     </div></header>
     <main><div class="wrap">
       <div class="stats">
@@ -466,7 +454,7 @@ function renderHome() {
 // ═══════════════════════════════════════════════════════════
 let playAllGen = 0;
 function renderLesson(lesson) {
-  document.title = `${lesson.title} · LinguaVelo`;
+  document.title = `${lesson.title} · Bobik Speaks Italian`;
   const pct = lessonProgress(lesson);
   const hardCount = lesson.phrases.filter(p => MODES.some(m => getRating(p.id, m.id) !== 'easy')).length;
   app.innerHTML = `
@@ -583,7 +571,7 @@ function renderCard() {
           <h1>${m.icon} ${m.name}</h1>
           <div class="sub">${esc(lesson.title)}</div>
         </div>
-        <div class="sub" style="font-weight:700;color:var(--accent)">${Math.min(done + 1, total)} / ${total}</div>
+        <div class="sub" style="font-weight:700;color:#fff">${Math.min(done + 1, total)} / ${total}</div>
       </div><div class="sbar"><i style="width:${done / total * 100}%"></i></div></header>
       <div class="stage"><div class="wrap"><div class="card" id="card">${promptHtml(p, mode)}</div></div></div>
       <div class="foot"><div class="wrap" id="foot"></div><div class="kbd-hint" id="kbd"></div></div>

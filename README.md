@@ -1,4 +1,4 @@
-# LinguaVelo
+# Bobik Speaks Italian!
 
 Učení italštiny ve stylu Rocket Languages: lekce → Flashcards / Hear it / Know it / Write it / Say it, hodnocení Hard / Good / Easy.
 
