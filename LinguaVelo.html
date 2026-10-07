@@ -16,1966 +16,796 @@
     --surface: #FFFFFF;
     --surface2: #F0F2F9;
     --border: #E4E7F0;
-    --text-primary: #0F1123;
-    --text-secondary: #6B7280;
-    --text-muted: #9CA3AF;
+    --text: #0F1123;
+    --text-2: #6B7280;
+    --text-3: #9CA3AF;
     --accent: #059669;
-    --accent-light: #ECFDF5;
-    --green: #059669;
-    --green-light: #ECFDF5;
-    --yellow: #D97706;
-    --yellow-light: #FFFBEB;
-    --red: #DC2626;
-    --chip-active-bg: #2563EB;
-    --chip-active-text: #fff;
-    --shadow-sm: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
-    --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+    --accent-2: #047857;
+    --accent-soft: #ECFDF5;
+    --easy: #059669;
+    --easy-soft: #ECFDF5;
+    --good: #2563EB;
+    --good-soft: #EFF6FF;
+    --hard: #DC2626;
+    --hard-soft: #FEF2F2;
+    --warn: #D97706;
+    --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+    --shadow-lg: 0 8px 24px rgba(15,17,35,0.08);
     --radius: 16px;
-    --radius-sm: 10px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0E1016;
+      --surface: #171A23;
+      --surface2: #1F2330;
+      --border: #2A2F3E;
+      --text: #ECEEF4;
+      --text-2: #A3A9B8;
+      --text-3: #6B7280;
+      --accent: #34D399;
+      --accent-2: #10B981;
+      --accent-soft: #0F2A22;
+      --easy: #34D399;
+      --easy-soft: #0F2A22;
+      --good: #60A5FA;
+      --good-soft: #13213A;
+      --hard: #F87171;
+      --hard-soft: #351818;
+      --warn: #FBBF24;
+      --shadow: 0 1px 3px rgba(0,0,0,0.4);
+      --shadow-lg: 0 8px 24px rgba(0,0,0,0.4);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0E1016; --surface: #171A23; --surface2: #1F2330; --border: #2A2F3E;
+    --text: #ECEEF4; --text-2: #A3A9B8; --text-3: #6B7280;
+    --accent: #34D399; --accent-2: #10B981; --accent-soft: #0F2A22;
+    --easy: #34D399; --easy-soft: #0F2A22; --good: #60A5FA; --good-soft: #13213A;
+    --hard: #F87171; --hard-soft: #351818; --warn: #FBBF24;
+    --shadow: 0 1px 3px rgba(0,0,0,0.4); --shadow-lg: 0 8px 24px rgba(0,0,0,0.4);
   }
 
+  html, body { height: 100%; }
   body {
-    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", Segoe UI, Roboto, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, sans-serif;
     background: var(--bg);
-    color: var(--text-primary);
-    min-height: 100vh;
+    color: var(--text);
     -webkit-font-smoothing: antialiased;
+    -webkit-tap-highlight-color: transparent;
   }
+  button { font: inherit; color: inherit; cursor: pointer; border: none; background: none; }
+  .wrap { max-width: 560px; margin: 0 auto; padding: 0 16px; }
 
   /* ── TOP BAR ── */
-  #topBar {
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    background: rgba(247,248,252,0.92);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+  .top {
+    position: sticky; top: 0; z-index: 10;
+    background: color-mix(in srgb, var(--bg) 90%, transparent);
+    backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
     border-bottom: 1px solid var(--border);
-    padding: 12px 16px;
-    padding-top: max(12px, env(safe-area-inset-top));
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
+    padding-top: env(safe-area-inset-top);
   }
-
-  #menuBtn {
-    width: 38px; height: 38px;
-    border-radius: var(--radius-sm);
-    border: 1px solid var(--border);
-    background: var(--surface);
-    color: var(--text-primary);
-    font-size: 1.1em;
-    cursor: pointer;
+  .top .wrap { display: flex; align-items: center; gap: 12px; height: 56px; }
+  .top h1 { font-size: 1.05em; font-weight: 700; flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .top .sub { font-size: 0.75em; color: var(--text-2); font-weight: 500; }
+  .icon-btn {
+    width: 38px; height: 38px; border-radius: 10px; flex-shrink: 0;
     display: flex; align-items: center; justify-content: center;
-    flex-shrink: 0;
-    box-shadow: var(--shadow-sm);
+    background: var(--surface2); font-size: 1.05em;
   }
+  .brand { font-weight: 800; letter-spacing: -0.02em; font-size: 1.25em; }
+  .brand span { color: var(--accent); }
 
-  .logo-wrap {
-    display: flex; align-items: center; gap: 8px;
-  }
-  .logo-icon {
-    width: 36px; height: 36px;
-    background: var(--accent);
-    border-radius: 9px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 1.1em;
-    color: white;
-    flex-shrink: 0;
-    box-shadow: 0 2px 8px rgba(5,150,105,0.25);
-  }
-  .logo-name {
-    font-size: 1.15em;
-    font-weight: 800;
-    letter-spacing: -0.02em;
-    color: var(--text-primary);
-  }
-  .logo-name span { color: var(--accent); }
+  main { padding: 20px 0 calc(40px + env(safe-area-inset-bottom)); }
 
-  #counterBar {
-    font-size: 0.78em;
-    font-weight: 600;
-    color: var(--text-secondary);
-    background: var(--surface2);
-    border-radius: 20px;
-    padding: 5px 10px;
-    white-space: nowrap;
-  }
+  /* ── HOME ── */
+  .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 24px; }
+  .stat { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px 12px; box-shadow: var(--shadow); }
+  .stat b { display: block; font-size: 1.5em; font-weight: 800; letter-spacing: -0.02em; }
+  .stat small { color: var(--text-2); font-size: 0.78em; }
+  .section-title { font-size: 0.8em; font-weight: 700; color: var(--text-2); text-transform: uppercase; letter-spacing: 0.06em; margin: 0 2px 10px; }
 
-  /* ── CATEGORY CHIPS ── */
-  #categoryChips {
-    display: flex;
-    gap: 8px;
-    padding: 12px 16px;
-    overflow-x: auto;
-    scrollbar-width: none;
-    -webkit-overflow-scrolling: touch;
+  .lesson {
+    display: flex; align-items: center; gap: 14px; width: 100%; text-align: left;
+    background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+    padding: 14px; margin-bottom: 10px; box-shadow: var(--shadow);
+    transition: transform .12s;
   }
-  #categoryChips::-webkit-scrollbar { display: none; }
+  .lesson:active { transform: scale(0.985); }
+  .lesson .ico { width: 48px; height: 48px; border-radius: 12px; background: var(--accent-soft); display: flex; align-items: center; justify-content: center; font-size: 1.5em; flex-shrink: 0; }
+  .lesson .meta { flex: 1; min-width: 0; }
+  .lesson .t { font-weight: 700; }
+  .lesson .d { font-size: 0.8em; color: var(--text-2); margin-top: 2px; }
+  .bar { height: 6px; border-radius: 3px; background: var(--surface2); overflow: hidden; margin-top: 8px; }
+  .bar > i { display: block; height: 100%; background: var(--accent); border-radius: 3px; transition: width .4s; }
+  .pct { font-weight: 800; font-size: 0.95em; color: var(--accent); min-width: 42px; text-align: right; }
 
-  .chip {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    white-space: nowrap;
-    padding: 6px 14px;
-    border-radius: 20px;
-    font-size: 0.82em;
-    font-weight: 600;
-    border: 1.5px solid var(--border);
-    background: var(--surface);
-    color: var(--text-secondary);
-    cursor: pointer;
-    transition: all 0.15s;
-    flex-shrink: 0;
-    box-shadow: var(--shadow-sm);
-  }
-  .chip.active {
-    background: var(--accent);
-    border-color: var(--accent);
-    color: white;
-    box-shadow: 0 2px 8px rgba(5,150,105,0.25);
-  }
+  .empty { text-align: center; color: var(--text-2); padding: 40px 16px; font-size: 0.9em; line-height: 1.5; }
 
-  /* ── PLAY BAR ── */
-  #playBar {
-    display: flex;
-    gap: 10px;
-    padding: 0 14px 12px;
+  /* ── LESSON ── */
+  .modes { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+  .mode {
+    background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+    padding: 14px; text-align: left; box-shadow: var(--shadow); transition: transform .12s;
   }
-  #playBar button {
-    flex: 1;
-    padding: 12px;
-    border-radius: var(--radius-sm);
-    border: none;
-    font-size: 0.92em;
-    font-weight: 700;
-    cursor: pointer;
-    transition: all 0.15s;
-  }
-  #loopLabel {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 48px;
-    height: 46px;
-    border-radius: var(--radius-sm);
-    border: 1.5px solid var(--border);
-    background: var(--surface);
-    cursor: pointer;
-    flex-shrink: 0;
-    box-shadow: var(--shadow-sm);
-    transition: all 0.15s;
-  }
-  #loopLabel:has(input:checked) {
-    background: var(--accent-light);
-    border-color: var(--accent);
-  }
-  #loopLabel input { display: none; }
-  #loopIcon {
-    font-size: 1.4em;
-    color: var(--text-muted);
-    line-height: 1;
-    transition: color 0.15s;
-  }
-  #loopLabel:has(input:checked) #loopIcon {
-    color: var(--accent);
-  }
-  #playBar #playAllBtn {
-    background: var(--surface);
-    color: var(--text-primary);
-    border: 1.5px solid var(--border);
-    box-shadow: var(--shadow-sm);
-  }
-  #playBar #playAllBtn.playing {
-    background: var(--accent);
-    color: white;
-    border-color: var(--accent);
-    box-shadow: 0 2px 8px rgba(5,150,105,0.25);
-  }
-  #playBar #shuffleBtn {
-    background: var(--surface);
-    color: var(--text-primary);
-    border: 1.5px solid var(--border);
-    box-shadow: var(--shadow-sm);
-  }
+  .mode:active { transform: scale(0.97); }
+  .mode.first { grid-column: 1 / -1; display: flex; align-items: center; gap: 14px; }
+  .mode.first .mi { font-size: 1.8em; }
+  .mode .mi { font-size: 1.4em; }
+  .mode .mn { font-weight: 700; margin-top: 4px; }
+  .mode.first .mn { margin-top: 0; }
+  .mode .md { font-size: 0.76em; color: var(--text-2); margin-top: 2px; line-height: 1.35; }
+  .mode .mp { font-size: 0.75em; font-weight: 700; color: var(--accent); margin-top: 8px; }
 
-  /* ── CARDS ── */
-  #list { padding: 0 14px 120px; }
+  .toggle-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 14px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 24px; font-size: 0.88em; }
+  .switch { position: relative; width: 44px; height: 26px; border-radius: 13px; background: var(--border); transition: background .2s; flex-shrink: 0; }
+  .switch::after { content: ''; position: absolute; top: 3px; left: 3px; width: 20px; height: 20px; border-radius: 50%; background: #fff; transition: transform .2s; box-shadow: 0 1px 3px rgba(0,0,0,.2); }
+  .switch.on { background: var(--accent); }
+  .switch.on::after { transform: translateX(18px); }
 
+  .list-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+  .list-head .section-title { margin: 0 2px; }
+  .pill-btn { padding: 8px 14px; border-radius: 999px; background: var(--accent); color: #fff; font-weight: 600; font-size: 0.85em; }
+  .phrase {
+    display: flex; align-items: center; gap: 12px;
+    background: var(--surface); border: 1px solid var(--border); border-radius: 14px;
+    padding: 12px 12px 12px 14px; margin-bottom: 8px; transition: border-color .2s, background .2s;
+  }
+  .phrase.playing { border-color: var(--accent); background: var(--accent-soft); }
+  .phrase .tx { flex: 1; min-width: 0; }
+  .phrase .it { font-weight: 600; line-height: 1.35; }
+  .phrase .src { font-size: 0.82em; color: var(--text-2); margin-top: 3px; line-height: 1.35; }
+  .dots { display: flex; gap: 3px; margin-top: 7px; }
+  .dots i { width: 7px; height: 7px; border-radius: 50%; background: var(--border); }
+  .dots i.easy { background: var(--easy); } .dots i.good { background: var(--good); } .dots i.hard { background: var(--hard); }
+  .play { width: 38px; height: 38px; border-radius: 50%; background: var(--surface2); display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 0.95em; }
+  .reset-link { display: block; margin: 20px auto 0; color: var(--text-3); font-size: 0.8em; text-decoration: underline; }
+
+  /* ── SESSION ── */
+  .session { display: flex; flex-direction: column; min-height: 100dvh; }
+  .session .top { position: static; }
+  .sbar { height: 4px; background: var(--surface2); }
+  .sbar > i { display: block; height: 100%; background: var(--accent); transition: width .3s; }
+  .stage { flex: 1; display: flex; flex-direction: column; justify-content: center; padding: 20px 0; }
   .card {
-    background: var(--surface);
-    border-radius: var(--radius);
-    padding: 18px 18px 14px;
-    margin-bottom: 10px;
-    box-shadow: var(--shadow-sm);
-    border: 1px solid var(--border);
-    transition: box-shadow 0.2s, transform 0.2s;
+    background: var(--surface); border: 1px solid var(--border); border-radius: 22px;
+    box-shadow: var(--shadow-lg); padding: 28px 22px; text-align: center; min-height: 260px;
+    display: flex; flex-direction: column; justify-content: center; gap: 14px;
   }
-  .card.playing {
-    border-color: var(--accent);
-    box-shadow: 0 0 0 2px rgba(5,150,105,0.15), var(--shadow-md);
-  }
+  .card .lbl { font-size: 0.72em; font-weight: 700; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.08em; }
+  .card .big { font-size: 1.45em; font-weight: 700; line-height: 1.3; letter-spacing: -0.01em; overflow-wrap: anywhere; }
+  .card .mid { font-size: 1.05em; color: var(--text-2); line-height: 1.4; }
+  .card hr { border: none; border-top: 1px dashed var(--border); margin: 4px 0; }
+  .card .it-ans { font-size: 1.35em; font-weight: 700; color: var(--accent); line-height: 1.3; overflow-wrap: anywhere; }
+  .audio-row { display: flex; justify-content: center; gap: 10px; }
+  .audio-btn { width: 52px; height: 52px; border-radius: 50%; background: var(--accent-soft); color: var(--accent); font-size: 1.3em; display: flex; align-items: center; justify-content: center; }
+  .audio-btn.lg { width: 84px; height: 84px; font-size: 2em; }
+  .audio-btn.slow { font-size: 1.15em; }
 
-  .category-tag {
-    display: inline-block;
-    font-size: 0.68em;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    color: var(--accent);
-    background: var(--accent-light);
-    border-radius: 6px;
-    padding: 2px 7px;
-    margin-bottom: 8px;
+  .write-in {
+    width: 100%; font: inherit; font-size: 1.1em; padding: 14px; border-radius: 14px;
+    border: 1.5px solid var(--border); background: var(--surface2); color: var(--text); resize: none; outline: none;
   }
+  .write-in:focus { border-color: var(--accent); }
+  .accents { display: flex; gap: 6px; justify-content: center; flex-wrap: wrap; }
+  .accents button { width: 38px; height: 34px; border-radius: 8px; background: var(--surface2); border: 1px solid var(--border); font-weight: 600; }
 
-  .cz {
-    font-size: 1.05em;
-    font-weight: 600;
-    color: var(--text-primary);
-    margin-bottom: 5px;
-    line-height: 1.4;
+  .mic {
+    width: 88px; height: 88px; border-radius: 50%; margin: 0 auto;
+    background: var(--accent); color: #fff; font-size: 2em; display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 6px 18px color-mix(in srgb, var(--accent) 40%, transparent);
   }
-  .it {
-    font-size: 1em;
-    font-weight: 500;
-    color: var(--green);
-    margin-bottom: 12px;
-    line-height: 1.4;
-  }
-  .es {
-    font-size: 1em;
-    font-weight: 500;
-    color: #D97706;
-    margin-bottom: 12px;
-    line-height: 1.4;
-  }
-  .hidden-es {
-    color: transparent !important;
-    background: var(--surface2);
-    border-radius: 6px;
-    user-select: none;
-    cursor: pointer;
-  }
-  .hidden-es:active { color: #D97706 !important; background: transparent; }
+  .mic.rec { background: var(--hard); animation: pulse 1.2s infinite; }
+  @keyframes pulse { 0%,100% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--hard) 45%, transparent); } 50% { box-shadow: 0 0 0 14px transparent; } }
+  .heard { min-height: 1.4em; color: var(--text-2); font-style: italic; }
 
-  .hidden-it {
-    color: transparent !important;
-    background: var(--surface2);
-    border-radius: 6px;
-    user-select: none;
-  }
-  .hidden-it:active { color: var(--green) !important; background: transparent; }
-  .hidden-cz {
-    color: transparent !important;
-    background: var(--surface2);
-    border-radius: 6px;
-    user-select: none;
-    cursor: pointer;
-  }
-  .hidden-cz:active { color: var(--text-primary) !important; background: transparent; }
+  .diff { font-size: 1.1em; line-height: 1.6; }
+  .diff .ok { color: var(--easy); font-weight: 600; }
+  .diff .miss { color: var(--hard); font-weight: 600; text-decoration: underline wavy; text-underline-offset: 4px; }
+  .score { display: inline-block; padding: 4px 12px; border-radius: 999px; font-weight: 700; font-size: 0.85em; }
+  .score.hi { background: var(--easy-soft); color: var(--easy); }
+  .score.mid { background: var(--good-soft); color: var(--good); }
+  .score.lo { background: var(--hard-soft); color: var(--hard); }
+  .note { font-size: 0.8em; color: var(--warn); }
 
-  .play-one {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    color: var(--text-secondary);
-    padding: 6px 12px;
-    border-radius: 8px;
-    font-size: 0.82em;
-    font-weight: 600;
-    cursor: pointer;
-    margin-bottom: 10px;
-    transition: background 0.15s;
-  }
-  .play-one:active { background: var(--border); }
+  .foot { padding: 12px 0 calc(16px + env(safe-area-inset-bottom)); }
+  .foot .wrap { display: flex; gap: 10px; }
+  .big-btn { flex: 1; padding: 16px; border-radius: 14px; font-weight: 700; font-size: 1em; background: var(--accent); color: #fff; }
+  .big-btn.ghost { background: var(--surface2); color: var(--text); flex: 0 0 auto; padding: 16px 18px; }
+  .rate { flex: 1; padding: 12px 6px; border-radius: 14px; font-weight: 700; display: flex; flex-direction: column; align-items: center; gap: 2px; border: 1.5px solid transparent; }
+  .rate small { font-weight: 500; font-size: 0.72em; opacity: 0.8; }
+  .rate.hard { background: var(--hard-soft); color: var(--hard); border-color: color-mix(in srgb, var(--hard) 30%, transparent); }
+  .rate.good { background: var(--good-soft); color: var(--good); border-color: color-mix(in srgb, var(--good) 30%, transparent); }
+  .rate.easy { background: var(--easy-soft); color: var(--easy); border-color: color-mix(in srgb, var(--easy) 30%, transparent); }
+  .kbd-hint { text-align: center; font-size: 0.72em; color: var(--text-3); margin-top: 8px; }
+  @media (hover: none) { .kbd-hint { display: none; } }
 
-  .stars-row {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    margin-top: 4px;
-  }
-  .stars-label {
-    font-size: 0.82em;
-    color: var(--text-muted);
-    width: 22px;
-    font-weight: 600;
-  }
-  .stars { font-size: 1.3em; letter-spacing: 2px; }
-  .stars .star { color: #D1D5DB; cursor: pointer; transition: color 0.12s; }
-  .stars .star.filled { color: #F59E0B; }
-
-  .locked-cards {
-    pointer-events: none;
-    opacity: 0.3;
-    filter: grayscale(0.5);
-  }
-
-  /* ── DRAWER ── */
-  #drawerOverlay {
-    display: none;
-    position: fixed; inset: 0;
-    background: rgba(15,17,35,0.4);
-    z-index: 200;
-    backdrop-filter: blur(2px);
-  }
-  #drawerOverlay.open { display: block; }
-
-  #drawer {
-    position: fixed;
-    bottom: 0; left: 0; right: 0;
-    z-index: 201;
-    background: var(--surface);
-    border-radius: 24px 24px 0 0;
-    padding: 0 0 40px;
-    transform: translateY(100%);
-    transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
-    max-height: 88vh;
-    overflow-y: auto;
-    box-shadow: 0 -8px 40px rgba(0,0,0,0.12);
-  }
-  #drawer.open { transform: translateY(0); }
-
-  .drawer-handle {
-    width: 36px; height: 4px;
-    background: var(--border);
-    border-radius: 2px;
-    margin: 14px auto 4px;
-  }
-
-  .drawer-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 10px 20px 14px;
-    border-bottom: 1px solid var(--border);
-  }
-  .drawer-title {
-    font-size: 1em;
-    font-weight: 700;
-    color: var(--text-primary);
-  }
-  #drawerClose {
-    width: 30px; height: 30px;
-    border-radius: 50%;
-    border: none;
-    background: var(--surface2);
-    color: var(--text-secondary);
-    font-size: 1em;
-    cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
-  }
-
-  .drawer-section {
-    padding: 16px 20px;
-    border-bottom: 1px solid var(--border);
-  }
-  .drawer-section:last-child { border-bottom: none; }
-
-  .drawer-section-label {
-    font-size: 0.7em;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: var(--text-muted);
-    margin-bottom: 10px;
-  }
-
-  .drawer-btn {
-    width: 100%;
-    background: var(--surface2);
-    border: 1.5px solid var(--border);
-    color: var(--text-primary);
-    padding: 11px 14px;
-    border-radius: var(--radius-sm);
-    font-size: 0.92em;
-    font-weight: 600;
-    cursor: pointer;
-    text-align: left;
-    transition: all 0.15s;
-    margin-bottom: 6px;
-  }
-  .drawer-btn:last-child { margin-bottom: 0; }
-  .drawer-btn.primary {
-    background: var(--accent);
-    border-color: var(--accent);
-    color: white;
-  }
-  .drawer-btn.mode-active, .drawer-btn.cat-active, .drawer-btn.star-active {
-    background: var(--accent-light);
-    border-color: var(--accent);
-    color: var(--accent);
-  }
-  .drawer-btn-row { display: flex; gap: 8px; }
-  .drawer-btn-row .drawer-btn { flex: 1; }
-
-  .toggle-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 8px 0;
-  }
-  .toggle-label { font-size: 0.92em; font-weight: 600; color: var(--text-primary); }
-  .toggle-switch { position: relative; width: 44px; height: 24px; flex-shrink: 0; }
-  .toggle-switch input { opacity: 0; width: 0; height: 0; }
-  .toggle-slider {
-    position: absolute; inset: 0;
-    background: var(--border);
-    border-radius: 24px;
-    cursor: pointer;
-    transition: background 0.2s;
-  }
-  .toggle-slider:before {
-    content: '';
-    position: absolute;
-    width: 18px; height: 18px;
-    left: 3px; top: 3px;
-    background: white;
-    border-radius: 50%;
-    transition: transform 0.2s;
-    box-shadow: var(--shadow-sm);
-  }
-  .toggle-switch input:checked + .toggle-slider { background: var(--accent); }
-  .toggle-switch input:checked + .toggle-slider:before { transform: translateX(20px); }
-
-  /* Stats */
-  .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-  .stat-card {
-    background: var(--surface2);
-    border-radius: var(--radius-sm);
-    padding: 14px;
-    text-align: center;
-  }
-  .stat-num { font-size: 1.8em; font-weight: 800; color: var(--accent); line-height: 1; }
-  .stat-label { font-size: 0.75em; color: var(--text-muted); margin-top: 4px; font-weight: 500; }
-
-  /* Add input */
-  #addPanel { display: none; margin-top: 10px; }
-  #addInput {
-    width: 100%;
-    background: var(--surface2);
-    border: 1.5px solid var(--border);
-    border-radius: var(--radius-sm);
-    color: var(--text-primary);
-    font-size: 0.95em;
-    padding: 11px 14px;
-    margin-bottom: 8px;
-    outline: none;
-    transition: border-color 0.15s;
-  }
-  #addInput:focus { border-color: var(--accent); }
-  #addInput::placeholder { color: var(--text-muted); }
-  #addStatus { font-size: 0.85em; min-height: 18px; color: var(--green); text-align: center; margin-top: 6px; }
-
-  /* Lock */
-  #lockDrawerBtn {
-    width: 100%;
-    padding: 13px 14px;
-    border-radius: var(--radius-sm);
-    border: 1.5px solid var(--border);
-    background: var(--surface2);
-    color: var(--text-primary);
-    font-size: 0.95em;
-    font-weight: 600;
-    cursor: pointer;
-    text-align: left;
-    transition: all 0.15s;
-  }
-  #lockDrawerBtn.is-locked {
-    background: #FEF2F2;
-    border-color: var(--red);
-    color: var(--red);
-  }
-
-  /* ── FABs ── */
-  #fabPause, #fabLock {
-    position: fixed;
-    bottom: 24px;
-    z-index: 999;
-    width: 54px; height: 54px;
-    border-radius: 50%;
-    border: none;
-    font-size: 1.3em;
-    cursor: pointer;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
-    display: flex; align-items: center; justify-content: center;
-    transition: transform 0.15s;
-  }
-  #fabLock {
-    right: 24px;
-    background: var(--surface);
-    color: var(--text-secondary);
-    border: 1.5px solid var(--border);
-  }
-  #fabLock.is-locked {
-    background: #FEF2F2;
-    color: var(--red);
-    border-color: var(--red);
-  }
-  #fabPause {
-    right: 90px;
-    background: var(--accent);
-    color: white;
-    display: none;
-  }
-  #fabPause.paused { background: var(--yellow); }
-  #fabAdd {
-    width: 36px; height: 36px;
-    border-radius: 9px;
-    border: none;
-    font-size: 1.3em;
-    font-weight: 400;
-    background: var(--accent);
-    color: white;
-    cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
-    transition: all 0.18s;
-    flex-shrink: 0;
-    line-height: 1;
-    box-shadow: 0 2px 8px rgba(5,150,105,0.25);
-  }
-  #fabAdd:active { transform: scale(0.92); }
-  #fabAdd.open {
-    background: var(--text-primary);
-    transform: rotate(45deg);
-  }
-
-  /* Add Modal */
-  #addOverlay {
-    display: none;
-    position: fixed; inset: 0;
-    background: rgba(15,17,35,0.3);
-    z-index: 300;
-    backdrop-filter: blur(4px);
-  }
-  #addOverlay.open { display: block; }
-  #addModal {
-    position: fixed;
-    top: 68px;
-    left: 16px;
-    right: 16px;
-    z-index: 301;
-    transform: translateY(-10px) scale(0.96);
-    opacity: 0;
-    pointer-events: none;
-    transition: all 0.2s cubic-bezier(0.4,0,0.2,1);
-    transform-origin: top left;
-  }
-  #addModal.open {
-    transform: translateY(0) scale(1);
-    opacity: 1;
-    pointer-events: all;
-  }
-  #addModalInner {
-    background: var(--surface);
-    border-radius: 20px;
-    padding: 20px;
-    box-shadow: 0 8px 40px rgba(0,0,0,0.14);
-    border: 1px solid var(--border);
-  }
-  #addModalTitle {
-    font-size: 0.88em;
-    font-weight: 700;
-    color: var(--text-muted);
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    margin-bottom: 12px;
-  }
-  #addModal #addInput {
-    width: 100%;
-    background: var(--surface2);
-    border: 1.5px solid var(--border);
-    border-radius: var(--radius-sm);
-    color: var(--text-primary);
-    font-size: 1em;
-    padding: 12px 14px;
-    margin-bottom: 10px;
-    outline: none;
-    transition: border-color 0.15s;
-  }
-  #addModal #addInput:focus { border-color: var(--accent); }
-  #addModal #addInput::placeholder { color: var(--text-muted); }
-  #addModal #addTranslateBtn {
-    width: 100%;
-    padding: 12px;
-    border-radius: var(--radius-sm);
-    border: none;
-    background: var(--accent);
-    color: white;
-    font-size: 0.95em;
-    font-weight: 700;
-    cursor: pointer;
-    transition: opacity 0.15s;
-  }
-  #addModal #addTranslateBtn:disabled { opacity: 0.6; }
-  #addStatus {
-    font-size: 0.85em;
-    min-height: 18px;
-    color: var(--green);
-    text-align: center;
-    margin-top: 8px;
-  }
-#chatPanel {
-    display: none;
-    flex-direction: column;
-    position: fixed;
-    inset: 0;
-    z-index: 500;
-    background: var(--bg);
-    height: 100%;
-    width: 100%;
-  }
-  #chatPanel.open {
-    display: flex;
-  }
-  #chatPanel #chatMessages {
-    flex: 1;
-    overflow-y: auto;
-    overscroll-behavior: contain;
-  }
-  #chatPanel > div:last-child {
-    flex-shrink: 0;
-    padding-bottom: max(12px, env(safe-area-inset-bottom));
-  }
-  body.chat-open > *:not(#chatPanel):not(#quizPanel) {
-    display: none !important;
-  }
-  body.chat-open {
-    overflow: hidden;
-  }
+  .summary { text-align: center; }
+  .summary .trophy { font-size: 3.4em; }
+  .summary h2 { font-size: 1.4em; margin: 6px 0 4px; }
+  .summary p { color: var(--text-2); }
+  .sum-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 22px 0; }
+  .sum-grid div { border-radius: 14px; padding: 14px 6px; font-weight: 700; }
+  .sum-grid b { display: block; font-size: 1.6em; }
+  .sum-grid .e { background: var(--easy-soft); color: var(--easy); }
+  .sum-grid .g { background: var(--good-soft); color: var(--good); }
+  .sum-grid .h { background: var(--hard-soft); color: var(--hard); }
 </style>
 </head>
 <body>
+<div id="app"></div>
 
-<!-- TOP BAR -->
-<div id="topBar">
-  <button id="menuBtn">☰</button>
-  <div class="logo-name" style="flex:1;text-align:center;">Lingua<span>Velo</span></div>
-  <button id="fabAdd">＋</button>
-  <button id="quizBtn" style="width:36px;height:36px;border-radius:9px;border:none;background:var(--surface2);color:var(--text-primary);font-size:1.1em;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;">🎯</button>
-  <button id="chatBtn" style="width:36px;height:36px;border-radius:9px;border:none;background:var(--accent-light);color:var(--accent);font-size:1.1em;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;">💬</button>
-</div>
-
-<!-- CATEGORY CHIPS -->
-<div id="categoryChips">
-  <div class="chip active" data-cat="all">Vše</div>
-  <div class="chip" data-cat="Pozdravy">👋 Pozdravy</div>
-  <div class="chip" data-cat="Konverzace">💬 Konverzace</div>
-  <div class="chip" data-cat="Kavárna">☕ Kavárna</div>
-  <div class="chip" data-cat="Restaurace">🍽️ Restaurace</div>
-  <div class="chip" data-cat="Nakupování">🛍️ Nakupování</div>
-  <div class="chip" data-cat="Doprava">🚌 Doprava</div>
-  <div class="chip" data-cat="Cestování">✈️ Cestování</div>
-  <div class="chip" data-cat="Rodina">👨‍👩‍👧 Rodina</div>
-  <div class="chip" data-cat="Hotel">🏨 Hotel</div>
-  <div class="chip" data-cat="Zdraví">❤️ Zdraví</div>
-  <div class="chip" data-cat="Práce">💼 Práce</div>
-  <div class="chip" data-cat="Ostatní">📌 Ostatní</div>
-  <div class="chip chip-divider" style="width:1px;background:var(--border);padding:0;margin:0 4px;pointer-events:none;"></div>
-  <div class="chip" data-diff="easy">🟢 Lehké</div>
-  <div class="chip" data-diff="medium">🟡 Normální</div>
-  <div class="chip" data-diff="hard">🔴 Složité</div>
-</div>
-
-<!-- CARDS -->
-<div id="playBar">
-  <button id="playAllBtn">▶️ Přehrát vše</button>
-  <label id="loopLabel">
-    <input type="checkbox" id="loopToggle">
-    <span id="loopIcon">∞</span>
-  </label>
-  <button id="shuffleBtn">🔀 Zamíchat</button>
-</div>
-
-<button id="stopBtn" style="display:none"></button><button id="sortBtn" style="display:none"></button><div id="list"></div>
-
-<!-- FABs -->
-<button id="fabPause">⏸</button>
-<button id="fabLock">🔓</button>
-
-<!-- Add modal -->
-<div id="addOverlay"></div>
-<div id="addModal">
-  <div id="addModalInner">
-    <div id="addModalTitle">Přidat frázi</div>
-    <input id="addInput" type="text" placeholder="Napiš česky nebo anglicky…" autocomplete="off">
-    <button id="addTranslateBtn">🌍 Přeložit a přidat</button>
-    <div id="addStatus"></div>
-  </div>
-</div>
-
-<!-- DRAWER OVERLAY -->
-<div id="drawerOverlay"></div>
-
-<!-- DRAWER -->
-<div id="drawer">
-  <div class="drawer-handle"></div>
-  <div class="drawer-header">
-    <span class="drawer-title">Menu</span>
-    <button id="drawerClose">✕</button>
-  </div>
-
-  <!-- Mód -->
-  <div class="drawer-section">
-    <div class="drawer-section-label">Mód zobrazení</div>
-    <button class="drawer-btn mode-btn mode-active" data-mode="normal" id="modeNormal">👀 Normální</button>
-    <button class="drawer-btn mode-btn" data-mode="listening" id="modeListening">🎧 Poslech – skryje češtinu</button>
-    <button class="drawer-btn mode-btn" data-mode="remembering" id="modeRemembering">🧠 Vybavování – skryje italštinu</button>
-  </div>
-
-  <!-- Procvičovat -->
-  <div class="drawer-section">
-    <div class="drawer-section-label">Procvičovat</div>
-    <button class="drawer-btn star-btn star-active" data-stars="all">⭐ Všechny fráze</button>
-    <button class="drawer-btn star-btn" data-stars="weak">⭐ Jen slabé (1–2 ★)</button>
-    <button class="drawer-btn star-btn" data-stars="medium">⭐⭐⭐ Jen střední (3 ★)</button>
-    <button class="drawer-btn star-btn" data-stars="strong">⭐⭐⭐⭐⭐ Jen silné (4–5 ★)</button>
-    <button class="drawer-btn star-btn" data-stars="unrated">— Bez hodnocení</button>
-  </div>
-
-  <!-- Statistiky -->
-  <div class="drawer-section">
-    <div class="drawer-section-label">Statistiky</div>
-    <div class="stats-grid">
-      <div class="stat-card">
-        <div class="stat-num" id="statListeningBig">0</div>
-        <div class="stat-label">🎧 Poslech zvládnut</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-num" id="statRememberingBig">0</div>
-        <div class="stat-label">🧠 Vybavování zvládnuto</div>
-      </div>
-      <div class="stat-card" style="grid-column:1/-1">
-        <div class="stat-num" id="statTotal">0</div>
-        <div class="stat-label">celkem frází</div>
-      </div>
-    </div>
-  </div>
-
-
-
-  <!-- Zámek -->
-  <div class="drawer-section">
-    <button id="lockDrawerBtn">🔓 Zamknout ovládání</button>
-  </div>
-</div>
-
-<script defer>
-const phrases = [
-  { cz: "Ahoj", it: "Ciao", category: "Pozdravy" },
-  { cz: "Jak to jde?", it: "Come va?", category: "Pozdravy" },
-  { cz: "Co se děje?", it: "Cosa succede?", category: "Konverzace" },
-  { cz: "Máme ještě nějakou kávu?", it: "Abbiamo ancora del caffè?", category: "Kavárna" },
-  { cz: "Jedno espresso lungo prosím", it: "Un caffè lungo, per favore", category: "Kavárna" },
-  { cz: "Dobré ráno", it: "Buongiorno", category: "Pozdravy" },
-  { cz: "Dobrý den", it: "Salve", category: "Pozdravy" },
-  { cz: "Dobrý večer", it: "Buonasera", category: "Pozdravy" },
-  { cz: "Jak se máte?", it: "Come state?", category: "Pozdravy" },
-  { cz: "Co budeš dneska dělat?", it: "Cosa farai oggi?", category: "Konverzace" },
-  { cz: "Co děláš?", it: "Cosa fai?", category: "Konverzace" },
-  { cz: "Tak já jdu, ahoj.", it: "Allora vado, ciao.", category: "Pozdravy" },
-  { cz: "Za chvilku jdu ven.", it: "Esco tra poco.", category: "Konverzace" },
-  { cz: "Ať ti to hezky utíká.", it: "Buon lavoro!", category: "Konverzace" },
-  { cz: "Už to mám dopitý", it: "L'ho già finito", category: "Kavárna" },
-  { cz: "Měj se krásně", it: "Stammi bene!", category: "Pozdravy" },
-  { cz: "Kolik to stojí?", it: "Quanto costa?", category: "Nakupování" },
-  { cz: "Tady je krásná příroda.", it: "Qui la natura è bellissima.", category: "Konverzace" },
-  { cz: "Slyšíš to?", it: "Lo senti?", category: "Konverzace" },
-  { cz: "Nerozumím", it: "Non capisco", category: "Konverzace" },
-  { cz: "Co to znamená?", it: "Cosa significa?", category: "Konverzace" },
-  { cz: "To je hrozný vedro", it: "Fa un caldo tremendo", category: "Konverzace" },
-  { cz: "Cvičíš tady?", it: "Ti alleni qui?", category: "Konverzace" },
-  { cz: "Máš skvělou postavu.", it: "Hai un fisico fantastico.", category: "Konverzace" },
-  { cz: "Máš super kraťase.", it: "Hai dei pantaloncini fantastici.", category: "Konverzace" },
-  { cz: "Máš super tričko.", it: "Hai una bella maglietta.", category: "Konverzace" },
-  { cz: "V pohodě.", it: "Tutto bene.", category: "Konverzace" },
-  { cz: "Kolik ti je?", it: "Quanti anni hai?", category: "Konverzace" },
-  { cz: "Jak se jmenuješ?", it: "Come ti chiami?", category: "Konverzace" },
-  { cz: "Jsem z formy", it: "Sono fuori forma", category: "Konverzace" },
-  { cz: "Já si nedám, děkuji", it: "Per me no, grazie", category: "Restaurace" },
-  { cz: "To je vaše dcera?", it: "È sua figlia?", category: "Rodina" },
-  { cz: "Chceš si se mnou procvičit italštinu?", it: "Vuoi praticare l'italiano con me?", category: "Konverzace" },
-  { cz: "Bylo to super", it: "È stato fantastico", category: "Konverzace" },
-  { cz: "Moc se mi tu líbilo", it: "Mi è piaciuto molto stare qui", category: "Cestování" },
-  { cz: "Příjdu zase", it: "Ritornerò", category: "Cestování" },
-  { cz: "Bylo to perfektní", it: "È stato perfetto", category: "Konverzace" },
-  { cz: "Ty si hodně ohebná", it: "Sei molto flessibile", category: "Konverzace" },
-  { cz: "Chceš potrénovat angličtinu?", it: "Vuoi praticare l'inglese?", category: "Konverzace" },
-  { cz: "Zvedáš závodně?", it: "Ti alleni a livello agonistico?", category: "Konverzace" },
-  { cz: "Zaplatím kartou.", it: "Pago con la carta.", category: "Nakupování" },
-  { cz: "Mohu zaplatit kartou prosím?", it: "Posso pagare con la carta, per favore?", category: "Nakupování" },
-  { cz: "Nevím", it: "Non lo so", category: "Konverzace" },
-  { cz: "Čau kámo", it: "Ciao amico", category: "Pozdravy" },
-  { cz: "Seš si jistá?", it: "Sei sicura?", category: "Konverzace" },
-  { cz: "Byl jsem na procházce", it: "Sono andato a fare una passeggiata", category: "Cestování" },
-  { cz: "Já ti nerozumím", it: "Non ti capisco", category: "Konverzace" },
-  { cz: "Bude mi potěšením", it: "Sarà un piacere", category: "Konverzace" },
-  { cz: "Co potřebuješ?", it: "Di cosa hai bisogno?", category: "Konverzace" },
-  { cz: "Co pro tebe mohu udělat?", it: "Cosa posso fare per te?", category: "Konverzace" },
-  { cz: "Co?", it: "Come?", category: "Konverzace" },
-  { cz: "Jdu do obchodu", it: "Vado al negozio", category: "Nakupování" },
-  { cz: "Jednu jízdenku číslo 3 prosím.", it: "Un biglietto numero 3, per favore.", category: "Doprava" },
-  { cz: "Zaplatím hotově.", it: "Pago in contanti.", category: "Nakupování" },
-  { cz: "Číslo.", it: "Numero.", category: "Ostatní" },
-  { cz: "Cafe lungo sebou prosím", it: "Un caffè lungo da portare via, per favore", category: "Kavárna" },
-  { cz: "Platba", it: "Pagamento", category: "Nakupování" },
-  { cz: "Jízdenka", it: "Biglietto", category: "Doprava" },
-  { cz: "Jeden lístek do Lerichi prosím.", it: "Un biglietto per Lerici, per favore.", category: "Doprava" },
-  { cz: "Jedu do Decathlonu", it: "Vado al Decathlon", category: "Nakupování" },
-  { cz: "Cvakni si lístek", it: "Convalida il biglietto", category: "Doprava" },
-  { cz: "Musíš si označit lístek", it: "Devi convalidare il biglietto", category: "Doprava" },
-  { cz: "Já jsem si zapomněl označit lístek", it: "Ho dimenticato di convalidare il biglietto", category: "Doprava" },
-  { cz: "Where's the fucking entrance?", lang: "en-US", it: "Dov'è cazzo l'entrata?", category: "Cestování" },
-  { cz: "Máte tady barefoot boty?", it: "Avete delle scarpe barefoot qui?", category: "Nakupování" },
-  { cz: "Can I have a little piece of focaccia?", lang: "en-US", it: "Posso avere un pezzettino di focaccia?", category: "Restaurace" },
-  { cz: "Is it possible?", lang: "en-US", it: "È possibile?", category: "Konverzace" },
-  { cz: "Kartou, prosím.", it: "Con la carta, per favore.", category: "Nakupování" },
-  { cz: "All good?", lang: "en-US", it: "Tutto bene?", category: "Konverzace" },
-  { cz: "Can we try again?", lang: "en-US", it: "Possiamo riprovare?", category: "Konverzace" },
-  { cz: "I have no idea where I am", lang: "en-US", it: "Non ho idea di dove sono", category: "Cestování" },
-  { cz: "I took the wrong bus", lang: "en-US", it: "Ho preso l'autobus sbagliato", category: "Doprava" },
-  { cz: "Kde si tady můžu koupit lístek?", it: "Dove posso comprare un biglietto qui?", category: "Doprava" },
-  { cz: "Cihla", it: "Mattone", category: "Ostatní" },
-  { cz: "Excuse me, do you speak a little bit of english?", lang: "en-US", it: "Mi scusi, parla un po' di inglese?", category: "Konverzace" },
-  { cz: "I can be successful", lang: "en-US", it: "Posso avere successo", category: "Konverzace" },
-  { cz: "Banka", it: "Banca", category: "Nakupování" },
-  { cz: "Can I do it?", lang: "en-US", it: "Posso farlo?", category: "Konverzace" },
-  { cz: "Can I leave a tip?", lang: "en-US", it: "Posso lasciare una mancia?", category: "Restaurace" },
-  { cz: "Wait a moment", lang: "en-US", it: "Aspetta un momento", category: "Konverzace" },
-  { cz: "One second", lang: "en-US", it: "Un secondo", category: "Konverzace" },
-  { cz: "Nothing", lang: "en-US", it: "Niente", category: "Konverzace" },
-  { cz: "Thank you for the practice", lang: "en-US", it: "Grazie per la pratica", category: "Konverzace" },
-
-  // ── Costello Hostel – recepce ──
-  { cz: "Welcome to the hostel, my name is Bob", lang: "en-US", it: "Benvenuti all'ostello, mi chiamo Bob", es: "Bienvenido al hostal, me llamo Bob", category: "Hotel" },
-  { cz: "What is your name?", lang: "en-US", it: "Come ti chiami?", es: "¿Cómo te llamas?", category: "Hotel" },
-  { cz: "How are you?", lang: "en-US", it: "Come stai?", es: "¿Cómo estás?", category: "Hotel" },
-  { cz: "Can I help you with the luggage?", lang: "en-US", it: "Posso aiutarla con i bagagli?", es: "¿Puedo ayudarle con el equipaje?", category: "Hotel" },
-  { cz: "You can sit down here and put your luggage down", lang: "en-US", it: "Puoi sederti qui e appoggiare i tuoi bagagli.", es: "Puedes sentarte aquí y dejar tu equipaje.", category: "Hotel" },
-  { cz: "Can I bring you a glass of water, juice or coffee?", lang: "en-US", it: "Posso portarle un bicchiere d'acqua, di succo di frutta o di caffè?", es: "¿Quieres un vaso de agua, zumo o café?", category: "Hotel" },
-  { cz: "What brings you to La Spezia?", lang: "en-US", it: "Cosa ti porta a La Spezia?", es: "¿Qué te trae a La Spezia?", category: "Hotel" },
-  { cz: "Are you here for the Cinque Terre?", lang: "en-US", it: "Siete qui per le Cinque Terre?", es: "¿Estás aquí por las Cinque Terre?", category: "Hotel" },
-  { cz: "Let me show you around the hostel.", lang: "en-US", it: "Lasciatemi mostrarvi l'ostello.", es: "Déjame enseñarte el albergue.", category: "Hotel" },
-  { cz: "This is the kitchen. The breakfast table. Fridge. Dishwasher. Coffee.", lang: "en-US", it: "Questa è la cucina. Il tavolo della colazione. Frigorifero. Lavastoviglie. Caffè.", es: "Esta es la cocina. La mesa del desayuno. Nevera. Lavavajillas. Cafetera.", category: "Hotel" },
-  { cz: "This is the terrace. It is open from 8 to 11", lang: "en-US", it: "Questa è la terrazza. È aperta dalle 8 alle 11.", es: "Esta es la terraza. Está abierta de 8 a 11.", category: "Hotel" },
-  { cz: "This is the bathroom. Each room has a toilet and a shower.", lang: "en-US", it: "Questo è il bagno. Ogni camera ha un WC e una doccia.", es: "Este es el baño. Cada habitación tiene inodoro y ducha.", category: "Hotel" },
-  { cz: "Can you give me your id or passport?", lang: "en-US", it: "Può darmi un documento d'identità o il passaporto?", es: "¿Puedes darme tu documento de identidad o pasaporte?", category: "Hotel" },
-  { cz: "Thank you very much.", lang: "en-US", it: "Grazie mille", es: "Muchas gracias", category: "Hotel" },
-  { cz: "Will you pay by card or cash?", lang: "en-US", it: "Preferisci pagare con carta o in contanti?", es: "¿Pagará con tarjeta o en efectivo?", category: "Hotel" },
-  { cz: "Do you want a towel? It is free.", lang: "en-US", it: "Desideri un asciugamano? È gratuito.", es: "¿Quieres una toalla? Es gratis.", category: "Hotel" },
-  { cz: "Let me get your bed sheets and show you your room.", lang: "en-US", it: "Lasciami prendere le lenzuola e mostrarti la tua stanza.", es: "Déjame traerte las sábanas y mostrarte tu habitación.", category: "Hotel" },
-  { cz: "If you need anything, let me know.", lang: "en-US", it: "Se hai bisogno di qualcosa, fammelo sapere.", es: "Si necesitas algo házmelo saber.", category: "Hotel" },
+<script>
+// ═══════════════════════════════════════════════════════════
+//  OBSAH — lekce a fráze
+//  src  = česká nebo anglická fráze (jazyk se pozná sám, nebo lang: 'cs' / 'en')
+//  it   = italský překlad
+//  id   = trvalé ID (na něm visí pokrok, neměnit)
+// ═══════════════════════════════════════════════════════════
+const LESSONS = [
+  {
+    id: 'hotel',
+    title: 'Hostel – recepce',
+    icon: '🏨',
+    phrases: [
+      { id: "hotel-1", src: "Welcome to the hostel, my name is Bob", it: "Benvenuti all'ostello, mi chiamo Bob" },
+      { id: "hotel-2", src: "What is your name?", it: "Come ti chiami?" },
+      { id: "hotel-3", src: "How are you?", it: "Come stai?" },
+      { id: "hotel-4", src: "Can I help you with the luggage?", it: "Posso aiutarla con i bagagli?" },
+      { id: "hotel-5", src: "You can sit down here and put your luggage down", it: "Puoi sederti qui e appoggiare i tuoi bagagli." },
+      { id: "hotel-6", src: "Can I bring you a glass of water, juice or coffee?", it: "Posso portarle un bicchiere d'acqua, di succo di frutta o di caffè?" },
+      { id: "hotel-7", src: "What brings you to La Spezia?", it: "Cosa ti porta a La Spezia?" },
+      { id: "hotel-8", src: "Are you here for the Cinque Terre?", it: "Siete qui per le Cinque Terre?" },
+      { id: "hotel-9", src: "Let me show you around the hostel.", it: "Lasciatemi mostrarvi l'ostello." },
+      { id: "hotel-10", src: "This is the kitchen. The breakfast table. Fridge. Dishwasher. Coffee.", it: "Questa è la cucina. Il tavolo della colazione. Frigorifero. Lavastoviglie. Caffè." },
+      { id: "hotel-11", src: "This is the terrace. It is open from 8 to 11", it: "Questa è la terrazza. È aperta dalle 8 alle 11." },
+      { id: "hotel-12", src: "This is the bathroom. Each room has a toilet and a shower.", it: "Questo è il bagno. Ogni camera ha un WC e una doccia." },
+      { id: "hotel-13", src: "Can you give me your id or passport?", it: "Può darmi un documento d'identità o il passaporto?" },
+      { id: "hotel-14", src: "Thank you very much.", it: "Grazie mille" },
+      { id: "hotel-15", src: "Will you pay by card or cash?", it: "Preferisci pagare con carta o in contanti?" },
+      { id: "hotel-16", src: "Do you want a towel? It is free.", it: "Desideri un asciugamano? È gratuito." },
+      { id: "hotel-17", src: "Let me get your bed sheets and show you your room.", it: "Lasciami prendere le lenzuola e mostrarti la tua stanza." },
+      { id: "hotel-18", src: "If you need anything, let me know.", it: "Se hai bisogno di qualcosa, fammelo sapere." },
+    ],
+  },
 ];
 
-const RATINGS_KEYS = { listening: 'lv-ratings-listening', remembering: 'lv-ratings-remembering' };
-const CUSTOM_KEY = 'lv-custom-phrases';
-const WORKER_URL = 'https://flat-paper-f764.itsbobik.workers.dev/';
+// ═══════════════════════════════════════════════════════════
+//  REŽIMY (Rocket-style)
+// ═══════════════════════════════════════════════════════════
+const MODES = [
+  { id: 'reveal', icon: '🃏', name: 'Flashcards', desc: 'Vidíš frázi, odkryješ italštinu' },
+  { id: 'hear',   icon: '🎧', name: 'Hear it',    desc: 'Slyšíš italsky – rozumíš?' },
+  { id: 'know',   icon: '🧠', name: 'Know it',    desc: 'Čteš italsky – víš, co to znamená?' },
+  { id: 'write',  icon: '✍️', name: 'Write it',   desc: 'Napiš to italsky' },
+  { id: 'say',    icon: '🎤', name: 'Say it',     desc: 'Řekni to italsky do mikrofonu' },
+];
+const RATING_POINTS = { hard: 1, good: 2, easy: 3 };
 
-function guessDifficulty(p) {
-  // Pokud už má obtížnost, vrátíme ji
-  if (p.difficulty) return p.difficulty;
-  const text = p.it || p.cz;
-  const words = text.trim().split(/\s+/).length;
-  // Složitá slova (dlouhá nebo s apostrofem)
-  const complexWords = text.split(/\s+/).filter(w => w.length > 8 || w.includes("'")).length;
-  if (words <= 2 && complexWords === 0) return 'easy';
-  if (words >= 7 || complexWords >= 2) return 'hard';
-  return 'medium';
+// ═══════════════════════════════════════════════════════════
+//  POKROK (localStorage)
+// ═══════════════════════════════════════════════════════════
+const STORE_KEY = 'lv2-progress';
+function loadStore() {
+  try {
+    const s = JSON.parse(localStorage.getItem(STORE_KEY));
+    if (s && s.cards) return s;
+  } catch {}
+  return { cards: {}, points: 0, days: [] };
+}
+let store = loadStore();
+function saveStore() { try { localStorage.setItem(STORE_KEY, JSON.stringify(store)); } catch {} }
+
+function today() {
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+}
+function rate(phraseId, mode, rating) {
+  (store.cards[phraseId] ||= {})[mode] = rating;
+  store.points += RATING_POINTS[rating];
+  const t = today();
+  if (!store.days.includes(t)) store.days.push(t);
+  saveStore();
+}
+function getRating(phraseId, mode) { return store.cards[phraseId]?.[mode] || null; }
+
+function streak() {
+  const set = new Set(store.days);
+  const d = new Date();
+  const key = () => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+  if (!set.has(key())) d.setDate(d.getDate() - 1); // dnešek se ještě může dohnat
+  let n = 0;
+  while (set.has(key())) { n++; d.setDate(d.getDate() - 1); }
+  return n;
+}
+function modeProgress(lesson, mode) {
+  if (!lesson.phrases.length) return 0;
+  const sum = lesson.phrases.reduce((a, p) => a + (RATING_POINTS[getRating(p.id, mode)] || 0), 0);
+  return Math.round(sum / (lesson.phrases.length * 3) * 100);
+}
+function lessonProgress(lesson) {
+  return Math.round(MODES.reduce((a, m) => a + modeProgress(lesson, m.id), 0) / MODES.length);
+}
+function masteredCount() {
+  // fráze ohodnocená jako "easy" ve všech režimech
+  return LESSONS.flatMap(l => l.phrases).filter(p => MODES.every(m => getRating(p.id, m.id) === 'easy')).length;
 }
 
-// Přiřadím obtížnost všem existujícím frázím
-phrases.forEach(p => { if (!p.difficulty) p.difficulty = guessDifficulty(p); });
-
-function loadRatings(mode) { try { return JSON.parse(localStorage.getItem(RATINGS_KEYS[mode])) || {}; } catch { return {}; } }
-function saveRatings(mode, r) { try { localStorage.setItem(RATINGS_KEYS[mode], JSON.stringify(r)); } catch {} }
-function loadCustom() { try { return JSON.parse(localStorage.getItem(CUSTOM_KEY)) || []; } catch { return []; } }
-
-const ratings = { listening: loadRatings('listening'), remembering: loadRatings('remembering') };
-loadCustom().forEach(p => phrases.push(p));
-
-const listEl = document.getElementById('list');
-let cardOrder = phrases.map((_, i) => i);
-let currentMode = 'normal';
-let activeCategory = 'all';
-let activeStarFilter = 'all';
-let activeStarMode = 'listening'; // nebo 'remembering'
-
-const VALID_CATEGORIES = ['Pozdravy','Cestování','Restaurace','Kavárna','Nakupování',
-  'Hotel','Doprava','Rodina','Práce','Zdraví','Čísla a čas','Konverzace','Gramatika','Ostatní'];
-
-let activeDifficulty = 'all';
-
-function getFilteredOrder() {
-  return phrases.map((_, i) => i).filter(i => {
-    const p = phrases[i];
-    if (activeCategory !== 'all') {
-      if ((p.category || 'Ostatní') !== activeCategory) return false;
-    }
-    if (activeDifficulty !== 'all') {
-      if ((p.difficulty || 'medium') !== activeDifficulty) return false;
-    }
-    return true;
-  });
+// ═══════════════════════════════════════════════════════════
+//  ŘEČ — TTS
+// ═══════════════════════════════════════════════════════════
+const synth = window.speechSynthesis;
+let itVoice = null;
+function pickVoice() {
+  const voices = synth ? synth.getVoices() : [];
+  const it = voices.filter(v => v.lang && v.lang.toLowerCase().startsWith('it'));
+  itVoice = it.find(v => /google|alice|federica|elsa|natural/i.test(v.name)) || it[0] || null;
 }
+if (synth) { pickVoice(); synth.onvoiceschanged = pickVoice; }
 
-function applyFilters(close = true) {
-  cardOrder = getFilteredOrder();
-  renderCards();
-  if (close) closeDrawer();
+function srcLang(p) {
+  if (p.lang) return p.lang === 'cs' ? 'cs-CZ' : 'en-US';
+  return /[ěščřžýáíéůúťďňĚŠČŘŽÝÁÍÉŮÚŤĎŇ]/.test(p.src) ? 'cs-CZ' : 'en-US';
 }
-let stopRequested = false;
-let isPaused = false;
-let isPlaying = false;
-let isLocked = false;
-let keepAliveTimer = null;
-let currentPlayingCard = null;
+function flag(p) { return srcLang(p) === 'cs-CZ' ? '🇨🇿' : '🇬🇧'; }
 
-// ── BUILD CARDS ──
-function buildCard(i) {
-  const p = phrases[i];
-  const card = document.createElement('div');
-  card.className = 'card';
-  card.id = `card-${i}`;
-  const flag = p.lang === 'en-US' ? '🇬🇧' : '🇨🇿';
-  card.innerHTML = `
-    <div class="cz" id="cz-${i}">${flag} ${p.cz}</div>
-    <div class="it" id="it-${i}">🇮🇹 ${p.it}</div>
-    ${p.es ? `<div class="es" id="es-${i}">🇪🇸 ${p.es}</div>` : ''}
-    <button class="play-one" data-index="${i}">▶️ Přehrát</button>
-    <div class="stars-row">
-      <span class="stars-label">🎧</span>
-      <div class="stars" id="stars-listening-${i}">
-        ${[1,2,3,4,5].map(v=>`<span class="star" data-v="${v}">★</span>`).join('')}
-      </div>
-    </div>
-    <div class="stars-row">
-      <span class="stars-label">🧠</span>
-      <div class="stars" id="stars-remembering-${i}">
-        ${[1,2,3,4,5].map(v=>`<span class="star" data-v="${v}">★</span>`).join('')}
-      </div>
-    </div>
-  `;
-  card.querySelector('.play-one').addEventListener('click', async () => {
-    const btn = card.querySelector('.play-one');
-    const gen = ++playGen;
-    if (btn.dataset.playing) {
-      speechSynthesis.cancel();
-      btn.textContent = '▶️ Přehrát';
-      delete btn.dataset.playing;
-      setPlayingCard(null);
-      return;
-    }
-    speechSynthesis.cancel();
-    btn.textContent = '⏹️ Stop';
-    btn.dataset.playing = '1';
-    await playPhrase(phrases[i], i, gen);
-    if (gen === playGen) {
-      btn.textContent = '▶️ Přehrát';
-      delete btn.dataset.playing;
-      setPlayingCard(null);
-    }
-  });
-  ['listening','remembering'].forEach(mode => {
-    renderStars(mode, i, card);
-    card.querySelectorAll(`#stars-${mode}-${i} .star`).forEach(star => {
-      star.addEventListener('click', () => {
-        const v = parseInt(star.dataset.v);
-        ratings[mode][i] = ratings[mode][i] === v ? 0 : v;
-        saveRatings(mode, ratings[mode]);
-        renderStars(mode, i, card);
-        updateCounter();
-      });
-    });
-  });
-  ['cz','it','es'].forEach(cls => {
-    const el = card.querySelector(`.${cls}`);
-    if (!el) return;
-    const hClass = cls === 'cz' ? 'hidden-cz' : (cls === 'it' ? 'hidden-it' : 'hidden-es');
-    el.addEventListener('click', () => {
-      if (el.classList.contains(hClass)) {
-        el.classList.remove(hClass);
-        setTimeout(() => {
-          if (cls === 'cz' && currentMode === 'listening') el.classList.add('hidden-cz');
-          if ((cls === 'it' || cls === 'es') && currentMode === 'remembering') el.classList.add(hClass);
-        }, 2500);
-      }
-    });
-  });
-  applyModeToCard(card);
-  return card;
-}
-
-function applyModeToCard(card) {
-  const czEl = card.querySelector('.cz');
-  const itEl = card.querySelector('.it');
-  const esEl = card.querySelector('.es');
-  if (currentMode === 'listening') {
-    czEl.classList.add('hidden-cz'); itEl.classList.remove('hidden-it');
-    if (esEl) esEl.classList.remove('hidden-es');
-  } else if (currentMode === 'remembering') {
-    itEl.classList.add('hidden-it'); czEl.classList.remove('hidden-cz');
-    if (esEl) esEl.classList.add('hidden-es');
-  } else {
-    czEl.classList.remove('hidden-cz'); itEl.classList.remove('hidden-it');
-    if (esEl) esEl.classList.remove('hidden-es');
-  }
-}
-
-function renderCards() {
-  listEl.innerHTML = '';
-  cardOrder.forEach(i => listEl.appendChild(buildCard(i)));
-  updateCounter();
-}
-
-function renderStars(mode, i, cardEl) {
-  const container = (cardEl || document).querySelector(`#stars-${mode}-${i}`);
-  if (!container) return;
-  const val = ratings[mode][i] || 0;
-  container.querySelectorAll('.star').forEach(s => {
-    s.classList.toggle('filled', parseInt(s.dataset.v) <= val);
-  });
-}
-
-function updateCounter() {
-  const total = phrases.length;
-  const ml = Object.values(ratings.listening).filter(v=>v===5).length;
-  const mr = Object.values(ratings.remembering).filter(v=>v===5).length;
-  const cb = document.getElementById('counterBar'); if(cb) cb.innerHTML = `🎧 <b>${ml}</b>/${total} &nbsp;🧠 <b>${mr}</b>/${total}`;
-  const slb = document.getElementById('statListeningBig');
-  const srb = document.getElementById('statRememberingBig');
-  const st = document.getElementById('statTotal');
-  if (slb) slb.textContent = ml;
-  if (srb) srb.textContent = mr;
-  if (st) st.textContent = total;
-}
-
-renderCards();
-
-// ── SPEECH ──
-function speak(text, lang) {
+let speakGen = 0;
+function speak(text, lang = 'it-IT', rate = 0.95) {
   return new Promise(resolve => {
-    if (stopRequested) { resolve(); return; }
+    if (!synth) return resolve();
     const u = new SpeechSynthesisUtterance(text);
-    u.lang = lang; u.rate = 0.95;
+    u.lang = lang; u.rate = rate;
+    if (lang === 'it-IT' && itVoice) u.voice = itVoice;
     u.onend = resolve; u.onerror = resolve;
-    speechSynthesis.speak(u);
+    synth.speak(u);
   });
 }
-function wait(ms) {
-  return new Promise(resolve => {
-    let elapsed = 0;
-    const check = () => {
-      if (stopRequested) { resolve(); return; }
-      if (!isPaused) elapsed += 50;
-      if (elapsed >= ms) resolve();
-      else setTimeout(check, 50);
-    };
-    check();
-  });
-}
-function startKeepAlive() {
-  stopKeepAlive();
-  keepAliveTimer = setInterval(() => speechSynthesis.resume(), 5000);
-}
-function stopKeepAlive() { if (keepAliveTimer) { clearInterval(keepAliveTimer); keepAliveTimer = null; } }
+function stopSpeech() { speakGen++; if (synth) synth.cancel(); }
+function sayIt(text, slow = false) { stopSpeech(); return speak(text, 'it-IT', slow ? 0.65 : 0.95); }
+const pause = ms => new Promise(r => setTimeout(r, ms));
 
-function setPlayingCard(i) {
-  if (currentPlayingCard) currentPlayingCard.classList.remove('playing');
-  if (i === null) { currentPlayingCard = null; return; }
-  const card = document.getElementById(`card-${i}`);
-  if (card) { card.classList.add('playing'); card.scrollIntoView({ behavior: 'smooth', block: 'center' }); currentPlayingCard = card; }
-}
+// ═══════════════════════════════════════════════════════════
+//  POROVNÁNÍ ODPOVĚDI (Write it / Say it)
+// ═══════════════════════════════════════════════════════════
+const stripAcc = s => s.normalize('NFD').replace(/[̀-ͯ]/g, '');
+const tokens = s => s.replace(/[’`]/g, "'").replace(/[.,!?;:"«»()¿¡…–-]/g, ' ').replace(/'/g, "' ").split(/\s+/).filter(Boolean);
 
-let playGen = 0;
-
-async function playPhrase(p, i, gen) {
-  if (gen !== playGen) return;
-  if (i !== undefined) setPlayingCard(i);
-  if (currentMode !== 'listening') {
-    await speak(p.cz, p.lang || 'cs-CZ');
-    if (gen !== playGen) return;
-    await wait(400);
-    if (gen !== playGen) return;
+function compare(expected, given) {
+  const exp = tokens(expected), giv = tokens(given);
+  const norm = w => stripAcc(w.toLowerCase());
+  const e = exp.map(norm), g = giv.map(norm);
+  // LCS na slovech (bez diakritiky)
+  const dp = Array.from({ length: e.length + 1 }, () => new Array(g.length + 1).fill(0));
+  for (let i = e.length - 1; i >= 0; i--)
+    for (let j = g.length - 1; j >= 0; j--)
+      dp[i][j] = e[i] === g[j] ? dp[i + 1][j + 1] + 1 : Math.max(dp[i + 1][j], dp[i][j + 1]);
+  const matched = new Array(e.length).fill(false);
+  let accentIssue = false;
+  for (let i = 0, j = 0; i < e.length && j < g.length;) {
+    if (e[i] === g[j]) { matched[i] = true; if (exp[i].toLowerCase() !== giv[j].toLowerCase()) accentIssue = true; i++; j++; }
+    else if (dp[i + 1][j] >= dp[i][j + 1]) i++;
+    else j++;
   }
-  await speak(p.it, 'it-IT');
-  if (p.es && gen === playGen) {
-    await wait(400);
-    if (gen !== playGen) return;
-    await speak(p.es, 'es-ES');
-  }
+  const hits = matched.filter(Boolean).length;
+  const extra = Math.max(0, g.length - hits);
+  const score = e.length ? Math.max(0, Math.round((hits - extra * 0.5) / e.length * 100)) : 0;
+  return { words: exp.map((w, i) => ({ w, ok: matched[i] })), score, accentIssue };
 }
-
-// ── PLAYBACK CONTROLS ──
-document.getElementById('playAllBtn').addEventListener('click', async () => {
-  const gen = ++playGen;
-  speechSynthesis.cancel();
-  isPaused = false;
-  startKeepAlive();
-  isPlaying = true;
-  document.getElementById('fabPause').style.display = 'block';
-  closeDrawer();
-  do {
-    for (const i of cardOrder) {
-      if (gen !== playGen) break;
-      await playPhrase(phrases[i], i, gen);
-      if (gen !== playGen) break;
-      await wait(600);
-    }
-    if (gen !== playGen) break;
-    if (document.getElementById('loopToggle').checked) { speechSynthesis.cancel(); await wait(300); }
-  } while (document.getElementById('loopToggle').checked && gen === playGen);
-  if (gen !== playGen) return;
-  stopKeepAlive();
-  setPlayingCard(null);
-  isPlaying = false;
-  document.getElementById('fabPause').style.display = 'none';
-  document.getElementById('fabPause').textContent = '⏸';
-  document.getElementById('fabPause').classList.remove('paused');
-  isPaused = false;
-});
-
-document.getElementById('stopBtn').addEventListener('click', () => {
-  playGen++; stopRequested = true; speechSynthesis.cancel(); stopKeepAlive();
-  setPlayingCard(null); isPlaying = false;
-  document.getElementById('playAllBtn').classList.remove('playing');
-  document.getElementById('fabPause').style.display = 'none';
-  
-  isPaused = false;
-  closeDrawer();
-});
-
-const fabPause = document.getElementById('fabPause');
-fabPause.addEventListener('click', () => {
-  if (!isPaused) { isPaused = true; speechSynthesis.pause(); fabPause.textContent = '▶️'; fabPause.classList.add('paused'); }
-  else { isPaused = false; speechSynthesis.resume(); fabPause.textContent = '⏸'; fabPause.classList.remove('paused'); }
-});
-
-// ── SHUFFLE / SORT ──
-document.getElementById('shuffleBtn').addEventListener('click', () => {
-  for (let i = cardOrder.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [cardOrder[i], cardOrder[j]] = [cardOrder[j], cardOrder[i]];
-  }
-  renderCards(); closeDrawer();
-});
-document.getElementById('sortBtn').addEventListener('click', () => {
-  cardOrder = phrases.map((_, i) => i);
-  renderCards(); closeDrawer();
-});
-
-// ── MODE ──
-document.querySelectorAll('.mode-btn').forEach(btn => {
-  btn.addEventListener('click', () => {
-    currentMode = btn.dataset.mode;
-    document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('mode-active'));
-    btn.classList.add('mode-active');
-    document.querySelectorAll('.card').forEach(card => applyModeToCard(card));
-    closeDrawer();
-  });
-});
-
-// ── ADD PHRASE ──
-
-
-document.getElementById('addTranslateBtn').addEventListener('click', async () => {
-  const input = document.getElementById('addInput');
-  const status = document.getElementById('addStatus');
-  const btn = document.getElementById('addTranslateBtn');
-  const text = input.value.trim();
-  if (!text) return;
-  btn.disabled = true; btn.textContent = '⏳ Překládám…';
-  status.style.color = '#aaa'; status.textContent = '';
-  try {
-    const res = await fetch(WORKER_URL, { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({text}) });
-    const data = await res.json();
-    const translation = data.translation;
-    const rawCat = data.category || 'Ostatní';
-    const category = VALID_CATEGORIES.includes(rawCat) ? rawCat : 'Ostatní';
-    const isEn = /^[a-zA-Z0-9\s.,!?'"-]+$/.test(text);
-    const newP = isEn ? {cz: text, lang: 'en-US', it: translation, category} : {cz: text, it: translation, category};
-    phrases.push(newP);
-    cardOrder.push(phrases.length - 1);
-    try {
-      const custom = loadCustom();
-      localStorage.setItem(CUSTOM_KEY, JSON.stringify([...custom, newP]));
-    } catch {}
-    listEl.appendChild(buildCard(phrases.length - 1));
-    updateCounter();
-    status.style.color = '#4ecca3';
-    status.textContent = `✅ Přidáno: "${translation}"`;
-    input.value = '';
-    setTimeout(() => document.getElementById(`card-${phrases.length-1}`).scrollIntoView({behavior:'smooth',block:'center'}), 100);
-  } catch {
-    status.style.color = '#e63946';
-    status.textContent = '❌ Chyba – zkontroluj připojení nebo Worker';
-  }
-  btn.disabled = false; btn.textContent = '🌍 Přeložit a přidat';
-});
-
-document.getElementById('addInput').addEventListener('keydown', e => {
-  if (e.key === 'Enter') document.getElementById('addTranslateBtn').click();
-});
-
-// ── LOCK ──
-let unlockTimer = null;
-let lockHoldActive = false;
-
-function setLocked(state) {
-  isLocked = state;
-  const lockDrawerBtn = document.getElementById('lockDrawerBtn');
-  const fabLock = document.getElementById('fabLock');
-  listEl.classList.toggle('locked-cards', state);
-  // apply to individual cards
-  document.querySelectorAll('.card').forEach(c => c.classList.toggle('locked-cards', state));
-  if (state) {
-    lockDrawerBtn.textContent = '🔒 ZAMČENO – podrž pro odemčení';
-    lockDrawerBtn.classList.add('is-locked');
-    fabLock.textContent = '🔒'; fabLock.classList.add('is-locked');
-  } else {
-    lockDrawerBtn.textContent = '🔓 Zamknout ovládání';
-    lockDrawerBtn.classList.remove('is-locked');
-    fabLock.textContent = '🔓'; fabLock.classList.remove('is-locked');
-  }
+function diffHtml(res) {
+  return res.words.map((x, i) => `<span class="${x.ok ? 'ok' : 'miss'}">${esc(x.w)}</span>` + (x.w.endsWith("'") || i === res.words.length - 1 ? '' : ' ')).join('');
 }
-
-function startUnlockHold(e) {
-  if (!isLocked) return;
-  e.preventDefault();
-  lockHoldActive = true;
-  unlockTimer = setTimeout(() => { if (lockHoldActive) setLocked(false); }, 800);
+function scoreBadge(score) {
+  const cls = score >= 90 ? 'hi' : score >= 60 ? 'mid' : 'lo';
+  return `<span class="score ${cls}">${score} %</span>`;
 }
-function cancelUnlockHold() {
-  lockHoldActive = false;
-  if (unlockTimer) { clearTimeout(unlockTimer); unlockTimer = null; }
+function suggestRating(score) { return score >= 90 ? 'easy' : score >= 60 ? 'good' : 'hard'; }
+
+// ═══════════════════════════════════════════════════════════
+//  UTIL
+// ═══════════════════════════════════════════════════════════
+const app = document.getElementById('app');
+const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const findLesson = id => LESSONS.find(l => l.id === id);
+const findMode = id => MODES.find(m => m.id === id);
+function shuffle(a) { a = [...a]; for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
+function phraseWord(n) { return n === 1 ? 'fráze' : (n >= 2 && n <= 4 ? 'fráze' : 'frází'); }
+
+let hardOnly = false;
+try { hardOnly = localStorage.getItem('lv2-hard-only') === '1'; } catch {}
+
+// ═══════════════════════════════════════════════════════════
+//  ROUTER  (#/  ·  #/l/ID  ·  #/l/ID/MODE)
+// ═══════════════════════════════════════════════════════════
+function route() {
+  stopSpeech(); stopRecognition(); playAllGen++;
+  window.scrollTo(0, 0);
+  const [, view, id, mode] = location.hash.replace(/^#\/?/, '#/').split('/');
+  const lesson = id && findLesson(decodeURIComponent(id));
+  if (view === 'l' && lesson && mode && findMode(mode)) return startSession(lesson, mode);
+  if (view === 'l' && lesson) return renderLesson(lesson);
+  renderHome();
 }
+window.addEventListener('hashchange', route);
+function go(hash) { location.hash = hash; }
 
-const lockDrawerBtn = document.getElementById('lockDrawerBtn');
-lockDrawerBtn.addEventListener('click', () => { if (!isLocked) setLocked(true); });
-lockDrawerBtn.addEventListener('touchstart', startUnlockHold);
-lockDrawerBtn.addEventListener('mousedown', startUnlockHold);
-lockDrawerBtn.addEventListener('touchend', cancelUnlockHold);
-lockDrawerBtn.addEventListener('touchcancel', cancelUnlockHold);
-lockDrawerBtn.addEventListener('mouseup', cancelUnlockHold);
-lockDrawerBtn.addEventListener('mouseleave', cancelUnlockHold);
-
-const fabLock = document.getElementById('fabLock');
-fabLock.addEventListener('click', () => { if (!isLocked) setLocked(true); });
-fabLock.addEventListener('touchstart', startUnlockHold);
-fabLock.addEventListener('mousedown', startUnlockHold);
-fabLock.addEventListener('touchend', cancelUnlockHold);
-fabLock.addEventListener('touchcancel', cancelUnlockHold);
-fabLock.addEventListener('mouseup', cancelUnlockHold);
-fabLock.addEventListener('mouseleave', cancelUnlockHold);
-
-// ── DRAWER ──
-function openDrawer() {
-  document.getElementById('drawer').classList.add('open');
-  document.getElementById('drawerOverlay').classList.add('open');
-  document.querySelectorAll('.cat-btn').forEach(b => {
-    b.classList.toggle('cat-active', b.dataset.cat === activeCategory);
-  });
-  document.querySelectorAll('.star-btn').forEach(b => {
-    b.classList.toggle('star-active', b.dataset.stars === activeStarFilter);
-  });
-}
-function closeDrawer() {
-  document.getElementById('drawer').classList.remove('open');
-  document.getElementById('drawerOverlay').classList.remove('open');
-}
-document.getElementById('menuBtn').addEventListener('click', openDrawer);
-document.getElementById('drawerClose').addEventListener('click', closeDrawer);
-document.getElementById('drawerOverlay').addEventListener('click', closeDrawer);
-
-// ── FAB ADD ──
-const fabAdd = document.getElementById('fabAdd');
-const addModal = document.getElementById('addModal');
-const addOverlay = document.getElementById('addOverlay');
-
-function openAddModal() {
-  fabAdd.classList.add('open');
-  addModal.classList.add('open');
-  addOverlay.classList.add('open');
-  setTimeout(() => document.getElementById('addInput').focus(), 200);
-}
-function closeAddModal() {
-  fabAdd.classList.remove('open');
-  addModal.classList.remove('open');
-  addOverlay.classList.remove('open');
-  document.getElementById('addStatus').textContent = '';
-}
-
-fabAdd.addEventListener('click', () => {
-  if (addModal.classList.contains('open')) closeAddModal();
-  else { closeDrawer(); openAddModal(); }
-});
-addOverlay.addEventListener('click', closeAddModal);
-
-// ── KATEGORIE ──
-document.querySelectorAll('.cat-btn').forEach(btn => {
-  btn.addEventListener('click', () => {
-    activeCategory = btn.dataset.cat;
-    document.querySelectorAll('.cat-btn').forEach(b => {
-      b.classList.toggle('cat-active', b.dataset.cat === activeCategory);
-    });
-    applyFilters();
-  });
-});
-
-// Inicializuj výchozí aktivní stav kategorií
-document.querySelectorAll('.cat-btn').forEach(b => {
-  b.classList.toggle('cat-active', b.dataset.cat === activeCategory);
-});
-
-// ── DIFFICULTY CHIPS ──
-document.querySelectorAll('[data-diff]').forEach(chip => {
-  chip.addEventListener('click', () => {
-    document.querySelectorAll('[data-diff]').forEach(c => c.classList.remove('active'));
-    chip.classList.add('active');
-    activeDifficulty = chip.dataset.diff;
-    applyFilters(false);
-  });
-});
-
-// ── CATEGORY CHIPS (inline) ──
-document.querySelectorAll('#categoryChips .chip').forEach(chip => {
-  chip.addEventListener('click', () => {
-    if (chip.classList.contains('chip-divider')) return;
-    
-    if (chip.dataset.cat !== undefined) {
-      // Kategorie chip
-      activeCategory = chip.dataset.cat;
-      activeDifficulty = 'all';
-    } else if (chip.dataset.diff !== undefined) {
-      // Difficulty chip
-      activeDifficulty = chip.dataset.diff;
-      activeCategory = 'all';
-    }
-    
-    // Aktualizuj aktivní stav všech chipů
-    document.querySelectorAll('#categoryChips .chip').forEach(c => c.classList.remove('active'));
-    chip.classList.add('active');
-    
-    // Sync drawer cat-btn
-    document.querySelectorAll('.cat-btn').forEach(b => {
-      b.classList.toggle('cat-active', b.dataset.cat === activeCategory);
-    });
-    
-    applyFilters(false);
-  });
-});
-
-// cat-btn sync je přímo v openDrawer
-
-
-
-const chatBtn = document.getElementById('chatBtn');
-function openChat() {
-  chatBtn.classList.add('open');
-  document.getElementById('chatPanel').classList.add('open');
-  document.body.classList.add('chat-open');
-}
-function closeChat() {
-  chatBtn.classList.remove('open');
-  document.getElementById('chatPanel').classList.remove('open');
-  document.body.classList.remove('chat-open');
-}
-if (chatBtn) {
-  chatBtn.addEventListener('click', openChat);
-}
-
-</script>
-
-<div id="chatPanel">
-  <div style="background:rgba(247,248,252,0.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:12px 16px;padding-top:max(12px,env(safe-area-inset-top));display:flex;align-items:center;gap:12px;flex-shrink:0;">
-    <button id="chatCloseBtn" style="width:36px;height:36px;border-radius:9px;border:1px solid var(--border);background:var(--surface);cursor:pointer;font-size:1em;display:flex;align-items:center;justify-content:center;">←</button>
-    <div style="flex:1;">
-      <div style="font-size:1em;font-weight:700;">🇮🇹 Konverzace s Marcem</div>
-      <div style="font-size:0.75em;color:var(--text-muted);">AI mluví italsky, používá tvoje fráze</div>
-    </div>
-    <button id="chatRestartBtn" style="width:36px;height:36px;border-radius:9px;border:1px solid var(--border);background:var(--surface);cursor:pointer;font-size:1em;">↺</button>
-  </div>
-  <div id="chatMessages" style="flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px;"></div>
-  <div style="padding:12px 16px;padding-bottom:max(12px,env(safe-area-inset-bottom));background:var(--surface);border-top:1px solid var(--border);display:flex;gap:8px;flex-shrink:0;overflow:hidden;">
-    <button id="suggestBtn" title="Nevím co napsat" style="width:42px;height:42px;border-radius:12px;border:1px solid var(--border);background:var(--surface2);font-size:1.1em;cursor:pointer;flex-shrink:0;">💡</button>
-    <textarea id="chatInput" rows="1" placeholder="Napiš italsky…" style="flex:1;background:var(--surface2);border:1.5px solid var(--border);border-radius:12px;color:var(--text-primary);font-size:1em;padding:10px 14px;outline:none;resize:none;font-family:inherit;max-height:100px;" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
-    <button id="chatSend" style="width:42px;height:42px;border-radius:12px;border:none;background:var(--accent);color:white;font-size:1.1em;cursor:pointer;flex-shrink:0;">↑</button>
-  </div>
-</div>
-
-
-<script>
-// Chat konverzace
-const WORKER = 'https://flat-paper-f764.itsbobik.workers.dev/';
-let chatHistory = [];
-
-async function startConversation() {
-  chatHistory = [];
-  document.getElementById('chatMessages').innerHTML = '';
-  const typing = addMsg('Marco scrive…', 'typing');
-  const reply = await callAI('Inizia la conversazione in modo amichevole. Una frase sola.');
-  typing.remove();
-  addMsg(reply, 'ai');
-}
-
-function addMsg(text, role) {
-  const msgs = document.getElementById('chatMessages');
-  const wrapper = document.createElement('div');
-  wrapper.style.cssText = 'display:flex;flex-direction:column;gap:4px;' + (role === 'user' ? 'align-items:flex-end;' : 'align-items:flex-start;');
-
-  const bubble = document.createElement('div');
-  bubble.textContent = text;
-  const styles = {
-    ai: 'background:var(--surface);border:1px solid var(--border);border-bottom-left-radius:4px;cursor:pointer;',
-    user: 'background:var(--accent);color:white;border-bottom-right-radius:4px;cursor:pointer;',
-    typing: 'background:var(--surface);border:1px solid var(--border);font-style:italic;color:var(--text-muted);font-size:0.88em;'
-  };
-  bubble.style.cssText = 'padding:10px 14px;border-radius:16px;font-size:0.95em;max-width:82%;' + (styles[role] || '');
-
-  const extra = document.createElement('div');
-  extra.style.cssText = 'font-size:0.8em;max-width:82%;padding:0 4px;';
-
-  if (role === 'ai') {
-    bubble.addEventListener('click', async () => {
-      if (extra.dataset.loaded) { extra.style.display = extra.style.display === 'none' ? '' : 'none'; return; }
-      extra.textContent = '⏳ Překládám…';
-      extra.style.color = 'var(--text-muted)';
-      extra.dataset.loaded = '1';
-      const t = await callAI(`Přelož přirozeně do češtiny (ne doslova, ale tak jak by to řekl rodilý mluvčí): "${text}". Napiš pouze překlad, nic jiného.`);
-      // odstranit tuto výměnu ze skutečné historie
-      chatHistory.splice(-2, 2);
-      extra.textContent = '🇨🇿 ' + t;
-      extra.style.color = 'var(--text-secondary, var(--text-muted))';
-    });
-  }
-
-  if (role === 'user') {
-    bubble.addEventListener('click', async () => {
-      if (extra.dataset.loaded) { extra.style.display = extra.style.display === 'none' ? '' : 'none'; return; }
-      extra.textContent = '⏳ Kontroluji…';
-      extra.style.color = 'var(--text-muted)';
-      extra.dataset.loaded = '1';
-      const t = await callAI(`Italský lektor. Věta: "${text}". Odpověz PŘESNĚ v tomto formátu (nic navíc):\n✅ Správně! nebo ❌ [opravená verze] – [chyba]\n🇨🇿 [překlad do češtiny]`);
-      chatHistory.splice(-2, 2);
-      extra.textContent = t;
-      extra.style.color = 'var(--text-secondary, var(--text-muted))';
-    });
-  }
-
-  wrapper.appendChild(bubble);
-  if (role === 'ai' || role === 'user') wrapper.appendChild(extra);
-  msgs.appendChild(wrapper);
-  msgs.scrollTop = 99999;
-  return wrapper;
-}
-
-async function suggestReplies() {
-  const btn = document.getElementById('suggestBtn');
-  btn.disabled = true;
-  btn.textContent = '⏳';
-  const lastAi = chatHistory.filter(m => m.role === 'assistant').slice(-1)[0];
-  const context = lastAi ? `Poslední Marcova zpráva: "${lastAi.content}"` : '';
-  const suggestions = await callAI(`${context} Navrhni 3 krátké italské odpovědi (1 věta každá). Formát - každá na novém řádku: italsky | česky`);
-  chatHistory.splice(-2, 2);
-  btn.disabled = false;
-  btn.textContent = '💡';
-
-  // zobraz návrhy jako klikatelné bubliny
-  const msgs = document.getElementById('chatMessages');
-  const box = document.createElement('div');
-  box.style.cssText = 'display:flex;flex-direction:column;gap:6px;align-items:flex-end;margin:4px 0;';
-  suggestions.split('\n').filter(l => l.includes('|')).forEach(line => {
-    const [it, cz] = line.split('|').map(s => s.trim());
-    if (!it) return;
-    const chip = document.createElement('div');
-    chip.style.cssText = 'background:var(--surface2);border:1.5px dashed var(--accent);border-radius:14px;padding:8px 14px;font-size:0.88em;cursor:pointer;max-width:85%;text-align:right;';
-    chip.innerHTML = `<span style="color:var(--text-primary)">${it}</span><br><span style="color:var(--text-muted);font-size:0.9em">${cz || ''}</span>`;
-    chip.addEventListener('click', () => {
-      box.remove();
-      document.getElementById('chatInput').value = it;
-      document.getElementById('chatInput').focus();
-    });
-    box.appendChild(chip);
-  });
-  msgs.appendChild(box);
-  msgs.scrollTop = 99999;
-}
-
-async function callAI(msg) {
-  chatHistory.push({ role: 'user', content: msg });
-  const sample = [...phrases].sort(() => Math.random() - 0.5).slice(0, 8)
-    .map(p => '"' + p.cz + '" = "' + p.it + '"').join(', ');
-  const sys = 'Jsi Marco z La Spezia. Piš POUZE italsky, krátce (1-2 věty). Fráze k použití: ' + sample;
-  try {
-    const res = await fetch(WORKER, {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({ chat: true, system: sys, messages: chatHistory })
-    });
-    const data = await res.json();
-    const reply = data.reply || 'Non ho capito…';
-    chatHistory.push({ role: 'assistant', content: reply });
-    return reply;
-  } catch(e) { return 'Scusa, problema di connessione…'; }
-}
-
-async function handleSend() {
-  const input = document.getElementById('chatInput');
-  const text = input.value.trim();
-  if (!text) return;
-  input.value = '';
-  addMsg(text, 'user');
-  const typing = addMsg('Marco scrive…', 'typing');
-  const reply = await callAI(text);
-  typing.remove();
-  addMsg(reply, 'ai');
-}
-
-document.getElementById('chatSend').addEventListener('click', handleSend);
-document.getElementById('chatInput').addEventListener('keydown', e => {
-  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSend(); }
-});
-document.getElementById('chatInput').addEventListener('focus', () => {
-  setTimeout(() => {
-    const msgs = document.getElementById('chatMessages');
-    if (msgs) msgs.scrollTop = msgs.scrollHeight;
-  }, 400);
-});
-document.getElementById('chatInput').addEventListener('blur', () => {
-  setTimeout(() => {
-    const msgs = document.getElementById('chatMessages');
-    if (msgs) msgs.scrollTop = msgs.scrollHeight;
-  }, 100);
-});
-// Blur inputu při scrollu — skryje klávesnici i kurzor
-;(function() {
-  const msgs = document.getElementById('chatMessages');
-  const input = document.getElementById('chatInput');
-  if (!msgs || !input) return;
-  msgs.addEventListener('touchstart', () => {
-    if (document.activeElement === input) input.blur();
-  }, { passive: true });
-})();
-// chatBtn click - spustí konverzaci pokud je nová
-document.getElementById('chatBtn').addEventListener('click', () => {
-  if (chatHistory.length === 0) startConversation();
-});
-document.getElementById('chatCloseBtn').addEventListener('click', () => {
-  if (typeof closeChat === 'function') closeChat();
-});
-document.getElementById('chatRestartBtn').addEventListener('click', startConversation);
-document.getElementById('suggestBtn').addEventListener('click', suggestReplies);
-</script>
-
-<!-- QUIZ PANEL -->
-<div id="quizPanel" style="display:none;flex-direction:column;position:fixed;inset:0;z-index:500;background:var(--bg);">
-  <div style="background:var(--surface);border-bottom:1px solid var(--border);padding:12px 16px;padding-top:max(12px,env(safe-area-inset-top));display:flex;align-items:center;gap:12px;flex-shrink:0;">
-    <button id="quizCloseBtn" style="width:36px;height:36px;border-radius:9px;border:1px solid var(--border);background:var(--surface2);cursor:pointer;font-size:1em;">←</button>
-    <div style="flex:1;">
-      <div id="quizTitle" style="font-size:1em;font-weight:700;">🎯 Kvíz</div>
-      <div id="quizSubtitle" style="font-size:0.75em;color:var(--text-muted);"></div>
-    </div>
-    <div id="quizProgress" style="font-size:0.85em;font-weight:600;color:var(--accent);"></div>
-  </div>
-  <div id="quizBody" style="flex:1;overflow-y:auto;padding:24px 16px;display:flex;flex-direction:column;gap:16px;align-items:stretch;justify-content:center;"></div>
-  <div id="quizFooter" style="padding:12px 16px;padding-bottom:max(12px,env(safe-area-inset-bottom));background:var(--surface);border-top:1px solid var(--border);display:flex;gap:8px;flex-shrink:0;"></div>
-</div>
-
-<script>
-// ── QUIZ ──
-const QUIZ_RATINGS = ['🏆 Perfecto!', '⭐ Very good!', '👍 Nice try!', '💪 Keep going!', '🌱 You will get better!'];
-
-let quizPhrases = [];
-let quizRound = 0;
-let quizIndex = 0;
-let quizScores = [];
-let quizTotalCycles = 1;
-let quizCurrentCycle = 1;
-let quizPhraseCount = 5;
-
-function openQuiz() {
-  document.getElementById('quizPanel').style.display = 'flex';
-  document.body.classList.add('chat-open');
-  showQuizSetup();
-}
-
-function showQuizSetup() {
-  setQuizHeader('🎯 Kvíz', 'Nastav si kvíz', '');
-  const body = document.getElementById('quizBody');
-  const footer = document.getElementById('quizFooter');
-  body.innerHTML = `
-    <div style="display:flex;flex-direction:column;gap:20px;">
-      <div>
-        <div style="font-weight:600;margin-bottom:10px;">Počet frází</div>
-        <div style="display:flex;gap:8px;flex-wrap:wrap;">
-          ${[3,5,8,10].map(n => `<button class="quiz-setup-btn" data-type="count" data-val="${n}" style="flex:1;padding:12px;border-radius:12px;border:2px solid var(--border);background:var(--surface2);font-size:1em;cursor:pointer;font-weight:600;">${n}</button>`).join('')}
-        </div>
+// ═══════════════════════════════════════════════════════════
+//  HOME
+// ═══════════════════════════════════════════════════════════
+function renderHome() {
+  document.title = 'LinguaVelo';
+  const total = LESSONS.reduce((a, l) => a + l.phrases.length, 0);
+  app.innerHTML = `
+    <header class="top"><div class="wrap">
+      <div class="brand" style="flex:1">Lingua<span>Velo</span></div>
+      <div class="sub">🇮🇹 italština</div>
+    </div></header>
+    <main><div class="wrap">
+      <div class="stats">
+        <div class="stat"><b>🔥 ${streak()}</b><small>dní v řadě</small></div>
+        <div class="stat"><b>⭐ ${store.points}</b><small>bodů</small></div>
+        <div class="stat"><b>✅ ${masteredCount()}</b><small>z ${total} zvládnuto</small></div>
       </div>
-      <div>
-        <div style="font-weight:600;margin-bottom:10px;">Počet opakování (celý cyklus 3 kol)</div>
-        <div style="display:flex;gap:8px;flex-wrap:wrap;">
-          ${[1,2,3,5].map(n => `<button class="quiz-setup-btn" data-type="cycles" data-val="${n}" style="flex:1;padding:12px;border-radius:12px;border:2px solid var(--border);background:var(--surface2);font-size:1em;cursor:pointer;font-weight:600;">${n}×</button>`).join('')}
-        </div>
-      </div>
-    </div>
-  `;
-  footer.innerHTML = '';
-
-  // výchozí hodnoty
-  let selectedCount = 5;
-  let selectedCycles = 1;
-
-  function updateButtons() {
-    body.querySelectorAll('[data-type="count"]').forEach(b => {
-      b.style.background = parseInt(b.dataset.val) === selectedCount ? 'var(--accent)' : 'var(--surface2)';
-      b.style.color = parseInt(b.dataset.val) === selectedCount ? 'white' : '';
-      b.style.borderColor = parseInt(b.dataset.val) === selectedCount ? 'var(--accent)' : 'var(--border)';
-    });
-    body.querySelectorAll('[data-type="cycles"]').forEach(b => {
-      b.style.background = parseInt(b.dataset.val) === selectedCycles ? 'var(--accent)' : 'var(--surface2)';
-      b.style.color = parseInt(b.dataset.val) === selectedCycles ? 'white' : '';
-      b.style.borderColor = parseInt(b.dataset.val) === selectedCycles ? 'var(--accent)' : 'var(--border)';
-    });
-  }
-  updateButtons();
-
-  body.querySelectorAll('.quiz-setup-btn').forEach(b => {
-    b.addEventListener('click', () => {
-      if (b.dataset.type === 'count') selectedCount = parseInt(b.dataset.val);
-      else selectedCycles = parseInt(b.dataset.val);
-      updateButtons();
-    });
-  });
-
-  const startBtn = document.createElement('button');
-  startBtn.textContent = 'Spustit kvíz →';
-  startBtn.style.cssText = 'width:100%;padding:14px;border-radius:12px;border:none;background:var(--accent);color:white;font-size:1em;font-weight:700;cursor:pointer;';
-  startBtn.onclick = () => {
-    quizPhraseCount = selectedCount;
-    quizTotalCycles = selectedCycles;
-    quizCurrentCycle = 1;
-    const pool = [...phrases].sort(() => Math.random() - 0.5).slice(0, selectedCount);
-    quizPhrases = pool;
-    quizRound = 1;
-    quizIndex = 0;
-    quizScores = [];
-    startQuizRound();
-  };
-  footer.appendChild(startBtn);
-}
-
-function closeQuiz() {
-  document.getElementById('quizPanel').style.display = 'none';
-  document.body.classList.remove('chat-open');
-  speechSynthesis.cancel();
-  stopVoiceVisual();
-  if (_sharedMicStream) { _sharedMicStream.getTracks().forEach(t => t.stop()); _sharedMicStream = null; }
-  if (_sharedAudioCtx) { _sharedAudioCtx.close(); _sharedAudioCtx = null; _sharedAnalyser = null; }
-}
-
-function setQuizHeader(title, subtitle, progress) {
-  document.getElementById('quizTitle').textContent = title;
-  document.getElementById('quizSubtitle').textContent = subtitle;
-  document.getElementById('quizProgress').textContent = progress;
-}
-
-function startQuizRound() {
-  quizIndex = 0;
-  if (quizRound === 1) {
-    setQuizHeader('🎯 Kvíz — Poslech', 'Poslouchej a sleduj fráze', '');
-    showQuizCard();
-  } else if (quizRound === 2) {
-    setQuizHeader('🎯 Kvíz — Piš italsky', 'Vidíš češtinu, napiš italsky', '');
-    showQuizCard();
-  } else if (quizRound === 3) {
-    setQuizHeader('🎯 Kvíz — Přelož', 'Vidíš italštinu, napiš česky', '');
-    showQuizCard();
-  }
-}
-
-function showQuizCard() {
-  const p = quizPhrases[quizIndex];
-  const body = document.getElementById('quizBody');
-  const footer = document.getElementById('quizFooter');
-  document.getElementById('quizProgress').textContent = `${quizIndex + 1} / ${quizPhraseCount}`;
-  body.innerHTML = '';
-  footer.innerHTML = '';
-
-  if (quizRound === 1) {
-    // Poslech — zobraz oboje, přehraj
-    const flag = p.lang === 'en-US' ? '🇬🇧' : '🇨🇿';
-    body.innerHTML = `
-      <div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:20px;text-align:center;">
-        <div style="font-size:1.1em;color:var(--text-muted);margin-bottom:12px;">${flag} ${p.cz}</div>
-        <div style="font-size:1.3em;font-weight:700;color:var(--text-primary);">🇮🇹 ${p.it}</div>
-      </div>
-      <div id="quizPlayStatus" style="text-align:center;color:var(--text-muted);font-size:0.9em;">⏳ Přehrávám…</div>
-    `;
-    // auto-přehrát
-    const gen = ++playGen;
-    (async () => {
-      await speak(p.cz, p.lang || 'cs-CZ');
-      if (gen !== playGen) return;
-      await wait(400);
-      if (gen !== playGen) return;
-      await speak(p.it, 'it-IT');
-      if (gen !== playGen) return;
-      document.getElementById('quizPlayStatus').textContent = '✅ Hotovo';
-      // ukáž tlačítko Další
-      const btn = document.createElement('button');
-      btn.textContent = quizIndex < 4 ? 'Další →' : 'Kolo 2 →';
-      btn.style.cssText = 'width:100%;padding:14px;border-radius:12px;border:none;background:var(--accent);color:white;font-size:1em;font-weight:700;cursor:pointer;';
-      btn.onclick = () => {
-        quizIndex++;
-        if (quizIndex < 5) showQuizCard();
-        else { quizRound = 2; startQuizRound(); }
-      };
-      footer.appendChild(btn);
-    })();
-
-  } else {
-    // Kolo 2: vidíš IT, píšeš CZ/EN | Kolo 3: vidíš CZ/EN, píšeš IT
-    const shown = quizRound === 2 ? p.it : p.cz;
-    const shownFlag = quizRound === 2 ? '🇮🇹' : (p.lang === 'en-US' ? '🇬🇧' : '🇨🇿');
-    const targetLang = quizRound === 2 ? (p.lang === 'en-US' ? 'anglicky' : 'česky') : 'italsky';
-
-    body.innerHTML = `
-      <div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:20px;text-align:center;">
-        <div style="font-size:1.2em;font-weight:700;">${shownFlag} ${shown}</div>
-      </div>
-      <div style="text-align:center;color:var(--text-muted);font-size:0.88em;">Napiš ${targetLang}:</div>
-      <textarea id="quizAnswer" rows="2" placeholder="Tvoje odpověď…" style="width:100%;border:1.5px solid var(--border);border-radius:12px;padding:12px;font-size:1em;background:var(--surface2);color:var(--text-primary);resize:none;font-family:inherit;box-sizing:border-box;outline:none;"></textarea>
-      <div id="quizFeedback" style="display:none;border-radius:12px;padding:14px;font-size:0.95em;line-height:1.5;"></div>
-    `;
-
-    // tlačítka: mic + zkontrolovat
-    const micBtn = document.createElement('button');
-    micBtn.textContent = '🎤';
-    micBtn.style.cssText = 'width:48px;height:48px;border-radius:12px;border:1px solid var(--border);background:var(--surface2);font-size:1.2em;cursor:pointer;flex-shrink:0;';
-    micBtn.onclick = () => startVoiceInput(micBtn);
-
-    const checkBtn = document.createElement('button');
-    checkBtn.textContent = 'Zkontrolovat ✓';
-    checkBtn.style.cssText = 'flex:1;padding:14px;border-radius:12px;border:none;background:var(--accent);color:white;font-size:1em;font-weight:700;cursor:pointer;';
-    checkBtn.onclick = () => checkQuizAnswer(p, quizRound, checkBtn);
-
-    footer.appendChild(micBtn);
-    footer.appendChild(checkBtn);
-  }
-}
-
-let _voiceStream = null;
-let _voiceAnim = null;
-let _sharedMicStream = null;
-let _sharedAudioCtx = null;
-let _sharedAnalyser = null;
-
-function stopVoiceVisual() {
-  if (_voiceAnim) { cancelAnimationFrame(_voiceAnim); _voiceAnim = null; }
-  if (_voiceStream) { _voiceStream.getTracks().forEach(t => t.stop()); _voiceStream = null; }
-  const c = document.getElementById('quizWave');
-  if (c) c.remove();
-}
-
-function startVoiceInput(btn) {
-  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-  if (!SR) { alert('Tvůj prohlížeč nepodporuje hlasový vstup.'); return; }
-
-  // pokud už nahrávám, zastav
-  if (btn.dataset.recording) {
-    if (btn._rec) { btn._rec.stop(); btn._rec = null; }
-    stopVoiceVisual();
-    btn.textContent = '🎤';
-    delete btn.dataset.recording;
-    return;
-  }
-
-  btn.dataset.recording = '1';
-  btn.textContent = '⏹️';
-
-  const lang = quizRound === 2 ? (quizPhrases[quizIndex].lang || 'cs-CZ') : 'it-IT';
-
-  // waveform canvas — vložit nad textarea
-  const textarea = document.getElementById('quizAnswer');
-  const canvas = document.createElement('canvas');
-  canvas.id = 'quizWave';
-  canvas.height = 48;
-  canvas.style.cssText = 'width:100%;border-radius:12px;background:var(--surface2);border:1.5px solid var(--accent);display:block;';
-  textarea.parentNode.insertBefore(canvas, textarea);
-  canvas.width = canvas.offsetWidth;
-
-  const getMic = _sharedMicStream
-    ? Promise.resolve(_sharedMicStream)
-    : navigator.mediaDevices.getUserMedia({ audio: true }).then(s => { _sharedMicStream = s; return s; });
-
-  getMic.then(stream => {
-    _voiceStream = stream;
-    // Reusuj AudioContext a Analyser — nevytvářej nový pokaždé
-    if (!_sharedAudioCtx || _sharedAudioCtx.state === 'closed') {
-      _sharedAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
-      const src = _sharedAudioCtx.createMediaStreamSource(stream);
-      _sharedAnalyser = _sharedAudioCtx.createAnalyser();
-      _sharedAnalyser.fftSize = 64;
-      src.connect(_sharedAnalyser);
-    }
-    // Probuď context pokud je suspended
-    if (_sharedAudioCtx.state === 'suspended') _sharedAudioCtx.resume();
-    const analyser = _sharedAnalyser;
-    const data = new Uint8Array(analyser.frequencyBinCount);
-    const canvasCtx = canvas.getContext('2d');
-    const accent = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim() || '#059669';
-
-    function draw() {
-      _voiceAnim = requestAnimationFrame(draw);
-      analyser.getByteFrequencyData(data);
-      canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
-      const barW = canvas.width / data.length * 1.5;
-      data.forEach((v, i) => {
-        const h = (v / 255) * canvas.height * 0.9;
-        canvasCtx.fillStyle = accent;
-        canvasCtx.beginPath();
-        canvasCtx.roundRect(i * barW * 1.1, (canvas.height - h) / 2, barW, h, 3);
-        canvasCtx.fill();
-      });
-    }
-    draw();
-  }).catch(() => {});
-
-  // Speech recognition — continuous mode
-  const rec = new SR();
-  rec.lang = lang;
-  rec.continuous = true;
-  rec.interimResults = true;
-  let finalTranscript = '';
-
-  rec.onresult = e => {
-    let interim = '';
-    for (let i = e.resultIndex; i < e.results.length; i++) {
-      if (e.results[i].isFinal) finalTranscript += e.results[i][0].transcript;
-      else interim = e.results[i][0].transcript;
-    }
-    textarea.value = finalTranscript + interim;
-  };
-  rec.onerror = () => {
-    stopVoiceVisual();
-    btn.textContent = '🎤';
-    delete btn.dataset.recording;
-  };
-
-  // ukládáme referenci aby šlo zastavit při stisku stop
-  btn._rec = rec;
-  rec.start();
-}
-
-async function checkQuizAnswer(p, round, btn) {
-  const answer = (document.getElementById('quizAnswer').value || '').trim();
-  if (!answer) return;
-  btn.disabled = true;
-  btn.textContent = '⏳';
-
-  const correct = round === 2 ? p.cz : p.it;
-  const prompt = `Jsi italský lektor. Správná odpověď je: "${correct}". Uživatel napsal: "${answer}". DŮLEŽITÉ: ignoruj chybějící diakritiku (háčky, čárky) a interpunkci (otazníky, tečky, čárky) — hlasový vstup je neumí přidat. Hodnoť POUZE obsah a smysl slov. Ohodnoť JEDNÍM slovem: Perfecto / Very good / Nice try / Keep going / You will get better. Pak nový řádek, 1 věta česky — co opravit nebo pochvala. Formát:\n[hodnocení]\n[komentář]`;
-
-  const result = await callAI(prompt);
-  chatHistory.splice(-2, 2);
-
-  const lines = result.trim().split('\n');
-  const ratingWord = lines[0].trim();
-  const comment = lines.slice(1).join(' ').trim();
-
-  const ratingMap = {
-    'Perfecto': 0, 'Very good': 1, 'Nice try': 2, 'Keep going': 3, 'You will get better': 4
-  };
-  const ratingIdx = Object.keys(ratingMap).findIndex(k => ratingWord.includes(k));
-  const rating = QUIZ_RATINGS[ratingIdx >= 0 ? ratingIdx : 2];
-  quizScores.push(ratingIdx >= 0 ? ratingIdx : 2);
-
-  const feedback = document.getElementById('quizFeedback');
-  feedback.style.display = 'block';
-  feedback.style.background = ratingIdx <= 1 ? 'var(--accent-light)' : ratingIdx <= 2 ? '#FEF9C3' : '#FEE2E2';
-  feedback.innerHTML = `<div style="font-size:1.1em;font-weight:700;margin-bottom:6px;">${rating}</div><div style="color:var(--text-muted);">${comment}</div><div style="margin-top:8px;font-size:0.88em;">✅ Správně: <strong>${correct}</strong></div>`;
-
-  // Nahraď footer tlačítkem Další
-  const footer = document.getElementById('quizFooter');
-  footer.innerHTML = '';
-  const nextBtn = document.createElement('button');
-  const isLast = quizIndex === quizPhraseCount - 1;
-  const isLastRound = round === 3;
-  const isLastCycle = quizCurrentCycle >= quizTotalCycles;
-  nextBtn.textContent = isLast
-    ? (isLastRound ? (isLastCycle ? '🏁 Výsledky' : `Cyklus ${quizCurrentCycle + 1} →`) : `Kolo ${round + 1} →`)
-    : 'Další →';
-  nextBtn.style.cssText = 'width:100%;padding:14px;border-radius:12px;border:none;background:var(--accent);color:white;font-size:1em;font-weight:700;cursor:pointer;';
-  nextBtn.onclick = () => {
-    quizIndex++;
-    if (quizIndex < quizPhraseCount) {
-      showQuizCard();
-    } else if (round < 3) {
-      quizRound++;
-      startQuizRound();
-    } else if (!isLastCycle) {
-      quizCurrentCycle++;
-      quizRound = 1;
-      startQuizRound();
-    } else {
-      showQuizResults();
-    }
-  };
-  footer.appendChild(nextBtn);
-}
-
-function showQuizResults() {
-  const body = document.getElementById('quizBody');
-  const footer = document.getElementById('quizFooter');
-  setQuizHeader('🎯 Výsledky', '', '');
-  document.getElementById('quizProgress').textContent = '';
-
-  const avg = quizScores.length ? quizScores.reduce((a, b) => a + b, 0) / quizScores.length : 2;
-  const overall = QUIZ_RATINGS[Math.round(avg)];
-
-  body.innerHTML = `
-    <div style="text-align:center;padding:20px 0;">
-      <div style="font-size:2.5em;margin-bottom:8px;">🎯</div>
-      <div style="font-size:1.4em;font-weight:700;margin-bottom:4px;">${overall}</div>
-      <div style="color:var(--text-muted);font-size:0.9em;">Celkové hodnocení</div>
-    </div>
-    <div style="display:flex;flex-direction:column;gap:8px;">
-      ${quizPhrases.map((p, i) => {
-        const s2 = quizScores[i];
-        const s3 = quizScores[i + quizPhraseCount];
-        const flag = p.lang === 'en-US' ? '🇬🇧' : '🇨🇿';
-        return `<div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:12px;">
-          <div style="font-size:0.9em;font-weight:600;">${flag} ${p.cz}</div>
-          <div style="font-size:0.85em;color:var(--text-muted);">🇮🇹 ${p.it}</div>
-          <div style="font-size:0.8em;margin-top:6px;display:flex;gap:8px;">
-            ${s2 !== undefined ? `<span>Kolo 2: ${QUIZ_RATINGS[s2].split(' ').slice(1).join(' ')}</span>` : ''}
-            ${s3 !== undefined ? `<span>Kolo 3: ${QUIZ_RATINGS[s3].split(' ').slice(1).join(' ')}</span>` : ''}
+      <div class="section-title">Lekce</div>
+      ${LESSONS.length ? LESSONS.map(l => {
+        const pct = lessonProgress(l);
+        return `<button class="lesson" data-go="#/l/${encodeURIComponent(l.id)}">
+          <div class="ico">${l.icon || '📘'}</div>
+          <div class="meta">
+            <div class="t">${esc(l.title)}</div>
+            <div class="d">${l.phrases.length} ${phraseWord(l.phrases.length)}</div>
+            <div class="bar"><i style="width:${pct}%"></i></div>
           </div>
-        </div>`;
-      }).join('')}
-    </div>
-  `;
-
-  footer.innerHTML = '';
-  const againBtn = document.createElement('button');
-  againBtn.textContent = '🔄 Znovu';
-  againBtn.style.cssText = 'flex:1;padding:14px;border-radius:12px;border:1px solid var(--border);background:var(--surface2);font-size:1em;cursor:pointer;';
-  againBtn.onclick = openQuiz;
-  const closeBtn = document.createElement('button');
-  closeBtn.textContent = '✓ Hotovo';
-  closeBtn.style.cssText = 'flex:1;padding:14px;border-radius:12px;border:none;background:var(--accent);color:white;font-size:1em;font-weight:700;cursor:pointer;';
-  closeBtn.onclick = closeQuiz;
-  footer.appendChild(againBtn);
-  footer.appendChild(closeBtn);
+          <div class="pct">${pct} %</div>
+        </button>`;
+      }).join('') : `<div class="empty">Zatím žádné lekce.</div>`}
+    </div></main>`;
+  bindGo();
 }
 
-document.getElementById('quizBtn').addEventListener('click', openQuiz);
-document.getElementById('quizCloseBtn').addEventListener('click', closeQuiz);
-</script>
+// ═══════════════════════════════════════════════════════════
+//  LEKCE
+// ═══════════════════════════════════════════════════════════
+let playAllGen = 0;
+function renderLesson(lesson) {
+  document.title = `${lesson.title} · LinguaVelo`;
+  const pct = lessonProgress(lesson);
+  const hardCount = lesson.phrases.filter(p => MODES.some(m => getRating(p.id, m.id) !== 'easy')).length;
+  app.innerHTML = `
+    <header class="top"><div class="wrap">
+      <button class="icon-btn" data-go="#/" aria-label="Zpět">←</button>
+      <div style="flex:1;min-width:0">
+        <h1>${lesson.icon || ''} ${esc(lesson.title)}</h1>
+        <div class="sub">${lesson.phrases.length} ${phraseWord(lesson.phrases.length)} · ${pct} % hotovo</div>
+      </div>
+    </div></header>
+    <main><div class="wrap">
+      <div class="modes">
+        ${MODES.map((m, i) => `
+          <button class="mode${i === 0 ? ' first' : ''}" data-go="#/l/${encodeURIComponent(lesson.id)}/${m.id}">
+            <div class="mi">${m.icon}</div>
+            <div style="flex:1">
+              <div class="mn">${m.name}</div>
+              <div class="md">${m.desc}</div>
+              <div class="bar"><i style="width:${modeProgress(lesson, m.id)}%"></i></div>
+              <div class="mp">${modeProgress(lesson, m.id)} %</div>
+            </div>
+          </button>`).join('')}
+      </div>
+      <div class="toggle-row">
+        <div><b>Jen těžké a nové</b><div style="color:var(--text-2);font-size:0.9em;margin-top:2px">Přeskočí fráze, které máš v daném režimu na Easy</div></div>
+        <button class="switch${hardOnly ? ' on' : ''}" id="hardToggle" aria-label="Jen těžké a nové"></button>
+      </div>
+      <div class="list-head">
+        <div class="section-title">Fráze</div>
+        <button class="pill-btn" id="playAll">▶ Přehrát vše</button>
+      </div>
+      ${lesson.phrases.map((p, i) => `
+        <div class="phrase" id="ph-${i}">
+          <div class="tx">
+            <div class="it">${esc(p.it)}</div>
+            <div class="src">${flag(p)} ${esc(p.src)}</div>
+            <div class="dots">${MODES.map(m => `<i class="${getRating(p.id, m.id) || ''}" title="${m.name}"></i>`).join('')}</div>
+          </div>
+          <button class="play" data-play="${i}" aria-label="Přehrát">🔊</button>
+        </div>`).join('')}
+      <button class="reset-link" id="resetLesson">Vynulovat pokrok lekce</button>
+    </div></main>`;
+  bindGo();
 
+  document.getElementById('hardToggle').onclick = e => {
+    hardOnly = !hardOnly;
+    e.currentTarget.classList.toggle('on', hardOnly);
+    try { localStorage.setItem('lv2-hard-only', hardOnly ? '1' : '0'); } catch {}
+  };
+  app.querySelectorAll('[data-play]').forEach(b => b.onclick = () => {
+    playAllGen++;
+    setPlaying(null);
+    sayIt(lesson.phrases[+b.dataset.play].it);
+  });
+  const playBtn = document.getElementById('playAll');
+  playBtn.onclick = async () => {
+    if (playBtn.dataset.on) { playAllGen++; stopSpeech(); setPlaying(null); playBtn.textContent = '▶ Přehrát vše'; delete playBtn.dataset.on; return; }
+    const gen = ++playAllGen; stopSpeech();
+    playBtn.dataset.on = '1'; playBtn.textContent = '⏸ Zastavit';
+    for (let i = 0; i < lesson.phrases.length && gen === playAllGen; i++) {
+      const p = lesson.phrases[i];
+      setPlaying(i);
+      await speak(p.src, srcLang(p)); if (gen !== playAllGen) break;
+      await pause(500); if (gen !== playAllGen) break;
+      await speak(p.it); if (gen !== playAllGen) break;
+      await pause(900);
+    }
+    if (gen === playAllGen) { setPlaying(null); playBtn.textContent = '▶ Přehrát vše'; delete playBtn.dataset.on; }
+  };
+  document.getElementById('resetLesson').onclick = () => {
+    if (!confirm(`Opravdu vynulovat pokrok lekce „${lesson.title}“?`)) return;
+    lesson.phrases.forEach(p => delete store.cards[p.id]);
+    saveStore(); renderLesson(lesson);
+  };
+}
+function setPlaying(i) {
+  app.querySelectorAll('.phrase.playing').forEach(el => el.classList.remove('playing'));
+  if (i === null) return;
+  const el = document.getElementById(`ph-${i}`);
+  if (el) { el.classList.add('playing'); el.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
+}
+
+// ═══════════════════════════════════════════════════════════
+//  SESSION (flashcards)
+// ═══════════════════════════════════════════════════════════
+let S = null; // { lesson, mode, queue, idx, revealed, results, requeued, check }
+
+function startSession(lesson, mode, only = null) {
+  let pool = lesson.phrases;
+  if (only) pool = pool.filter(p => only.includes(p.id));
+  else if (hardOnly) {
+    const f = pool.filter(p => getRating(p.id, mode) !== 'easy');
+    pool = f.length ? f : pool;
+  }
+  S = { lesson, mode, queue: shuffle(pool), idx: 0, revealed: false, results: {}, requeued: new Set(), check: null };
+  document.title = `${findMode(mode).name} · ${lesson.title}`;
+  renderCard();
+}
+
+function renderCard() {
+  const { lesson, mode, queue, idx } = S;
+  if (idx >= queue.length) return renderSummary();
+  const p = queue[idx];
+  const m = findMode(mode);
+  const done = Object.keys(S.results).length;
+  const total = new Set(queue.map(q => q.id)).size;
+  S.revealed = false; S.check = null;
+
+  app.innerHTML = `
+    <div class="session">
+      <header class="top"><div class="wrap">
+        <button class="icon-btn" data-go="#/l/${encodeURIComponent(lesson.id)}" aria-label="Zavřít">✕</button>
+        <div style="flex:1;min-width:0">
+          <h1>${m.icon} ${m.name}</h1>
+          <div class="sub">${esc(lesson.title)}</div>
+        </div>
+        <div class="sub" style="font-weight:700;color:var(--accent)">${Math.min(done + 1, total)} / ${total}</div>
+      </div><div class="sbar"><i style="width:${done / total * 100}%"></i></div></header>
+      <div class="stage"><div class="wrap"><div class="card" id="card">${promptHtml(p, mode)}</div></div></div>
+      <div class="foot"><div class="wrap" id="foot"></div><div class="kbd-hint" id="kbd"></div></div>
+    </div>`;
+  bindGo();
+  renderFoot();
+  wirePrompt(p, mode);
+}
+
+function promptHtml(p, mode) {
+  const srcBlock = `<div class="lbl">${flag(p)} Jak se řekne italsky?</div><div class="big">${esc(p.src)}</div>`;
+  switch (mode) {
+    case 'reveal': return srcBlock;
+    case 'hear': return `
+      <div class="lbl">🎧 Poslouchej</div>
+      <div class="audio-row">
+        <button class="audio-btn lg" data-say="0" aria-label="Přehrát">🔊</button>
+        <button class="audio-btn slow" data-say="1" aria-label="Pomalu" style="align-self:center">🐢</button>
+      </div>
+      <div class="mid">Co to znamená?</div>`;
+    case 'know': return `<div class="lbl">🇮🇹 Co to znamená?</div><div class="big">${esc(p.it)}</div>`;
+    case 'write': return `${srcBlock}
+      <textarea class="write-in" id="answer" rows="2" lang="it" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Napiš italsky…"></textarea>
+      <div class="accents">${['à', 'è', 'é', 'ì', 'ò', 'ù'].map(c => `<button data-acc="${c}">${c}</button>`).join('')}</div>`;
+    case 'say': return `${srcBlock}
+      <button class="mic" id="mic" aria-label="Mluvit">🎤</button>
+      <div class="heard" id="heard">Klepni a řekni to italsky</div>`;
+  }
+}
+
+function wirePrompt(p, mode) {
+  app.querySelectorAll('[data-say]').forEach(b => b.onclick = () => sayIt(p.it, b.dataset.say === '1'));
+  if (mode === 'hear') setTimeout(() => S && !S.revealed && sayIt(p.it), 250);
+  if (mode === 'write') {
+    const ta = document.getElementById('answer');
+    setTimeout(() => ta.focus(), 50);
+    ta.addEventListener('keydown', e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); checkWritten(); } });
+    app.querySelectorAll('[data-acc]').forEach(b => {
+      b.onmousedown = e => e.preventDefault(); // nechat focus v textarea
+      b.onclick = () => {
+        const s = ta.selectionStart, eIdx = ta.selectionEnd;
+        ta.value = ta.value.slice(0, s) + b.dataset.acc + ta.value.slice(eIdx);
+        ta.selectionStart = ta.selectionEnd = s + 1; ta.focus();
+      };
+    });
+  }
+  if (mode === 'say') document.getElementById('mic').onclick = () => toggleRecognition(p);
+}
+
+function renderFoot() {
+  const foot = document.getElementById('foot');
+  const kbd = document.getElementById('kbd');
+  if (!S.revealed) {
+    if (S.mode === 'write') {
+      foot.innerHTML = `<button class="big-btn ghost" id="dunno">Nevím</button><button class="big-btn" id="checkBtn">Zkontrolovat</button>`;
+      document.getElementById('checkBtn').onclick = checkWritten;
+      document.getElementById('dunno').onclick = () => reveal();
+      kbd.textContent = 'Enter = zkontrolovat';
+    } else {
+      foot.innerHTML = `<button class="big-btn" id="revealBtn">Odkrýt</button>`;
+      document.getElementById('revealBtn').onclick = () => reveal();
+      kbd.textContent = 'Mezerník = odkrýt';
+    }
+  } else {
+    const sug = S.check ? suggestRating(S.check.score) : null;
+    foot.innerHTML = ['hard', 'good', 'easy'].map(r => `
+      <button class="rate ${r}" data-rate="${r}" ${sug === r ? 'style="border-width:2.5px;border-color:currentColor"' : ''}>
+        ${{ hard: 'Hard', good: 'Good', easy: 'Easy' }[r]}<small>${{ hard: 'Znovu', good: 'Skoro', easy: 'Umím' }[r]}</small>
+      </button>`).join('');
+    foot.querySelectorAll('[data-rate]').forEach(b => b.onclick = () => rateCard(b.dataset.rate));
+    kbd.textContent = '1 = Hard · 2 = Good · 3 = Easy';
+  }
+}
+
+function reveal() {
+  if (S.revealed) return;
+  stopRecognition();
+  const p = S.queue[S.idx];
+  S.revealed = true;
+  const card = document.getElementById('card');
+  const audio = `<div class="audio-row"><button class="audio-btn" data-say="0" aria-label="Přehrát">🔊</button><button class="audio-btn slow" data-say="1" aria-label="Pomalu">🐢</button></div>`;
+  let checkHtml = '';
+  if (S.check) {
+    checkHtml = `<div>${scoreBadge(S.check.score)}</div>
+      ${S.check.given ? `<div class="mid" style="font-size:0.9em">Tvoje: „${esc(S.check.given)}“</div>` : ''}
+      ${S.check.score < 100 ? `<div class="diff">${diffHtml(S.check)}</div>` : ''}
+      ${S.check.accentIssue && S.mode === 'write' ? '<div class="note">Pozor na přízvuky (à è é ì ò ù)</div>' : ''}<hr>`;
+  }
+  switch (S.mode) {
+    case 'reveal':
+      card.innerHTML = `<div class="lbl">${flag(p)}</div><div class="mid">${esc(p.src)}</div><hr><div class="it-ans">${esc(p.it)}</div>${audio}`;
+      break;
+    case 'hear':
+    case 'know':
+      card.innerHTML = `<div class="lbl">🇮🇹</div><div class="it-ans">${esc(p.it)}</div>${audio}<hr><div class="lbl">${flag(p)} Význam</div><div class="big" style="font-size:1.2em">${esc(p.src)}</div>`;
+      break;
+    case 'write':
+    case 'say':
+      card.innerHTML = `<div class="mid">${flag(p)} ${esc(p.src)}</div><hr>${checkHtml}<div class="it-ans">${esc(p.it)}</div>${audio}`;
+      break;
+  }
+  app.querySelectorAll('[data-say]').forEach(b => b.onclick = () => sayIt(p.it, b.dataset.say === '1'));
+  if (S.mode !== 'hear') sayIt(p.it);
+  renderFoot();
+}
+
+function checkWritten() {
+  const ta = document.getElementById('answer');
+  const given = ta ? ta.value.trim() : '';
+  if (!given) return reveal();
+  const p = S.queue[S.idx];
+  S.check = { ...compare(p.it, given), given };
+  reveal();
+}
+
+function rateCard(r) {
+  if (!S || !S.revealed) return;
+  const p = S.queue[S.idx];
+  rate(p.id, S.mode, r);
+  S.results[p.id] = r; // poslední hodnocení se počítá
+  if (r === 'hard' && !S.requeued.has(p.id)) { S.requeued.add(p.id); S.queue.push(p); }
+  S.idx++;
+  stopSpeech();
+  renderCard();
+}
+
+function renderSummary() {
+  const { lesson, mode } = S;
+  const vals = Object.values(S.results);
+  const c = { easy: 0, good: 0, hard: 0 };
+  vals.forEach(v => c[v]++);
+  const pts = vals.reduce((a, v) => a + RATING_POINTS[v], 0);
+  const hardIds = Object.keys(S.results).filter(id => S.results[id] !== 'easy');
+  const pct = vals.length ? Math.round(pts / (vals.length * 3) * 100) : 0;
+  const m = findMode(mode);
+  app.innerHTML = `
+    <div class="session">
+      <header class="top"><div class="wrap">
+        <button class="icon-btn" data-go="#/l/${encodeURIComponent(lesson.id)}" aria-label="Zavřít">✕</button>
+        <h1>${m.icon} ${m.name}</h1>
+      </div><div class="sbar"><i style="width:100%"></i></div></header>
+      <div class="stage"><div class="wrap summary">
+        <div class="trophy">${pct >= 85 ? '🏆' : pct >= 60 ? '💪' : '🌱'}</div>
+        <h2>${pct >= 85 ? 'Bravissimo!' : pct >= 60 ? 'Bene!' : 'Avanti così!'}</h2>
+        <p>${esc(lesson.title)} · ${m.name} · +${pts} bodů</p>
+        <div class="sum-grid">
+          <div class="e"><b>${c.easy}</b>Easy</div>
+          <div class="g"><b>${c.good}</b>Good</div>
+          <div class="h"><b>${c.hard}</b>Hard</div>
+        </div>
+      </div></div>
+      <div class="foot"><div class="wrap">
+        ${hardIds.length ? `<button class="big-btn ghost" id="again" style="flex:1">Zopakovat ${hardIds.length} slabší</button>` : ''}
+        <button class="big-btn" data-go="#/l/${encodeURIComponent(lesson.id)}">Hotovo</button>
+      </div></div>
+    </div>`;
+  bindGo();
+  const again = document.getElementById('again');
+  if (again) again.onclick = () => startSession(lesson, mode, hardIds);
+  S.finished = true;
+}
+
+// ═══════════════════════════════════════════════════════════
+//  SAY IT — rozpoznávání řeči
+// ═══════════════════════════════════════════════════════════
+let rec = null;
+function stopRecognition() {
+  if (rec) { const r = rec; rec = null; try { r.stop(); } catch {} }
+  const mic = document.getElementById('mic');
+  if (mic) { mic.classList.remove('rec'); mic.textContent = '🎤'; }
+}
+function toggleRecognition(p) {
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  const heard = document.getElementById('heard');
+  if (!SR) { heard.textContent = 'Tento prohlížeč neumí rozpoznávat řeč – řekni to nahlas a odkryj.'; return; }
+  if (rec) { finishSpeech(p); return; }
+  stopSpeech();
+  const mic = document.getElementById('mic');
+  mic.classList.add('rec'); mic.textContent = '⏹';
+  heard.textContent = 'Poslouchám… (klepni znovu pro konec)';
+  let finalT = '', interimT = '';
+  const r = new SR();
+  r.lang = 'it-IT'; r.continuous = true; r.interimResults = true;
+  r.onresult = e => {
+    interimT = '';
+    for (let i = e.resultIndex; i < e.results.length; i++) {
+      if (e.results[i].isFinal) finalT += e.results[i][0].transcript + ' ';
+      else interimT += e.results[i][0].transcript;
+    }
+    heard.textContent = (finalT + interimT).trim() || '…';
+    r._text = (finalT + interimT).trim();
+  };
+  r.onerror = e => {
+    if (e.error === 'not-allowed' || e.error === 'service-not-allowed') heard.textContent = 'Přístup k mikrofonu zamítnut.';
+  };
+  r.onend = () => { if (rec === r) finishSpeech(p); };
+  rec = r;
+  try { r.start(); } catch { stopRecognition(); }
+}
+function finishSpeech(p) {
+  const text = rec ? rec._text || '' : '';
+  stopRecognition();
+  if (!S || S.revealed) return;
+  if (!text) { const h = document.getElementById('heard'); if (h) h.textContent = 'Nic jsem neslyšel – zkus to znovu.'; return; }
+  S.check = { ...compare(p.it, text), given: text };
+  reveal();
+}
+
+// ═══════════════════════════════════════════════════════════
+//  KLÁVESNICE
+// ═══════════════════════════════════════════════════════════
+document.addEventListener('keydown', e => {
+  if (!S || S.finished || !location.hash.match(/^#\/l\/[^/]+\/\w+/)) return;
+  if (e.target.tagName === 'TEXTAREA' || e.target.tagName === 'INPUT') return;
+  if (!S.revealed && (e.key === ' ' || e.key === 'Enter')) { e.preventDefault(); reveal(); }
+  else if (S.revealed && ['1', '2', '3'].includes(e.key)) rateCard(['hard', 'good', 'easy'][+e.key - 1]);
+  else if (e.key === 'Escape') go(`#/l/${encodeURIComponent(S.lesson.id)}`);
+});
+
+function bindGo() { app.querySelectorAll('[data-go]').forEach(el => el.onclick = () => go(el.dataset.go)); }
+
+route();
+</script>
 </body>
 </html>
