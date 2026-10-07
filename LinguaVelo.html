@@ -194,6 +194,10 @@
   .sync-p { font-size: 0.88em; color: var(--text-2); line-height: 1.5; }
   .sync-status { font-size: 0.88em; text-align: center; min-height: 1.3em; }
   .sync-btns { display: flex; gap: 10px; }
+  .lesson.grammar .ico { background: var(--good-soft); }
+  .gtag { color: var(--good); font-weight: 800; }
+  .notes.gnotes { border-left-color: var(--good); }
+  .notes.gnotes ul { font-size: 0.95em; }
   .empty { text-align: center; color: var(--text-2); padding: 40px 16px; font-size: 0.9em; line-height: 1.5; }
 
   /* ── LESSON ── */
@@ -313,6 +317,7 @@
 // ═══════════════════════════════════════════════════════════
 //  OBSAH — úrovně, lekce a fráze
 //  notes = krátký úvod / gramatika k lekci (**tučně**)
+//  grammar = gramatická lekce (📐, podrobnější výklad v notes)
 //  dialogs = samostatné rozhovory (každý = jedna souvislá scéna), postavy cast A/B, jen z frází této a předchozích lekcí
 //  src  = česká nebo anglická fráze (jazyk se pozná sám, nebo lang: 'cs' / 'en')
 //  it   = italský překlad
@@ -517,6 +522,42 @@ const LESSONS = [
     ],
   },
   {
+    id: "g_cleny", level: "l1", title: "Gramatika: členy il, la, un, una", icon: "📐", grammar: true,
+    notes: [
+      "Každé podstatné jméno má rod. Mužský člen **il** (il letto), ženský **la** (la camera). Před samohláskou **l'** (l'ostello, l'acqua).",
+      "Neurčitý člen („nějaký, jeden“): **un** (un caffè), **una** (una birra), před ženskou samohláskou **un'** (un'amica).",
+      "Před **s + souhláska** a před **z** je **lo / uno**: lo spritz, uno zaino.",
+      "Množné číslo: il → **i** (i letti), la → **le** (le camere), l' / lo → **gli** (gli amici).",
+      "Většinou platí: **-o** = mužský, **-a** = ženský. Na **-e** může být obojí: il mare, la chiave.",
+    ],
+    phrases: [
+      { id: "g_cleny-1", src: "The bed – the beds", it: "Il letto – i letti" },
+      { id: "g_cleny-2", src: "The room – the rooms", it: "La camera – le camere" },
+      { id: "g_cleny-3", src: "The friend – the friends", it: "L'amico – gli amici" },
+      { id: "g_cleny-4", src: "The water", it: "L'acqua" },
+      { id: "g_cleny-5", src: "A coffee", it: "Un caffè" },
+      { id: "g_cleny-6", src: "A beer", it: "Una birra" },
+      { id: "g_cleny-7", src: "A friend (female)", it: "Un'amica" },
+      { id: "g_cleny-8", src: "The spritz", it: "Lo spritz" },
+      { id: "g_cleny-9", src: "A backpack", it: "Uno zaino" },
+      { id: "g_cleny-10", src: "The sea", it: "Il mare" },
+      { id: "g_cleny-11", src: "The key – the keys", it: "La chiave – le chiavi" },
+      { id: "g_cleny-12", src: "The tourists", it: "I turisti" },
+    ],
+    dialogs: [
+      {
+        title: "Objednávka pro všechny", scene: "Večer na terase. Marco objednává pro sebe a kamarádku.", cast: {"A": "Bob", "B": "Marco"},
+        lines: [
+          { s: "B", it: "Ciao! Un caffè e una birra, per favore.", cz: "Ahoj! Jedno kafe a jedno pivo, prosím." },
+          { s: "A", it: "Un caffè e una birra. E per l'amica?", cz: "Kafe a pivo. A pro kamarádku?" },
+          { s: "B", it: "Per l'amica uno spritz!", cz: "Pro kamarádku spritz!" },
+          { s: "A", it: "Lo spritz… e l'acqua?", cz: "Spritz… a vodu?" },
+          { s: "B", it: "Sì, l'acqua per tutti!", cz: "Jo, vodu pro všechny!" },
+        ],
+      },
+    ],
+  },
+  {
     id: "slovicka", level: "l1", title: "Malá slovíčka, co lepí věty", icon: "🧱",
     notes: [
       "Tahle slovíčka uslyšíš v každé větě – vyplatí se je umět bez přemýšlení.",
@@ -613,6 +654,42 @@ const LESSONS = [
           { s: "A", it: "Settantacinque euro. E la tassa di soggiorno è di due euro a notte.", cz: "Sedmdesát pět eur. A turistická taxa je dvě eura na noc." },
           { s: "B", it: "Quant'è in tutto?", cz: "Kolik to je celkem?" },
           { s: "A", it: "Ottantuno euro.", cz: "Osmdesát jedna eur." },
+        ],
+      },
+    ],
+  },
+  {
+    id: "g_rod", level: "l1", title: "Gramatika: přídavná jména a rod", icon: "📐", grammar: true,
+    notes: [
+      "Přídavné jméno se shoduje s podstatným: **il ragazzo italiano**, **la ragazza italiana**.",
+      "Množné číslo: italian**i** (muži nebo smíšená skupina), italian**e** (jen ženy).",
+      "Přídavná jména na **-e** mají stejný tvar pro muže i ženy: **grande, gentile, felice** (množné: grandi).",
+      "Přídavné jméno většinou stojí **za** podstatným: una camera grande. Výjimky jako bello, buono, piccolo často stojí před: un **bel** posto.",
+    ],
+    phrases: [
+      { id: "g_rod-1", src: "He is Italian – she is Italian", it: "Lui è italiano – lei è italiana" },
+      { id: "g_rod-2", src: "They are Italian (men)", it: "Sono italiani" },
+      { id: "g_rod-3", src: "They are Italian (women)", it: "Sono italiane" },
+      { id: "g_rod-4", src: "A big room", it: "Una camera grande" },
+      { id: "g_rod-5", src: "A small bed", it: "Un letto piccolo" },
+      { id: "g_rod-6", src: "The room is clean", it: "La camera è pulita" },
+      { id: "g_rod-7", src: "The beds are clean", it: "I letti sono puliti" },
+      { id: "g_rod-8", src: "A beautiful place", it: "Un bel posto" },
+      { id: "g_rod-9", src: "A nice girl", it: "Una ragazza simpatica" },
+      { id: "g_rod-10", src: "Nice guys", it: "Ragazzi simpatici" },
+      { id: "g_rod-11", src: "The coffee is hot", it: "Il caffè è caldo" },
+      { id: "g_rod-12", src: "The water is cold", it: "L'acqua è fredda" },
+    ],
+    dialogs: [
+      {
+        title: "Jaký je pokoj?", scene: "Anna se před check-inem ptá, jaký je pokoj.", cast: {"A": "Bob", "B": "Anna"},
+        lines: [
+          { s: "B", it: "Com'è la camera?", cz: "Jaký je pokoj?" },
+          { s: "A", it: "La camera è grande e pulita.", cz: "Pokoj je velký a čistý." },
+          { s: "B", it: "E i letti?", cz: "A postele?" },
+          { s: "A", it: "I letti sono nuovi!", cz: "Postele jsou nové!" },
+          { s: "B", it: "Che bello! E le ragazze in camera?", cz: "Super! A holky na pokoji?" },
+          { s: "A", it: "Sono tedesche. Molto simpatiche!", cz: "Jsou to Němky. Moc milé!" },
         ],
       },
     ],
@@ -747,6 +824,42 @@ const LESSONS = [
     ],
   },
   {
+    id: "g_are", level: "l2", title: "Gramatika: slovesa na -are", icon: "📐", grammar: true,
+    notes: [
+      "Většina sloves končí na **-are**: parlare, lavorare, abitare, mangiare, cercare.",
+      "Odtrhni -are a přidej koncovku: io parl**o**, tu parl**i**, lui/lei parl**a**, noi parl**iamo**, voi parl**ate**, loro parl**ano**.",
+      "Pozor na přízvuk u „oni“: **pàrlano** (ne parlàno).",
+      "Pravopis: mangiare → tu mang**i** (ne mangii), cercare → tu cerc**hi** (aby zůstalo tvrdé k).",
+    ],
+    phrases: [
+      { id: "g_are-1", src: "I speak Italian", it: "Parlo italiano" },
+      { id: "g_are-2", src: "Does she speak Czech?", it: "Lei parla ceco?" },
+      { id: "g_are-3", src: "We speak a little", it: "Parliamo un po'" },
+      { id: "g_are-4", src: "Where do you (all) live?", it: "Dove abitate?" },
+      { id: "g_are-5", src: "They live in Rome", it: "Abitano a Roma" },
+      { id: "g_are-6", src: "Do you work here?", it: "Lavori qui?" },
+      { id: "g_are-7", src: "We work together", it: "Lavoriamo insieme" },
+      { id: "g_are-8", src: "What are you eating?", it: "Cosa mangi?" },
+      { id: "g_are-9", src: "I'm eating a pizza", it: "Mangio una pizza" },
+      { id: "g_are-10", src: "I'm looking for the key", it: "Cerco la chiave" },
+      { id: "g_are-11", src: "What are you looking for?", it: "Cosa cerchi?" },
+      { id: "g_are-12", src: "They arrive tomorrow", it: "Arrivano domani" },
+    ],
+    dialogs: [
+      {
+        title: "Kdo tu pracuje?", scene: "Nový host se u recepce vyptává Boba.", cast: {"A": "Bob", "B": "Marco"},
+        lines: [
+          { s: "B", it: "Lavori qui?", cz: "Pracuješ tady?" },
+          { s: "A", it: "Sì, lavoro alla reception.", cz: "Jo, pracuju na recepci." },
+          { s: "B", it: "E Giulia?", cz: "A Giulia?" },
+          { s: "A", it: "Anche lei lavora qui. Lavoriamo insieme.", cz: "Ona tu taky pracuje. Pracujeme spolu." },
+          { s: "B", it: "Parlate inglese?", cz: "Mluvíte anglicky?" },
+          { s: "A", it: "Sì, ma parliamo anche italiano!", cz: "Jo, ale mluvíme i italsky!" },
+        ],
+      },
+    ],
+  },
+  {
     id: "seznameni3", level: "l2", title: "Jak dlouho už…?", icon: "⏳",
     notes: [
       "**Da + čas** = už (od)… a sloveso je v přítomném čase: „Sono qui **da** due mesi“ = jsem tu (už) dva měsíce.",
@@ -836,6 +949,76 @@ const LESSONS = [
     ],
   },
   {
+    id: "g_ere_ire", level: "l2", title: "Gramatika: slovesa na -ere a -ire", icon: "📐", grammar: true,
+    notes: [
+      "**-ere** (prendere, vivere, leggere): prend**o**, prend**i**, prend**e**, prend**iamo**, prend**ete**, prend**ono**.",
+      "**-ire** (dormire, partire, aprire): dorm**o**, dorm**i**, dorm**e**, dorm**iamo**, dorm**ite**, dorm**ono**.",
+      "Některá -ire mají **-isc-**: capire → cap**isc**o, cap**isc**i, cap**isc**e, capiamo, capite, cap**isc**ono. Proto „non capisco“!",
+      "Zkratka: pro „já“ je koncovka vždycky **-o**, pro „ty“ vždycky **-i** – u všech tří skupin.",
+    ],
+    phrases: [
+      { id: "g_ere_ire-1", src: "We'll take the train", it: "Prendiamo il treno" },
+      { id: "g_ere_ire-2", src: "What are you (all) having?", it: "Cosa prendete?" },
+      { id: "g_ere_ire-3", src: "I live in Italy", it: "Vivo in Italia" },
+      { id: "g_ere_ire-4", src: "Where do you live?", it: "Dove vivi?" },
+      { id: "g_ere_ire-5", src: "I sleep a lot", it: "Dormo molto" },
+      { id: "g_ere_ire-6", src: "Are you sleeping?", it: "Dormi?" },
+      { id: "g_ere_ire-7", src: "They're leaving tomorrow", it: "Partono domani" },
+      { id: "g_ere_ire-8", src: "When are you leaving?", it: "Quando parti?" },
+      { id: "g_ere_ire-9", src: "I understand", it: "Capisco" },
+      { id: "g_ere_ire-10", src: "Do you understand?", it: "Capisci?" },
+      { id: "g_ere_ire-11", src: "They don't understand", it: "Non capiscono" },
+      { id: "g_ere_ire-12", src: "We open at eight", it: "Apriamo alle otto" },
+    ],
+    dialogs: [
+      {
+        title: "Kdy odjíždíš?", scene: "Bob se u snídaně baví s Annou.", cast: {"A": "Bob", "B": "Anna"},
+        lines: [
+          { s: "A", it: "Quando parti?", cz: "Kdy odjíždíš?" },
+          { s: "B", it: "Parto domani. Prendo il treno alle nove.", cz: "Odjíždím zítra. Jedu vlakem v devět." },
+          { s: "A", it: "Dormi bene qui?", cz: "Spíš tu dobře?" },
+          { s: "B", it: "Sì, dormo benissimo!", cz: "Jo, spím skvěle!" },
+          { s: "A", it: "Capisci tutto in italiano?", cz: "Rozumíš všemu italsky?" },
+          { s: "B", it: "No, capisco un po'!", cz: "Ne, rozumím trochu!" },
+        ],
+      },
+    ],
+  },
+  {
+    id: "g_ce", level: "l2", title: "Gramatika: c'è / ci sono", icon: "📐", grammar: true,
+    notes: [
+      "**C'è** = je tu / existuje (jedna věc): „C'è un problema.“",
+      "**Ci sono** = jsou tu (víc věcí): „Ci sono due letti.“",
+      "Otázka: „C'è il Wi-Fi?“ · zápor: „**Non c'è** tempo.“",
+      "**Dov'è…?** se ptá, KDE to je (víš, že to existuje). **C'è…?** se ptá, JESTLI to vůbec je.",
+    ],
+    phrases: [
+      { id: "g_ce-1", src: "Is there Wi-Fi?", it: "C'è il Wi-Fi?" },
+      { id: "g_ce-2", src: "There is a problem", it: "C'è un problema" },
+      { id: "g_ce-3", src: "There are two beds", it: "Ci sono due letti" },
+      { id: "g_ce-4", src: "Are there towels?", it: "Ci sono asciugamani?" },
+      { id: "g_ce-5", src: "There's no time", it: "Non c'è tempo" },
+      { id: "g_ce-6", src: "There are many tourists", it: "Ci sono molti turisti" },
+      { id: "g_ce-7", src: "Is there a bar here?", it: "C'è un bar qui?" },
+      { id: "g_ce-8", src: "There are a lot of people", it: "C'è tanta gente" },
+      { id: "g_ce-9", src: "How many people are there?", it: "Quante persone ci sono?" },
+      { id: "g_ce-10", src: "There's a free bed", it: "C'è un letto libero" },
+    ],
+    dialogs: [
+      {
+        title: "Je tu místo?", scene: "Odpoledne přijde do hostelu batůžkář bez rezervace.", cast: {"A": "Bob", "B": "Marco"},
+        lines: [
+          { s: "B", it: "Ciao! C'è un letto libero?", cz: "Ahoj! Je tu volná postel?" },
+          { s: "A", it: "Sì, c'è un letto in camera sei.", cz: "Jo, je tu postel v pokoji šest." },
+          { s: "B", it: "Quante persone ci sono in camera?", cz: "Kolik lidí je na pokoji?" },
+          { s: "A", it: "Ci sono quattro persone.", cz: "Jsou tam čtyři lidi." },
+          { s: "B", it: "C'è il Wi-Fi?", cz: "Je tu wifi?" },
+          { s: "A", it: "Sì, certo!", cz: "Jo, jasně!" },
+        ],
+      },
+    ],
+  },
+  {
     id: "modalni", level: "l2", title: "Můžu, chci, potřebuju", icon: "🙋",
     notes: [
       "**Posso…?** = můžu…? Nejužitečnější slovo vůbec: „Posso entrare? Posso pagare?“",
@@ -896,6 +1079,40 @@ const LESSONS = [
           { s: "A", it: "Andiamo! Va bene?", cz: "Pojďme! Jo?" },
           { s: "B", it: "Va bene! Spero di arrivare in tempo…", cz: "Dobře! Doufám, že to stihnu…" },
           { s: "A", it: "Lo spero!", cz: "Doufám!" },
+        ],
+      },
+    ],
+  },
+  {
+    id: "g_zapor", level: "l2", title: "Gramatika: zápor a otázky", icon: "📐", grammar: true,
+    notes: [
+      "Zápor: **non** před sloveso: „Non parlo tedesco.“ „Non è lontano.“",
+      "Dvojitý zápor je v italštině správně: **non… mai** (nikdy), **non… niente** (nic), **non… nessuno** (nikdo).",
+      "Otázka = stejná věta, jen hlas na konci jde nahoru: „Parli italiano?“ Nic se nepřehazuje.",
+      "Otázková slova jdou na začátek: „**Dove** abiti?“, „**Quando** parti?“",
+    ],
+    phrases: [
+      { id: "g_zapor-1", src: "I don't speak German", it: "Non parlo tedesco" },
+      { id: "g_zapor-2", src: "It's not far", it: "Non è lontano" },
+      { id: "g_zapor-3", src: "I never drink coffee", it: "Non bevo mai il caffè" },
+      { id: "g_zapor-4", src: "I don't want anything", it: "Non voglio niente" },
+      { id: "g_zapor-5", src: "There's nobody here", it: "Non c'è nessuno" },
+      { id: "g_zapor-6", src: "You speak Italian?", it: "Parli italiano?" },
+      { id: "g_zapor-7", src: "Is it open?", it: "È aperto?" },
+      { id: "g_zapor-8", src: "Isn't it open?", it: "Non è aperto?" },
+      { id: "g_zapor-9", src: "Where do you live?", it: "Dove abiti?" },
+      { id: "g_zapor-10", src: "Not now", it: "Non adesso" },
+    ],
+    dialogs: [
+      {
+        title: "Ne, ne, ne!", scene: "Giulia Bobovi všechno nabízí.", cast: {"A": "Bob", "B": "Giulia"},
+        lines: [
+          { s: "B", it: "Parli tedesco?", cz: "Mluvíš německy?" },
+          { s: "A", it: "No, non parlo tedesco.", cz: "Ne, německy nemluvím." },
+          { s: "B", it: "Vuoi un caffè?", cz: "Chceš kafe?" },
+          { s: "A", it: "No grazie, non bevo mai il caffè.", cz: "Ne díky, kafe nikdy nepiju." },
+          { s: "B", it: "Mai? Vuoi qualcosa?", cz: "Nikdy? Chceš něco?" },
+          { s: "A", it: "Non voglio niente, grazie!", cz: "Nechci nic, díky!" },
         ],
       },
     ],
@@ -1047,6 +1264,43 @@ const LESSONS = [
           { s: "A", it: "Stasera no. Lavoro sempre la mattina.", cz: "Dnes večer ne. Pracuju vždycky ráno." },
           { s: "B", it: "E questo fine settimana?", cz: "A tenhle víkend?" },
           { s: "A", it: "Sabato sono libero!", cz: "V sobotu mám volno!" },
+        ],
+      },
+    ],
+  },
+  {
+    id: "g_nepravidelna", level: "l2", title: "Gramatika: fare, andare, venire, stare", icon: "📐", grammar: true,
+    notes: [
+      "Nejčastější nepravidelná slovesa – vyplatí se je umět nazpaměť.",
+      "**fare** (dělat): faccio, fai, fa, facciamo, fate, fanno.",
+      "**andare** (jít, jet): vado, vai, va, andiamo, andate, vanno.",
+      "**venire** (přijít): vengo, vieni, viene, veniamo, venite, vengono.",
+      "**stare** (být, mít se): sto, stai, sta, stiamo, state, stanno.",
+    ],
+    phrases: [
+      { id: "g_nepravidelna-1", src: "What are you doing?", it: "Cosa fai?" },
+      { id: "g_nepravidelna-2", src: "I'm doing nothing", it: "Non faccio niente" },
+      { id: "g_nepravidelna-3", src: "Where are you going?", it: "Dove vai?" },
+      { id: "g_nepravidelna-4", src: "I'm going to bed", it: "Vado a letto" },
+      { id: "g_nepravidelna-5", src: "They're going to Rome", it: "Vanno a Roma" },
+      { id: "g_nepravidelna-6", src: "Are you coming?", it: "Vieni?" },
+      { id: "g_nepravidelna-7", src: "I'm coming!", it: "Vengo!" },
+      { id: "g_nepravidelna-8", src: "Where do you come from?", it: "Da dove vieni?" },
+      { id: "g_nepravidelna-9", src: "How are they?", it: "Come stanno?" },
+      { id: "g_nepravidelna-10", src: "We're fine", it: "Stiamo bene" },
+      { id: "g_nepravidelna-11", src: "What are you (all) doing tonight?", it: "Cosa fate stasera?" },
+    ],
+    dialogs: [
+      {
+        title: "Kam jdeš?", scene: "Bob potká Giulii na chodbě, když odchází.", cast: {"A": "Bob", "B": "Giulia"},
+        lines: [
+          { s: "A", it: "Ciao Giulia! Dove vai?", cz: "Ahoj Giulie! Kam jdeš?" },
+          { s: "B", it: "Vado al bar. E tu, cosa fai?", cz: "Jdu do baru. A ty, co děláš?" },
+          { s: "A", it: "Non faccio niente.", cz: "Nic nedělám." },
+          { s: "B", it: "Allora vieni con me?", cz: "Tak půjdeš se mnou?" },
+          { s: "A", it: "Vengo!", cz: "Jdu!" },
+          { s: "B", it: "Bene! Come stanno Marco e Anna?", cz: "Fajn! Jak se mají Marco a Anna?" },
+          { s: "A", it: "Stanno bene! Vanno a Roma domani.", cz: "Mají se dobře! Zítra jedou do Říma." },
         ],
       },
     ],
@@ -1332,6 +1586,42 @@ const LESSONS = [
     ],
   },
   {
+    id: "g_minuly", level: "l3", title: "Gramatika: minulý čas – avere, nebo essere?", icon: "📐", grammar: true,
+    notes: [
+      "Většina sloves: **avere** + příčestí: ho mangiato, hai visto, abbiamo fatto.",
+      "**Essere** + příčestí: pohyb a změna – andare, venire, arrivare, partire, uscire, tornare, stare, essere.",
+      "S essere se příčestí **shoduje**: lui è andat**o**, lei è andat**a**, siamo andat**i**, sono andat**e** (jen ženy).",
+      "Zápor: **non** před ho / sono: „Non ho mangiato.“ „Non sono uscito.“",
+      "**Già** = už, **non… ancora** = ještě ne: „Hai già mangiato? – Non ancora.“",
+    ],
+    phrases: [
+      { id: "g_minuly-1", src: "She went to Rome", it: "Lei è andata a Roma" },
+      { id: "g_minuly-2", src: "We arrived yesterday", it: "Siamo arrivati ieri" },
+      { id: "g_minuly-3", src: "They left this morning", it: "Sono partiti stamattina" },
+      { id: "g_minuly-4", src: "Did you go out last night?", it: "Sei uscito ieri sera?" },
+      { id: "g_minuly-5", src: "I came back late", it: "Sono tornato tardi" },
+      { id: "g_minuly-6", src: "We did a lot", it: "Abbiamo fatto tanto" },
+      { id: "g_minuly-7", src: "Did you see the sunset?", it: "Hai visto il tramonto?" },
+      { id: "g_minuly-8", src: "I didn't eat", it: "Non ho mangiato" },
+      { id: "g_minuly-9", src: "Have you already eaten?", it: "Hai già mangiato?" },
+      { id: "g_minuly-10", src: "Not yet", it: "Non ancora" },
+      { id: "g_minuly-11", src: "Anna stayed at home", it: "Anna è stata a casa" },
+    ],
+    dialogs: [
+      {
+        title: "Včerejší večer", scene: "Ráno u kafe. Giulia byla včera venku.", cast: {"A": "Bob", "B": "Giulia"},
+        lines: [
+          { s: "A", it: "Sei uscita ieri sera?", cz: "Byla jsi včera večer venku?" },
+          { s: "B", it: "Sì, sono andata al bar con Anna.", cz: "Jo, šla jsem s Annou do baru." },
+          { s: "A", it: "E siete tornate tardi?", cz: "A vrátily jste se pozdě?" },
+          { s: "B", it: "Sì, siamo tornate alle due!", cz: "Jo, vrátily jsme se ve dvě!" },
+          { s: "A", it: "Hai già mangiato?", cz: "Už jsi jedla?" },
+          { s: "B", it: "Non ancora… ho fame!", cz: "Ještě ne… mám hlad!" },
+        ],
+      },
+    ],
+  },
+  {
     id: "jidlo", level: "l3", title: "V baru", icon: "🍹",
     notes: [
       "V baru: „**Per me** uno spritz“ = pro mě spritz. Nebo „**Vorrei**…“",
@@ -1389,6 +1679,42 @@ const LESSONS = [
           { s: "A", it: "Mmm, è buonissimo!", cz: "Mmm, to je výborné!" },
           { s: "B", it: "Sei vegetariano?", cz: "Jsi vegetarián?" },
           { s: "A", it: "No. Ma adesso sono pieno!", cz: "Ne. Ale teď jsem plný!" },
+        ],
+      },
+    ],
+  },
+  {
+    id: "g_predlozky", level: "l3", title: "Gramatika: předložky a, in, da, di", icon: "📐", grammar: true,
+    notes: [
+      "**a** = do / v (města, směr): „Sono **a** La Spezia“, „Vado **a** Roma“, „**a** casa“.",
+      "**in** = v / do (země, místa, doprava): „**in** Italia“, „**in** spiaggia“, „**in** treno“.",
+      "**da** = od / z / u: „Vengo **da** Praga“, „**da** Marco“ (u Marca), „**da** ieri“.",
+      "**di** = z (odkud jsem), čí: „Sono **di** Brno“, „la chiave **di** Anna“.",
+      "S členem se slévají: a + il = **al**, a + la = **alla**, in + la = **nella**, di + l' = **dell'**, da + la = **dalla**.",
+    ],
+    phrases: [
+      { id: "g_predlozky-1", src: "I'm in La Spezia", it: "Sono a La Spezia" },
+      { id: "g_predlozky-2", src: "We're going to the bar", it: "Andiamo al bar" },
+      { id: "g_predlozky-3", src: "I'm going to the station", it: "Vado alla stazione" },
+      { id: "g_predlozky-4", src: "I'm in Italy", it: "Sono in Italia" },
+      { id: "g_predlozky-5", src: "By train or by bus?", it: "In treno o in autobus?" },
+      { id: "g_predlozky-6", src: "I come from Prague", it: "Vengo da Praga" },
+      { id: "g_predlozky-7", src: "I'm at Marco's", it: "Sono da Marco" },
+      { id: "g_predlozky-8", src: "Anna's key", it: "La chiave di Anna" },
+      { id: "g_predlozky-9", src: "In the room", it: "Nella camera" },
+      { id: "g_predlozky-10", src: "The hostel's terrace", it: "La terrazza dell'ostello" },
+      { id: "g_predlozky-11", src: "From the beach", it: "Dalla spiaggia" },
+    ],
+    dialogs: [
+      {
+        title: "Kde jsi?", scene: "Giulia volá Bobovi.", cast: {"A": "Bob", "B": "Giulia"},
+        lines: [
+          { s: "B", it: "Pronto? Bob, dove sei?", cz: "Haló? Bobe, kde jsi?" },
+          { s: "A", it: "Sono da Marco. E tu?", cz: "Jsem u Marca. A ty?" },
+          { s: "B", it: "Sono alla stazione. Vado a Riomaggiore.", cz: "Jsem na nádraží. Jedu do Riomaggiore." },
+          { s: "A", it: "In treno?", cz: "Vlakem?" },
+          { s: "B", it: "Sì, in treno. E stasera andiamo al bar?", cz: "Jo, vlakem. A večer půjdeme do baru?" },
+          { s: "A", it: "Sì! Ci vediamo alle otto.", cz: "Jo! Uvidíme se v osm." },
         ],
       },
     ],
@@ -1459,6 +1785,40 @@ const LESSONS = [
           { s: "A", it: "Nessun problema. Sei pronta?", cz: "Žádný problém. Jsi připravená?" },
           { s: "B", it: "Sono pronta! Tra due minuti sono lì.", cz: "Jsem připravená! Za dvě minuty jsem tam." },
           { s: "A", it: "Va bene, ti aspetto!", cz: "Dobře, čekám na tebe!" },
+        ],
+      },
+    ],
+  },
+  {
+    id: "g_zvratna", level: "l3", title: "Gramatika: zvratná slovesa (mi chiamo, mi alzo)", icon: "📐", grammar: true,
+    notes: [
+      "Zvratná slovesa mají italské „se / si“ **před** slovesem: **mi** chiamo, **ti** chiami, **si** chiama, **ci** chiamiamo, **vi** chiamate, **si** chiamano.",
+      "Typická: **alzarsi** (vstávat), **sedersi** (sednout si), **sentirsi** (cítit se), **allenarsi** (trénovat), **divertirsi** (bavit se).",
+      "**Ci vediamo** = uvidíme se (doslova „vidíme se navzájem“).",
+      "U infinitivu se zájmeno lepí na konec: devo alzar**mi**, puoi seder**ti**.",
+    ],
+    phrases: [
+      { id: "g_zvratna-1", src: "What's his name?", it: "Come si chiama?" },
+      { id: "g_zvratna-2", src: "I get up at seven", it: "Mi alzo alle sette" },
+      { id: "g_zvratna-3", src: "Do you get up early?", it: "Ti alzi presto?" },
+      { id: "g_zvratna-4", src: "I'll sit here", it: "Mi siedo qui" },
+      { id: "g_zvratna-5", src: "How do you feel?", it: "Come ti senti?" },
+      { id: "g_zvratna-6", src: "We train together", it: "Ci alleniamo insieme" },
+      { id: "g_zvratna-7", src: "We'll see each other tomorrow", it: "Ci vediamo domani" },
+      { id: "g_zvratna-8", src: "I have to get up early", it: "Devo alzarmi presto" },
+      { id: "g_zvratna-9", src: "They're called Marco and Anna", it: "Si chiamano Marco e Anna" },
+      { id: "g_zvratna-10", src: "I'm having fun", it: "Mi diverto" },
+    ],
+    dialogs: [
+      {
+        title: "Ranní ptáče", scene: "Pozdě večer v kuchyni. Giulia se diví, proč Bob jde spát tak brzo.", cast: {"A": "Bob", "B": "Giulia"},
+        lines: [
+          { s: "B", it: "A che ora ti alzi domani?", cz: "V kolik zítra vstáváš?" },
+          { s: "A", it: "Mi alzo alle sei. Lavoro alle sette.", cz: "Vstávám v šest. V sedm jdu do práce." },
+          { s: "B", it: "Presto! Io mi alzo alle dieci.", cz: "Brzo! Já vstávám v deset." },
+          { s: "A", it: "Che fortuna! Come ti senti oggi?", cz: "Ty se máš! Jak se dneska cítíš?" },
+          { s: "B", it: "Mi sento benissimo. Ci vediamo domani?", cz: "Cítím se skvěle. Uvidíme se zítra?" },
+          { s: "A", it: "Sì, ci vediamo domani! Buonanotte!", cz: "Jo, uvidíme se zítra! Dobrou noc!" },
         ],
       },
     ],
@@ -1622,6 +1982,42 @@ const LESSONS = [
           { s: "B", it: "Ogni camera ha un bagno?", cz: "Má každý pokoj koupelnu?" },
           { s: "A", it: "Sì, ogni camera ha una doccia. La tua camera è di sopra.", cz: "Jo, každý pokoj má sprchu. Tvůj pokoj je nahoře." },
           { s: "A", it: "Se hai bisogno di qualcosa, dimmi!", cz: "Kdybys něco potřeboval, řekni!" },
+        ],
+      },
+    ],
+  },
+  {
+    id: "g_zajmena", level: "l4", title: "Gramatika: mi, ti, lo, la", icon: "📐", grammar: true,
+    notes: [
+      "**mi** = mi / mně, **ti** = ti / tobě: „**Mi** dai la chiave?“ „**Ti** porto un caffè.“",
+      "**lo** = ho / to (mužský rod), **la** = ji / to (ženský): „Il passaporto? **Lo** prendo.“ „La chiave? **La** prendo.“",
+      "Zájmeno jde **před** sloveso, ale k infinitivu se lepí na **konec**: „Posso aiutar**ti**?“, „Puoi aiutar**mi**?“",
+      "Dvě zájmena za sebou: mi + lo = **me lo**, ti + lo = **te lo**: „**Te lo** faccio vedere“ = ukážu ti to.",
+    ],
+    phrases: [
+      { id: "g_zajmena-1", src: "Can you give me the key?", it: "Mi dai la chiave?" },
+      { id: "g_zajmena-2", src: "I'll bring you a coffee", it: "Ti porto un caffè" },
+      { id: "g_zajmena-3", src: "Can you help me with the luggage?", it: "Puoi aiutarmi con i bagagli?" },
+      { id: "g_zajmena-4", src: "I'll help you", it: "Ti aiuto io" },
+      { id: "g_zajmena-5", src: "The passport? I'll take it.", it: "Il passaporto? Lo prendo." },
+      { id: "g_zajmena-6", src: "The key? I'll take it.", it: "La chiave? La prendo." },
+      { id: "g_zajmena-7", src: "I'll wait for you", it: "Ti aspetto" },
+      { id: "g_zajmena-8", src: "Are you waiting for me?", it: "Mi aspetti?" },
+      { id: "g_zajmena-9", src: "I'll show it to you", it: "Te lo faccio vedere" },
+      { id: "g_zajmena-10", src: "Can you tell me?", it: "Puoi dirmi?" },
+      { id: "g_zajmena-11", src: "Do you know him?", it: "Lo conosci?" },
+      { id: "g_zajmena-12", src: "Tell me!", it: "Dimmi!" },
+    ],
+    dialogs: [
+      {
+        title: "Pomůžu ti", scene: "Anna právě přijela s velkým batohem.", cast: {"A": "Bob", "B": "Anna"},
+        lines: [
+          { s: "B", it: "Ciao Bob! Puoi aiutarmi con i bagagli?", cz: "Ahoj Bobe! Můžeš mi pomoct se zavazadly?" },
+          { s: "A", it: "Certo, ti aiuto io! Lo zaino lo prendo io.", cz: "Jasně, pomůžu ti! Batoh vezmu já." },
+          { s: "B", it: "Grazie! E il passaporto?", cz: "Díky! A pas?" },
+          { s: "A", it: "Me lo dai dopo. Ti porto un caffè?", cz: "Dáš mi ho potom. Přinesu ti kafe?" },
+          { s: "B", it: "Sì! Mi aspetti qui?", cz: "Jo! Počkáš tu na mě?" },
+          { s: "A", it: "Sì, ti aspetto!", cz: "Jo, počkám na tebe!" },
         ],
       },
     ],
@@ -1919,6 +2315,42 @@ const LESSONS = [
     ],
   },
   {
+    id: "g_rozkaz", level: "l5", title: "Gramatika: rozkazovací způsob (vai, gira, prendi)", icon: "📐", grammar: true,
+    notes: [
+      "Rozkaz pro **ty** u sloves na -are končí na **-a**: gir**a**, attravers**a**, aspett**a**, guard**a**.",
+      "U sloves na -ere / -ire končí na **-i**: prend**i**, sent**i**, dorm**i**.",
+      "Nepravidelné: **vai** (jdi), **vieni** (pojď), **fai** (dělej), **dimmi** (řekni mi), **scusa** (promiň).",
+      "Zápor = **non + infinitiv**: „**Non** girare!“ (nezahýbej), „**Non** preoccupar**ti**!“",
+      "Pro víc lidí: **-ate / -ete / -ite**: girate, prendete, venite.",
+    ],
+    phrases: [
+      { id: "g_rozkaz-1", src: "Look!", it: "Guarda!" },
+      { id: "g_rozkaz-2", src: "Wait!", it: "Aspetta!" },
+      { id: "g_rozkaz-3", src: "Come here!", it: "Vieni qui!" },
+      { id: "g_rozkaz-4", src: "Take the bus", it: "Prendi l'autobus" },
+      { id: "g_rozkaz-5", src: "Listen!", it: "Senti!" },
+      { id: "g_rozkaz-6", src: "Don't turn!", it: "Non girare!" },
+      { id: "g_rozkaz-7", src: "Don't wait for me", it: "Non aspettarmi" },
+      { id: "g_rozkaz-8", src: "Tell me everything!", it: "Dimmi tutto!" },
+      { id: "g_rozkaz-9", src: "Come with us! (all of you)", it: "Venite con noi!" },
+      { id: "g_rozkaz-10", src: "Turn left (all of you)", it: "Girate a sinistra" },
+      { id: "g_rozkaz-11", src: "Go straight on (all of you)", it: "Andate dritto" },
+    ],
+    dialogs: [
+      {
+        title: "Na rozcestí", scene: "Bob s Giulií jdou pěšky na nádraží.", cast: {"A": "Bob", "B": "Giulia"},
+        lines: [
+          { s: "B", it: "Bob, dove andiamo?", cz: "Bobe, kam jdeme?" },
+          { s: "A", it: "Guarda! La stazione è lì. Vieni!", cz: "Koukej! Nádraží je tamhle. Pojď!" },
+          { s: "B", it: "Aspetta! A destra o a sinistra?", cz: "Počkej! Doprava, nebo doleva?" },
+          { s: "A", it: "Non girare! Vai dritto.", cz: "Nezahýbej! Jdi rovně." },
+          { s: "B", it: "E poi? Dimmi!", cz: "A pak? Řekni mi!" },
+          { s: "A", it: "Poi prendi l'autobus.", cz: "Pak jeď autobusem." },
+        ],
+      },
+    ],
+  },
+  {
     id: "cesta2", level: "l5", title: "Popis cesty", icon: "🧭",
     notes: [
       "**La prima / la seconda a destra** = první / druhá doprava.",
@@ -2079,6 +2511,39 @@ const LESSONS = [
           { s: "A", it: "Lo prendo! Posso pagare con la carta?", cz: "Beru to! Můžu platit kartou?" },
           { s: "B", it: "Certo. Sacchetto?", cz: "Jasně. Tašku?" },
           { s: "A", it: "Niente sacchetto, grazie.", cz: "Tašku ne, díky." },
+        ],
+      },
+    ],
+  },
+  {
+    id: "g_budouci", level: "l5", title: "Gramatika: budoucí čas", icon: "📐", grammar: true,
+    notes: [
+      "Na blízkou budoucnost Italové často používají přítomný čas: „Domani **parto**.“",
+      "Budoucí čas: -are / -ere → **-erò, -erai, -erà, -eremo, -erete, -eranno**: parl**erò**, prend**erò**. -ire → **-irò**: dorm**irò**.",
+      "Nepravidelné: **sarò** (budu), **avrò** (budu mít), **andrò** (půjdu), **farò** (udělám), **verrò** (přijdu), **vedrò** (uvidím).",
+      "Budoucí čas slouží i pro odhad: „**Sarà** stanco“ = asi je unavený.",
+    ],
+    phrases: [
+      { id: "g_budouci-1", src: "Tomorrow I'm leaving", it: "Domani parto" },
+      { id: "g_budouci-2", src: "I will speak Italian well", it: "Parlerò bene l'italiano" },
+      { id: "g_budouci-3", src: "We'll see", it: "Vedremo" },
+      { id: "g_budouci-4", src: "I'll go to Rome", it: "Andrò a Roma" },
+      { id: "g_budouci-5", src: "What will you do tomorrow?", it: "Cosa farai domani?" },
+      { id: "g_budouci-6", src: "I'll be there at eight", it: "Sarò lì alle otto" },
+      { id: "g_budouci-7", src: "Will you come?", it: "Verrai?" },
+      { id: "g_budouci-8", src: "I'll have more time", it: "Avrò più tempo" },
+      { id: "g_budouci-9", src: "He's probably tired", it: "Sarà stanco" },
+      { id: "g_budouci-10", src: "I'll call you later", it: "Ti chiamerò più tardi" },
+    ],
+    dialogs: [
+      {
+        title: "Plány na příští rok", scene: "Večer na terase. Giulia se ptá Boba na budoucnost.", cast: {"A": "Bob", "B": "Giulia"},
+        lines: [
+          { s: "B", it: "Cosa farai l'anno prossimo?", cz: "Co budeš dělat příští rok?" },
+          { s: "A", it: "Resterò in Italia. E parlerò bene l'italiano!", cz: "Zůstanu v Itálii. A budu mluvit dobře italsky!" },
+          { s: "B", it: "Sicuro! E andrai a Roma?", cz: "Určitě! A pojedeš do Říma?" },
+          { s: "A", it: "Sì, andrò a Roma in primavera. Verrai con me?", cz: "Jo, pojedu na jaře do Říma. Pojedeš se mnou?" },
+          { s: "B", it: "Vedremo!", cz: "Uvidíme!" },
         ],
       },
     ],
@@ -2377,10 +2842,10 @@ function renderHome() {
           </div>` + ls.map(l => {
           const pct = lessonProgress(l);
           const isNext = l === next;
-          return `<button class="lesson${isNext ? ' next' : ''}" data-go="#/l/${encodeURIComponent(l.id)}">
+          return `<button class="lesson${isNext ? ' next' : ''}${l.grammar ? ' grammar' : ''}" data-go="#/l/${encodeURIComponent(l.id)}">
             <div class="ico">${l.icon || '📘'}</div>
             <div class="meta">
-              <div class="num">LEKCE ${lessonNumber(l)}${isNext ? '<span class="next-badge">Pokračuj tady</span>' : ''}</div>
+              <div class="num">LEKCE ${lessonNumber(l)}${l.grammar ? ' · <span class="gtag">GRAMATIKA</span>' : ''}${isNext ? '<span class="next-badge">Pokračuj tady</span>' : ''}</div>
               <div class="t">${esc(l.title)}</div>
               <div class="d">${l.phrases.length} ${phraseWord(l.phrases.length)}</div>
               <div class="bar"><i style="width:${pct}%"></i></div>
@@ -2406,12 +2871,12 @@ function renderLesson(lesson) {
       <button class="icon-btn" data-go="#/" aria-label="Zpět">←</button>
       <div style="flex:1;min-width:0">
         <h1>${lesson.icon || ''} ${esc(lesson.title)}</h1>
-        <div class="sub">Lekce ${lessonNumber(lesson)} · ${lesson.phrases.length} ${phraseWord(lesson.phrases.length)} · ${pct} % hotovo</div>
+        <div class="sub">Lekce ${lessonNumber(lesson)}${lesson.grammar ? ' · gramatika' : ''} · ${lesson.phrases.length} ${phraseWord(lesson.phrases.length)} · ${pct} % hotovo</div>
       </div>
     </div></header>
     <main><div class="wrap">
-      ${lesson.notes && lesson.notes.length ? `<details class="notes"${pct < 30 ? ' open' : ''}>
-        <summary>📖 Než začneš</summary>
+      ${lesson.notes && lesson.notes.length ? `<details class="notes${lesson.grammar ? ' gnotes' : ''}"${pct < 30 || lesson.grammar ? ' open' : ''}>
+        <summary>${lesson.grammar ? '📐 Výklad' : '📖 Než začneš'}</summary>
         <ul>${lesson.notes.map(n => `<li>${md(n)}</li>`).join('')}</ul>
       </details>` : ''}
       ${(lesson.dialogs || []).map((d, di) => `<div class="dlg-card">
