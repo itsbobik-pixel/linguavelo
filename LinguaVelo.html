@@ -112,6 +112,25 @@
   .bar > i { display: block; height: 100%; background: var(--accent); border-radius: 3px; transition: width .4s; }
   .pct { font-weight: 800; font-size: 0.95em; color: var(--accent); min-width: 42px; text-align: right; }
 
+  .level-head { margin: 26px 2px 10px; }
+  .level-head:first-of-type { margin-top: 0; }
+  .level-head .lt { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; }
+  .level-head .ln { font-size: 0.72em; font-weight: 800; color: var(--accent); text-transform: uppercase; letter-spacing: 0.08em; }
+  .level-head h2 { font-size: 1.1em; font-weight: 800; letter-spacing: -0.01em; margin-top: 2px; }
+  .level-head p { font-size: 0.8em; color: var(--text-2); margin-top: 3px; line-height: 1.4; }
+  .level-head .lp { font-size: 0.8em; font-weight: 700; color: var(--text-2); white-space: nowrap; }
+  .lesson .num { font-size: 0.7em; font-weight: 700; color: var(--text-3); }
+  .lesson.next { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft), var(--shadow); }
+  .next-badge { display: inline-block; font-size: 0.68em; font-weight: 800; color: #fff; background: var(--accent); border-radius: 999px; padding: 2px 8px; margin-left: 6px; vertical-align: 2px; }
+  .notes { background: var(--surface); border: 1px solid var(--border); border-left: 4px solid var(--accent); border-radius: var(--radius); margin-bottom: 14px; box-shadow: var(--shadow); }
+  .notes summary { padding: 13px 14px; font-weight: 700; cursor: pointer; list-style: none; display: flex; justify-content: space-between; }
+  .notes summary::-webkit-details-marker { display: none; }
+  .notes summary::after { content: '▾'; color: var(--text-3); transition: transform .2s; }
+  .notes[open] summary::after { transform: rotate(180deg); }
+  .notes ul { padding: 0 16px 14px 32px; display: flex; flex-direction: column; gap: 8px; font-size: 0.9em; line-height: 1.5; color: var(--text-2); }
+  .notes b { color: var(--text); }
+  .next-lesson { display: flex; align-items: center; gap: 12px; width: 100%; margin-top: 18px; padding: 14px; border-radius: var(--radius); background: var(--accent); color: #fff; text-align: left; font-weight: 700; }
+  .next-lesson small { display: block; font-weight: 500; opacity: 0.85; font-size: 0.8em; }
   .empty { text-align: center; color: var(--text-2); padding: 40px 16px; font-size: 0.9em; line-height: 1.5; }
 
   /* ── LESSON ── */
@@ -228,16 +247,450 @@
 
 <script>
 // ═══════════════════════════════════════════════════════════
-//  OBSAH — lekce a fráze
+//  OBSAH — úrovně, lekce a fráze
+//  notes = krátký úvod / gramatika k lekci (**tučně**)
 //  src  = česká nebo anglická fráze (jazyk se pozná sám, nebo lang: 'cs' / 'en')
 //  it   = italský překlad
 //  id   = trvalé ID (na něm visí pokrok, neměnit)
 // ═══════════════════════════════════════════════════════════
+const LEVELS = [
+  { id: "l1", title: "Úplné základy", desc: "Pozdravy, zdvořilost, já/ty, čísla. Kostra všeho dalšího." },
+  { id: "l2", title: "První rozhovory", desc: "Jak se máš, seznámení, mám / chci / můžu, když nerozumíš, čas." },
+  { id: "l3", title: "Small talk", desc: "Povídání s lidmi: co je nového, počasí, co se ti líbí, co jsi dělal, plány." },
+  { id: "l4", title: "Práce v hostelu", desc: "Check-in, pravidla, telefon a rezervace, řešení problémů." },
+  { id: "l5", title: "Pomoc a cesta po městě", desc: "Kde je…, popis cesty, doprava, nakupování." },
+  { id: "l6", title: "Volný čas", desc: "Posilovna, tělo a pár slov, co v učebnici nenajdeš." },
+];
+
 const LESSONS = [
   {
-    id: 'hotel',
-    title: 'Hostel – recepce',
-    icon: '🏨',
+    id: "pozdravy", level: "l1", title: "Ciao! Pozdravy", icon: "👋",
+    notes: [
+      "**Ciao** = ahoj i čau – při příchodu i odchodu. V hostelu a mezi kamarády úplně normální.",
+      "**Buongiorno** se říká zhruba do odpoledne, potom **Buonasera**. **Buonanotte** jen když jdeš spát.",
+      "**Salve** je neutrální „dobrý den“ – hodí se, když nevíš, jestli tykat, nebo vykat.",
+    ],
+    phrases: [
+      { id: "pozdravy-1", src: "Hi / Bye", it: "Ciao" },
+      { id: "pozdravy-2", src: "Good morning / Good day", it: "Buongiorno" },
+      { id: "pozdravy-3", src: "Good evening", it: "Buonasera" },
+      { id: "pozdravy-4", src: "Good night", it: "Buonanotte" },
+      { id: "pozdravy-5", src: "Hello (neutral)", it: "Salve" },
+      { id: "pozdravy-6", src: "Goodbye", it: "Arrivederci" },
+      { id: "denni-7", src: "See you soon", it: "A presto" },
+      { id: "pozdravy-7", src: "See you later", it: "A dopo" },
+      { id: "pozdravy-8", src: "See you tomorrow", it: "A domani" },
+      { id: "pozdravy-9", src: "See you!", it: "Ci vediamo!" },
+      { id: "denni-11", src: "Hi everyone", it: "Ciao a tutti" },
+      { id: "denni-9", src: "Welcome back", it: "Bentornato!" },
+      { id: "pozdravy-10", src: "Have a nice day!", it: "Buona giornata!" },
+      { id: "pozdravy-11", src: "Have a nice evening!", it: "Buona serata!" },
+    ],
+  },
+  {
+    id: "zdvorilost", level: "l1", title: "Prosím, děkuju, promiň", icon: "🙏",
+    notes: [
+      "**Prego** má víc významů: „není zač“, „prosím, pojďte dál“ i „prosím?“, když ti něco podávají.",
+      "**Scusa** = promiň (tykání), **Scusi** = promiňte (vykání). Obojí funguje i jako oslovení: „Scusi, …?“",
+      "**Mi dispiace** = je mi líto (omluva, soucit). Na drobnosti stačí scusa.",
+    ],
+    phrases: [
+      { id: "zdvorilost-1", src: "Yes / No", it: "Sì / No" },
+      { id: "zdvorilost-2", src: "Please", it: "Per favore" },
+      { id: "zdvorilost-3", src: "Thank you", it: "Grazie" },
+      { id: "denni-5", src: "Thank you so much", it: "Grazie mille" },
+      { id: "denni-6", src: "You are welcome", it: "Prego" },
+      { id: "zdvorilost-4", src: "Don't mention it", it: "Di niente" },
+      { id: "zdvorilost-5", src: "Sorry / Excuse me", it: "Scusa" },
+      { id: "zdvorilost-6", src: "Excuse me (formal)", it: "Scusi" },
+      { id: "zdvorilost-7", src: "I'm sorry", it: "Mi dispiace" },
+      { id: "zdvorilost-8", src: "Okay / All right", it: "Va bene" },
+      { id: "denni-2", src: "For sure!", it: "Certo!" },
+      { id: "denni-3", src: "No problem", it: "Nessun problema" },
+      { id: "zdvorilost-9", src: "Of course, no problem", it: "Certo, nessun problema" },
+      { id: "zdvorilost-10", src: "May I come in? / Excuse me (to pass)", it: "Permesso?" },
+    ],
+  },
+  {
+    id: "essere", level: "l1", title: "Já, ty, on – sloveso být", icon: "🧍",
+    notes: [
+      "Zájmena (io, tu…) Italové většinou **vynechávají** – tvar slovesa už řekne kdo: „Sono Bob“ = Jsem Bob.",
+      "**Essere** (být): io **sono**, tu **sei**, lui/lei **è**, noi **siamo**, voi **siete**, loro **sono**.",
+      "**Lei** může znamenat „ona“ i zdvořilé **„Vy“**: „Lei è italiano?“ = Jste Ital?",
+    ],
+    phrases: [
+      { id: "zaklad-3", src: "I", it: "Io" },
+      { id: "zaklad-5", src: "You (one person)", it: "Tu" },
+      { id: "zaklad-7", src: "He", it: "Lui" },
+      { id: "zaklad-8", src: "She", it: "Lei" },
+      { id: "zaklad-4", src: "We", it: "Noi" },
+      { id: "zaklad-6", src: "You (more people)", it: "Voi" },
+      { id: "zaklad-9", src: "They", it: "Loro" },
+      { id: "essere-1", src: "I am Bob", it: "Sono Bob" },
+      { id: "essere-2", src: "I am Czech", it: "Sono ceco" },
+      { id: "essere-3", src: "Are you Italian?", it: "Sei italiano?" },
+      { id: "essere-4", src: "He is a friend of mine", it: "Lui è un mio amico" },
+      { id: "essere-5", src: "She is very nice", it: "Lei è molto simpatica" },
+      { id: "essere-6", src: "We are in La Spezia", it: "Siamo a La Spezia" },
+      { id: "essere-7", src: "Where are you from? (plural)", it: "Di dove siete?" },
+      { id: "essere-8", src: "They are tourists", it: "Sono turisti" },
+      { id: "denni-4", src: "That's not possible", it: "Non è possibile" },
+    ],
+  },
+  {
+    id: "slovicka", level: "l1", title: "Malá slovíčka, co lepí věty", icon: "🧱",
+    notes: [
+      "Tahle slovíčka uslyšíš v každé větě – vyplatí se je umět bez přemýšlení.",
+      "**Perché** = proč i protože: „Perché? – Perché sono stanco.“",
+      "**Però** = ale / však – trochu důraznější než **ma**, často na začátku věty.",
+    ],
+    phrases: [
+      { id: "slovicka-1", src: "And", it: "E" },
+      { id: "zaklad-1", src: "But", it: "Ma" },
+      { id: "zaklad-2", src: "Or", it: "O" },
+      { id: "slovicka-2", src: "Also / too", it: "Anche" },
+      { id: "zaklad-14", src: "For", it: "Per" },
+      { id: "zaklad-15", src: "However", it: "Però" },
+      { id: "slovicka-3", src: "Very / a lot", it: "Molto" },
+      { id: "zaklad-20", src: "Almost", it: "Quasi" },
+      { id: "zaklad-21", src: "Obviously", it: "Ovviamente" },
+      { id: "zaklad-17", src: "What", it: "Cosa" },
+      { id: "zaklad-19", src: "How?", it: "Come?" },
+      { id: "slovicka-4", src: "Where?", it: "Dove?" },
+      { id: "slovicka-5", src: "When?", it: "Quando?" },
+      { id: "slovicka-6", src: "Who?", it: "Chi?" },
+      { id: "zaklad-18", src: "Why / Because", it: "Perché" },
+      { id: "slovicka-7", src: "How much?", it: "Quanto?" },
+      { id: "zaklad-24", src: "This (masculine / feminine)", it: "Questo / Questa" },
+      { id: "slovicka-8", src: "Now", it: "Adesso" },
+      { id: "slovicka-9", src: "Then / afterwards", it: "Poi" },
+    ],
+  },
+  {
+    id: "cisla", level: "l1", title: "Čísla a kolik to stojí", icon: "🔢",
+    notes: [
+      "1–10: uno, due, tre, quattro, cinque, sei, sette, otto, nove, dieci.",
+      "11–20: undici, dodici, tredici, quattordici, quindici, sedici, diciassette, diciotto, diciannove, venti.",
+      "Desítky: trenta, quaranta, cinquanta, sessanta, settanta, ottanta, novanta, **cento** (100).",
+      "**Euro** se v množném čísle nemění: „dieci euro“.",
+    ],
+    phrases: [
+      { id: "cisla-1", src: "One, two, three", it: "Uno, due, tre" },
+      { id: "cisla-2", src: "Four, five, six", it: "Quattro, cinque, sei" },
+      { id: "cisla-3", src: "Seven, eight, nine, ten", it: "Sette, otto, nove, dieci" },
+      { id: "cisla-4", src: "Fifteen", it: "Quindici" },
+      { id: "cisla-5", src: "Twenty", it: "Venti" },
+      { id: "cisla-6", src: "Thirty euros", it: "Trenta euro" },
+      { id: "cisla-7", src: "How much is it?", it: "Quanto costa?" },
+      { id: "cisla-8", src: "How much is it altogether?", it: "Quant'è in tutto?" },
+      { id: "cisla-9", src: "It's twenty-five euros a night", it: "Sono venticinque euro a notte" },
+      { id: "cisla-10", src: "The tourist tax is two euros", it: "La tassa di soggiorno è di due euro" },
+      { id: "cisla-11", src: "Room number six", it: "La camera numero sei" },
+      { id: "cisla-12", src: "Bed number three", it: "Il letto numero tre" },
+    ],
+  },
+  {
+    id: "jaksemas", level: "l2", title: "Jak se máš?", icon: "😊",
+    notes: [
+      "**Come stai?** (tykání) / **Come sta?** (vykání). Odpověz a otázku vrať: „Bene, grazie. **E tu?**“",
+      "**Tutto bene?** = Všechno v pohodě? – slyšíš ho pořád, skoro jako pozdrav.",
+      "Koncovka podle rodu: muž **stanco**, žena **stanca**. -issimo = hodně: **stanchissimo**.",
+    ],
+    phrases: [
+      { id: "jaksemas-1", src: "How's it going?", it: "Come va?" },
+      { id: "jaksemas-2", src: "How are you? (formal)", it: "Come sta?" },
+      { id: "jaksemas-3", src: "Good, thanks. And you?", it: "Bene, grazie. E tu?" },
+      { id: "jaksemas-4", src: "Very well!", it: "Benissimo!" },
+      { id: "jaksemas-5", src: "Not bad", it: "Non c'è male" },
+      { id: "jaksemas-6", src: "So-so", it: "Così così" },
+      { id: "jaksemas-7", src: "Everything okay?", it: "Tutto bene?" },
+      { id: "jaksemas-8", src: "All good!", it: "Tutto a posto!" },
+      { id: "jaksemas-9", src: "Great! (really well)", it: "Alla grande!" },
+      { id: "jaksemas-10", src: "I'm tired", it: "Sono stanco" },
+      { id: "denni-15", src: "I'm so tired", it: "Sono stanchissimo" },
+      { id: "modalni-7", src: "I feel", it: "Mi sento" },
+      { id: "jaksemas-11", src: "I feel good", it: "Mi sento bene" },
+      { id: "jaksemas-12", src: "I'm a bit sick", it: "Sono un po' malato" },
+    ],
+  },
+  {
+    id: "seznameni", level: "l2", title: "Seznámení", icon: "🤝",
+    notes: [
+      "**Mi chiamo…** = jmenuji se (doslova „volám se“). **Come ti chiami?** = jak se jmenuješ?",
+      "**Piacere!** = těší mě – říká se při podání ruky.",
+      "**Di dove sei?** = odkud jsi? „Sono **di** Brno“ (město), „Sono **della** Repubblica Ceca“ (země).",
+      "Přivlastňovací: **mio / mia** (můj / moje), **tuo / tua** (tvůj / tvoje) – podle rodu věci, ne majitele.",
+    ],
+    phrases: [
+      { id: "seznameni-1", src: "My name is Bob", it: "Mi chiamo Bob" },
+      { id: "seznameni-2", src: "And you, what's your name?", it: "E tu, come ti chiami?" },
+      { id: "seznameni-3", src: "Nice to meet you!", it: "Piacere!" },
+      { id: "seznameni-4", src: "Where are you from?", it: "Di dove sei?" },
+      { id: "seznameni-5", src: "I'm from the Czech Republic", it: "Sono della Repubblica Ceca" },
+      { id: "seznameni-6", src: "I live in La Spezia", it: "Abito a La Spezia" },
+      { id: "seznameni-7", src: "What do you do for work?", it: "Che lavoro fai?" },
+      { id: "seznameni-8", src: "I work in a hostel", it: "Lavoro in un ostello" },
+      { id: "seznameni-9", src: "How long have you been here?", it: "Da quanto tempo sei qui?" },
+      { id: "seznameni-10", src: "I've been here for two months", it: "Sono qui da due mesi" },
+      { id: "seznameni-11", src: "How long are you staying?", it: "Quanto tempo rimani?" },
+      { id: "seznameni-12", src: "Is it your first time in Italy?", it: "È la tua prima volta in Italia?" },
+      { id: "seznameni-13", src: "Are you travelling alone?", it: "Viaggi da solo?" },
+      { id: "zaklad-10", src: "My", it: "Mio / Mia" },
+      { id: "zaklad-11", src: "Your", it: "Tuo / Tua" },
+    ],
+  },
+  {
+    id: "avere", level: "l2", title: "Mám – sloveso avere", icon: "🎒",
+    notes: [
+      "**Avere** (mít): io **ho**, tu **hai**, lui/lei **ha**, noi **abbiamo**, voi **avete**, loro **hanno**. „H“ se nevyslovuje.",
+      "Italové hlad, žízeň a zimu **mají**: **ho fame, ho sete, ho freddo, ho caldo, ho sonno**.",
+      "**Ho bisogno di…** = potřebuji… · **Hai ragione** = máš pravdu.",
+    ],
+    phrases: [
+      { id: "avere-1", src: "I'm hungry", it: "Ho fame" },
+      { id: "avere-2", src: "I'm thirsty", it: "Ho sete" },
+      { id: "avere-3", src: "I'm cold", it: "Ho freddo" },
+      { id: "avere-4", src: "I'm hot", it: "Ho caldo" },
+      { id: "avere-5", src: "I'm sleepy", it: "Ho sonno" },
+      { id: "avere-6", src: "Do you have time?", it: "Hai tempo?" },
+      { id: "avere-7", src: "I don't have time", it: "Non ho tempo" },
+      { id: "avere-8", src: "I have a question", it: "Ho una domanda" },
+      { id: "avere-9", src: "Do you have a reservation?", it: "Hai una prenotazione?" },
+      { id: "avere-10", src: "How old are you?", it: "Quanti anni hai?" },
+      { id: "avere-11", src: "I need help", it: "Ho bisogno di aiuto" },
+      { id: "avere-12", src: "You're right", it: "Hai ragione" },
+    ],
+  },
+  {
+    id: "modalni", level: "l2", title: "Chci, můžu, musím", icon: "🙋",
+    notes: [
+      "**Posso…?** = můžu…? Nejužitečnější slovo vůbec: „Posso entrare? Posso pagare? Posso aiutarti?“",
+      "**Voglio** = chci (přímé), **Vorrei** = chtěl bych (zdvořilé – v baru a obchodě vždycky vorrei).",
+      "Po posso / voglio / devo jde infinitiv: „Devo **andare**“ = musím jít.",
+    ],
+    phrases: [
+      { id: "modalni-1", src: "Can I…?", it: "Posso…?" },
+      { id: "modalni-15", src: "Can I help you?", it: "Posso aiutarti?" },
+      { id: "modalni-2", src: "I want", it: "Voglio" },
+      { id: "modalni-16", src: "I would like a coffee", it: "Vorrei un caffè" },
+      { id: "modalni-3", src: "I need", it: "Mi serve" },
+      { id: "modalni-17", src: "I need a towel", it: "Mi serve un asciugamano" },
+      { id: "modalni-4", src: "I have to", it: "Devo" },
+      { id: "modalni-18", src: "I have to go", it: "Devo andare" },
+      { id: "modalni-5", src: "Do you want…?", it: "Vuoi…?" },
+      { id: "modalni-19", src: "Can you help me?", it: "Puoi aiutarmi?" },
+      { id: "zaklad-16", src: "Go", it: "Andare" },
+      { id: "modalni-6", src: "Let's go", it: "Andiamo" },
+      { id: "modalni-11", src: "Is it okay?", it: "Va bene?" },
+      { id: "modalni-8", src: "I hope", it: "Spero" },
+      { id: "modalni-9", src: "I hope so", it: "Lo spero" },
+      { id: "modalni-10", src: "I thought", it: "Pensavo" },
+    ],
+  },
+  {
+    id: "italstina", level: "l2", title: "Nerozumím – učím se italsky", icon: "📚",
+    notes: [
+      "Nestyď se říct, že nerozumíš – Italové rádi zpomalí. **Più piano, per favore** = pomaleji, prosím.",
+      "**Come si dice…?** a **Cosa significa…?** jsou tvoji nejlepší kamarádi.",
+      "**Sto imparando** = (právě) se učím. **stare + -ando / -endo** = děj, který zrovna probíhá.",
+    ],
+    phrases: [
+      { id: "italstina-10", src: "I don't understand", it: "Non capisco" },
+      { id: "italstina-11", src: "Can you repeat, please?", it: "Puoi ripetere, per favore?" },
+      { id: "italstina-12", src: "Slower, please", it: "Più piano, per favore" },
+      { id: "italstina-7", src: "How do you say…?", it: "Come si dice…?" },
+      { id: "italstina-8", src: "What does \"…\" mean?", it: "Cosa significa \"…\"?" },
+      { id: "italstina-13", src: "Do you speak English?", it: "Parli inglese?" },
+      { id: "italstina-9", src: "I thought you could speak English", it: "Pensavo che parlassi inglese" },
+      { id: "italstina-14", src: "I speak a little Italian", it: "Parlo un po' di italiano" },
+      { id: "italstina-15", src: "I'm learning Italian", it: "Sto imparando l'italiano" },
+      { id: "italstina-16", src: "Is that correct?", it: "È giusto?" },
+      { id: "italstina-1", src: "I try to practice", it: "Provo a esercitarmi" },
+      { id: "italstina-2", src: "I practice my Italian", it: "Pratico il mio italiano" },
+      { id: "italstina-3", src: "I have to practice my Italian", it: "Devo esercitarmi con l'italiano" },
+      { id: "italstina-4", src: "I need to practice my Italian", it: "Ho bisogno di esercitarmi con l'italiano" },
+      { id: "italstina-5", src: "I am writing down everything I want to say in Italian", it: "Mi scrivo tutto quello che voglio dire in italiano" },
+      { id: "italstina-6", src: "My Italian is better than yours", it: "Il mio italiano è meglio del tuo" },
+    ],
+  },
+  {
+    id: "cas", level: "l2", title: "Kdy? Čas a dny", icon: "⏰",
+    notes: [
+      "**Che ore sono?** = kolik je hodin? „**Sono le** tre“ (3:00), ale „**È l'**una“ (1:00).",
+      "**Alle** otto = v osm. **A che ora?** = v kolik?",
+      "**Tra** due minuti = za dvě minuty (budoucnost). **Fa** = před: „due giorni fa“ = před dvěma dny.",
+    ],
+    phrases: [
+      { id: "cas-1", src: "What time is it?", it: "Che ore sono?" },
+      { id: "cas-2", src: "It's three o'clock", it: "Sono le tre" },
+      { id: "cas-3", src: "It's half past eight", it: "Sono le otto e mezza" },
+      { id: "cas-4", src: "At what time?", it: "A che ora?" },
+      { id: "cas-5", src: "At eight", it: "Alle otto" },
+      { id: "cas-6", src: "Today / tomorrow / yesterday", it: "Oggi / domani / ieri" },
+      { id: "zaklad-23", src: "This evening / Tonight", it: "Stasera" },
+      { id: "cas-7", src: "This morning", it: "Stamattina" },
+      { id: "cas-8", src: "Later", it: "Più tardi" },
+      { id: "denni-10", src: "In two minutes", it: "Tra due minuti" },
+      { id: "cas-9", src: "Two days ago", it: "Due giorni fa" },
+      { id: "cas-10", src: "Always / never", it: "Sempre / mai" },
+      { id: "cas-11", src: "Monday, Tuesday, Wednesday", it: "Lunedì, martedì, mercoledì" },
+      { id: "cas-12", src: "Thursday, Friday, Saturday, Sunday", it: "Giovedì, venerdì, sabato, domenica" },
+      { id: "cas-13", src: "This weekend", it: "Questo fine settimana" },
+    ],
+  },
+  {
+    id: "smalltalk", level: "l3", title: "Small talk – co je nového", icon: "💬",
+    notes: [
+      "Typický rozjezd: „Ciao! **Come va?** – Bene! **Cosa fai oggi?**“",
+      "**Fare** (dělat): faccio, fai, fa, facciamo, fate, fanno. „Cosa fai?“ = co děláš / co budeš dělat.",
+      "Pro blízkou budoucnost stačí přítomný čas: „Stasera **esco**“ = dnes večer jdu ven.",
+    ],
+    phrases: [
+      { id: "denni-18", src: "Co budeš dnes dělat?", it: "Cosa fai oggi?" },
+      { id: "smalltalk-1", src: "What are you doing tonight?", it: "Cosa fai stasera?" },
+      { id: "smalltalk-2", src: "Any plans for the weekend?", it: "Hai programmi per il weekend?" },
+      { id: "smalltalk-3", src: "Anything new?", it: "Novità?" },
+      { id: "denni-17", src: "Something new in your life?", it: "Qualcosa di nuovo nella tua vita?" },
+      { id: "zaklad-12", src: "New", it: "Nuovo / Nuova" },
+      { id: "zaklad-13", src: "Life", it: "La vita" },
+      { id: "smalltalk-4", src: "How was your day?", it: "Com'è andata la giornata?" },
+      { id: "smalltalk-5", src: "What did you do today?", it: "Cosa hai fatto oggi?" },
+      { id: "smalltalk-6", src: "Nothing special", it: "Niente di speciale" },
+      { id: "denni-1", src: "Really?", it: "Davvero?" },
+      { id: "smalltalk-7", src: "Seriously?", it: "Sul serio?" },
+      { id: "smalltalk-8", src: "That's so cool!", it: "Che figata!" },
+      { id: "smalltalk-9", src: "How lucky!", it: "Che fortuna!" },
+      { id: "smalltalk-10", src: "I'm going out tonight", it: "Stasera esco" },
+      { id: "smalltalk-11", src: "Where are you going next?", it: "Dove vai dopo?" },
+      { id: "denni-21", src: "My goals", it: "I miei obiettivi" },
+    ],
+  },
+  {
+    id: "pocasi", level: "l3", title: "Počasí", icon: "☀️",
+    notes: [
+      "Počasí se říká přes **fare**: „**Fa** caldo / freddo“ = je horko / zima.",
+      "**C'è** il sole = svítí slunce (doslova „je tu slunce“). **Piove** = prší.",
+      "**Che…!** = to je ale…! „Che caldo!“ = to je vedro!",
+    ],
+    phrases: [
+      { id: "pocasi-1", src: "What's the weather like?", it: "Che tempo fa?" },
+      { id: "pocasi-2", src: "It's hot", it: "Fa caldo" },
+      { id: "pocasi-3", src: "It's cold", it: "Fa freddo" },
+      { id: "pocasi-4", src: "It's sunny", it: "C'è il sole" },
+      { id: "pocasi-5", src: "It's raining", it: "Piove" },
+      { id: "pocasi-6", src: "It's so hot today!", it: "Che caldo oggi!" },
+      { id: "pocasi-7", src: "What beautiful weather!", it: "Che bel tempo!" },
+      { id: "pocasi-8", src: "Is it going to rain tomorrow?", it: "Domani piove?" },
+      { id: "pocasi-9", src: "It's windy", it: "C'è vento" },
+      { id: "pocasi-10", src: "The sea is calm today", it: "Oggi il mare è calmo" },
+      { id: "pocasi-11", src: "Take an umbrella", it: "Prendi l'ombrello" },
+      { id: "denni-16", src: "The bugs are horrible", it: "Gli insetti sono terribili" },
+      { id: "pocasi-12", src: "The mosquitoes are biting me", it: "Le zanzare mi pungono" },
+    ],
+  },
+  {
+    id: "libise", level: "l3", title: "Líbí se mi", icon: "❤️",
+    notes: [
+      "**Mi piace** = líbí se mi / chutná mi (doslova „mně se líbí“). Víc věcí: **mi piacciono** – „Mi piacciono le Cinque Terre.“",
+      "**Ti piace?** = líbí se ti? → „Sì, mi piace molto!“ / „No, non mi piace.“",
+      "**Adoro** = zbožňuju · **Preferisco** = mám radši · **Anche a me** = mně taky.",
+    ],
+    phrases: [
+      { id: "libise-1", src: "I like it", it: "Mi piace" },
+      { id: "libise-2", src: "I don't like it", it: "Non mi piace" },
+      { id: "libise-3", src: "Do you like La Spezia?", it: "Ti piace La Spezia?" },
+      { id: "libise-4", src: "I really like it here", it: "Mi piace molto qui" },
+      { id: "denni-14", src: "I love this place", it: "Adoro questo posto" },
+      { id: "libise-5", src: "I love the Cinque Terre", it: "Mi piacciono le Cinque Terre" },
+      { id: "libise-6", src: "How beautiful!", it: "Che bello!" },
+      { id: "libise-7", src: "It's very beautiful", it: "È bellissimo" },
+      { id: "libise-8", src: "I prefer the sea", it: "Preferisco il mare" },
+      { id: "libise-9", src: "What do you like to do?", it: "Cosa ti piace fare?" },
+      { id: "libise-10", src: "I like going to the gym", it: "Mi piace andare in palestra" },
+      { id: "libise-11", src: "Me too!", it: "Anche a me!" },
+      { id: "libise-12", src: "Me neither", it: "Neanche a me" },
+      { id: "zaklad-25", src: "Star", it: "Stella" },
+      { id: "zaklad-26", src: "Song / track", it: "Brano" },
+    ],
+  },
+  {
+    id: "minuly", level: "l3", title: "Bylo to super – minulý čas", icon: "📸",
+    notes: [
+      "Minulý čas = **avere / essere + příčestí**: „**Ho** mangiato“ = jedl jsem, „**Sono** andato“ = šel jsem.",
+      "S **essere** jdou hlavně slovesa pohybu a změny (andare, venire, arrivare, partire, stare). Příčestí se pak shoduje: on **andato**, ona **andata**.",
+      "Příčestí: -are → **-ato**, -ere → **-uto**, -ire → **-ito**. Nepravidelná: **fatto, visto, preso, stato**.",
+    ],
+    phrases: [
+      { id: "denni-12", src: "It was great", it: "È stato bellissimo" },
+      { id: "denni-13", src: "It was amazing", it: "È stato fantastico" },
+      { id: "minuly-1", src: "How was it?", it: "Com'è stato?" },
+      { id: "minuly-2", src: "What did you do yesterday?", it: "Cosa hai fatto ieri?" },
+      { id: "minuly-3", src: "I went to Riomaggiore", it: "Sono andato a Riomaggiore" },
+      { id: "minuly-4", src: "We ate really well", it: "Abbiamo mangiato benissimo" },
+      { id: "minuly-5", src: "I saw the sunset", it: "Ho visto il tramonto" },
+      { id: "minuly-6", src: "Did you sleep well?", it: "Hai dormito bene?" },
+      { id: "minuly-7", src: "I slept badly", it: "Ho dormito male" },
+      { id: "minuly-8", src: "When did you arrive?", it: "Quando sei arrivato?" },
+      { id: "minuly-9", src: "I've already been there", it: "Ci sono già stato" },
+      { id: "minuly-10", src: "I forgot", it: "Ho dimenticato" },
+      { id: "minuly-11", src: "I didn't understand", it: "Non ho capito" },
+      { id: "zaklad-22", src: "Finally", it: "Finalmente" },
+    ],
+  },
+  {
+    id: "jidlo", level: "l3", title: "Jídlo, bar a aperitivo", icon: "🍝",
+    notes: [
+      "V baru: „**Vorrei** uno spritz“ nebo jednoduše „**Per me** un caffè“.",
+      "**Prendo…** = dám si… (doslova „vezmu“). **Cosa prendi?** = co si dáš?",
+      "Přípitek: **Salute!** nebo **Cin cin!**",
+    ],
+    phrases: [
+      { id: "denni-19", src: "Dobrou chuť", it: "Buon appetito" },
+      { id: "denni-20", src: "We are having an aperitivo this evening", it: "Stasera facciamo un aperitivo" },
+      { id: "jidlo-1", src: "What are you having?", it: "Cosa prendi?" },
+      { id: "jidlo-2", src: "I'll have a spritz", it: "Prendo uno spritz" },
+      { id: "jidlo-3", src: "A coffee for me, please", it: "Per me un caffè, per favore" },
+      { id: "jidlo-4", src: "Cheers!", it: "Salute! / Cin cin!" },
+      { id: "jidlo-5", src: "It's delicious!", it: "È buonissimo!" },
+      { id: "jidlo-6", src: "The bill, please", it: "Il conto, per favore" },
+      { id: "mesto-3", src: "Takeaway", it: "Da portare via" },
+      { id: "jidlo-7", src: "A table for two?", it: "Un tavolo per due?" },
+      { id: "jidlo-8", src: "I'm vegetarian", it: "Sono vegetariano" },
+      { id: "jidlo-9", src: "Is there any coffee left?", it: "C'è ancora del caffè?" },
+      { id: "jidlo-10", src: "I'm full", it: "Sono pieno" },
+    ],
+  },
+  {
+    id: "plany", level: "l3", title: "Plány a domlouvání", icon: "📅",
+    notes: [
+      "**Ti va di…?** = máš chuť…? Nejpřirozenější pozvání: „Ti va di prendere un caffè?“",
+      "**Ci vediamo** = uvidíme se / sejdeme se: „Ci vediamo alle otto davanti all'ostello.“",
+      "Zdvořile odmítnout: **Magari un'altra volta** = třeba jindy.",
+    ],
+    phrases: [
+      { id: "plany-1", src: "Do you feel like getting a coffee?", it: "Ti va di prendere un caffè?" },
+      { id: "plany-2", src: "Do you want to come with us?", it: "Vuoi venire con noi?" },
+      { id: "plany-3", src: "We're going to the beach, are you coming?", it: "Andiamo in spiaggia, vieni?" },
+      { id: "plany-4", src: "Gladly!", it: "Volentieri!" },
+      { id: "plany-5", src: "Why not?", it: "Perché no?" },
+      { id: "plany-6", src: "Maybe another time", it: "Magari un'altra volta" },
+      { id: "plany-7", src: "Where shall we meet?", it: "Dove ci vediamo?" },
+      { id: "plany-8", src: "Let's meet at eight", it: "Ci vediamo alle otto" },
+      { id: "plany-9", src: "In front of the hostel", it: "Davanti all'ostello" },
+      { id: "modalni-13", src: "Are you ready?", it: "Sei pronto?" },
+      { id: "modalni-14", src: "I am ready", it: "Sono pronto" },
+      { id: "modalni-12", src: "Am I too early?", it: "Sono troppo in anticipo?" },
+      { id: "plany-10", src: "I'm running late", it: "Sono in ritardo" },
+      { id: "plany-11", src: "Wait for me!", it: "Aspettami!" },
+    ],
+  },
+  {
+    id: "hotel", level: "l4", title: "Check-in a prohlídka hostelu", icon: "🏨",
+    notes: [
+      "V hostelu se běžně **tyká** (tu). Starším hostům nebo po telefonu můžeš vykat: **Lei** + sloveso ve 3. osobě – „**Può** darmi…?“",
+      "**Posso + infinitiv** = nabídka: „Posso aiutar**la**?“ (vykání) / „Posso aiutar**ti**?“ (tykání).",
+      "**Questo / Questa è…** = tohle je… – na prohlídku hostelu ideální.",
+    ],
     phrases: [
       { id: "hotel-1", src: "Welcome to the hostel, my name is Bob", it: "Benvenuti all'ostello, mi chiamo Bob" },
       { id: "hotel-2", src: "What is your name?", it: "Come ti chiami?" },
@@ -264,135 +717,199 @@ const LESSONS = [
     ],
   },
   {
-    id: 'zaklad',
-    title: 'Základní slovíčka',
-    icon: '🧱',
+    id: "pravidla", level: "l4", title: "Pokoj, snídaně a pravidla", icon: "🛏️",
+    notes: [
+      "**Dalle… alle…** = od… do…: „La colazione è dalle 8 alle 10.“",
+      "**Entro** = do (nejpozději): „Il check-out è entro le 10.“",
+      "**Si può / non si può** = smí se / nesmí se: „Non si può fumare in camera.“",
+    ],
     phrases: [
-      { id: "zaklad-1", src: "But", it: "Ma" },
-      { id: "zaklad-2", src: "Or", it: "O" },
-      { id: "zaklad-3", src: "I", it: "Io" },
-      { id: "zaklad-4", src: "We", it: "Noi" },
-      { id: "zaklad-5", src: "You (one person)", it: "Tu" },
-      { id: "zaklad-6", src: "You (more people)", it: "Voi" },
-      { id: "zaklad-7", src: "He", it: "Lui" },
-      { id: "zaklad-8", src: "She", it: "Lei" },
-      { id: "zaklad-9", src: "They", it: "Loro" },
-      { id: "zaklad-10", src: "My", it: "Mio / Mia" },
-      { id: "zaklad-11", src: "Your", it: "Tuo / Tua" },
-      { id: "zaklad-12", src: "New", it: "Nuovo / Nuova" },
-      { id: "zaklad-13", src: "Life", it: "La vita" },
-      { id: "zaklad-14", src: "For", it: "Per" },
-      { id: "zaklad-15", src: "However", it: "Però" },
-      { id: "zaklad-16", src: "Go", it: "Andare" },
-      { id: "zaklad-17", src: "What", it: "Cosa" },
-      { id: "zaklad-18", src: "Why / Because", it: "Perché" },
-      { id: "zaklad-19", src: "How?", it: "Come?" },
-      { id: "zaklad-20", src: "Almost", it: "Quasi" },
-      { id: "zaklad-21", src: "Obviously", it: "Ovviamente" },
-      { id: "zaklad-22", src: "Finally", it: "Finalmente" },
-      { id: "zaklad-23", src: "This evening / Tonight", it: "Stasera" },
-      { id: "zaklad-24", src: "This (masculine / feminine)", it: "Questo / Questa" },
-      { id: "zaklad-25", src: "Star", it: "Stella" },
-      { id: "zaklad-26", src: "Song / track", it: "Brano" },
+      { id: "pravidla-1", src: "Breakfast is from 8 to 10", it: "La colazione è dalle 8 alle 10" },
+      { id: "pravidla-2", src: "Check-out is by 10", it: "Il check-out è entro le 10" },
+      { id: "pravidla-3", src: "Here is your key", it: "Ecco la tua chiave" },
+      { id: "pravidla-4", src: "Your bed is the top one", it: "Il tuo letto è quello sopra" },
+      { id: "pravidla-5", src: "Your bed is the bottom one", it: "Il tuo letto è quello sotto" },
+      { id: "pravidla-6", src: "The Wi-Fi password is on the wall", it: "La password del Wi-Fi è sul muro" },
+      { id: "pravidla-7", src: "You can leave your luggage here", it: "Puoi lasciare i bagagli qui" },
+      { id: "pravidla-8", src: "The lockers are in the room", it: "Gli armadietti sono in camera" },
+      { id: "pravidla-9", src: "Quiet after eleven, please", it: "Silenzio dopo le undici, per favore" },
+      { id: "pravidla-10", src: "You can't smoke in the room", it: "Non si può fumare in camera" },
+      { id: "pravidla-11", src: "You can use the kitchen", it: "Puoi usare la cucina" },
+      { id: "pravidla-12", src: "Please wash your dishes", it: "Per favore, lava i tuoi piatti" },
+      { id: "pravidla-13", src: "Do you need anything else?", it: "Ti serve altro?" },
     ],
   },
   {
-    id: 'modalni',
-    title: 'Chci, můžu, musím',
-    icon: '🙋',
-    phrases: [
-      { id: "modalni-1", src: "Can I…?", it: "Posso…?" },
-      { id: "modalni-2", src: "I want", it: "Voglio" },
-      { id: "modalni-3", src: "I need", it: "Mi serve" },
-      { id: "modalni-4", src: "I have to", it: "Devo" },
-      { id: "modalni-5", src: "Do you want…?", it: "Vuoi…?" },
-      { id: "modalni-6", src: "Let's go", it: "Andiamo" },
-      { id: "modalni-7", src: "I feel", it: "Mi sento" },
-      { id: "modalni-8", src: "I hope", it: "Spero" },
-      { id: "modalni-9", src: "I hope so", it: "Lo spero" },
-      { id: "modalni-10", src: "I thought", it: "Pensavo" },
-      { id: "modalni-11", src: "Is it okay?", it: "Va bene?" },
-      { id: "modalni-12", src: "Am I too early?", it: "Sono troppo in anticipo?" },
-      { id: "modalni-13", src: "Are you ready?", it: "Sei pronto?" },
-      { id: "modalni-14", src: "I am ready", it: "Sono pronto" },
+    id: "telefon", level: "l4", title: "Telefon a rezervace", icon: "📞",
+    notes: [
+      "Do telefonu se hlásí **Pronto?** Za hostel: „Ostello Costello, buongiorno!“",
+      "Po telefonu se spíš **vyká**: „**Ha** una prenotazione?“ = Máte rezervaci?",
+      "**A che nome?** = Na jaké jméno? · **Un attimo** = moment.",
     ],
-  },
-  {
-    id: 'denni',
-    title: 'Každodenní fráze',
-    icon: '💬',
     phrases: [
-      { id: "denni-1", src: "Really?", it: "Davvero?" },
-      { id: "denni-2", src: "For sure!", it: "Certo!" },
-      { id: "denni-3", src: "No problem", it: "Nessun problema" },
-      { id: "denni-4", src: "That's not possible", it: "Non è possibile" },
-      { id: "denni-5", src: "Thank you so much", it: "Grazie mille" },
-      { id: "denni-6", src: "You are welcome", it: "Prego" },
-      { id: "denni-7", src: "See you soon", it: "A presto" },
       { id: "denni-8", src: "Hello? (on the phone)", it: "Pronto?" },
-      { id: "denni-9", src: "Welcome back", it: "Bentornato!" },
-      { id: "denni-10", src: "In two minutes", it: "Tra due minuti" },
-      { id: "denni-11", src: "Hi everyone", it: "Ciao a tutti" },
-      { id: "denni-12", src: "It was great", it: "È stato bellissimo" },
-      { id: "denni-13", src: "It was amazing", it: "È stato fantastico" },
-      { id: "denni-14", src: "I love this place", it: "Adoro questo posto" },
-      { id: "denni-15", src: "I'm so tired", it: "Sono stanchissimo" },
-      { id: "denni-16", src: "The bugs are horrible", it: "Gli insetti sono terribili" },
-      { id: "denni-17", src: "Something new in your life?", it: "Qualcosa di nuovo nella tua vita?" },
-      { id: "denni-18", src: "Co budeš dnes dělat?", it: "Cosa fai oggi?" },
-      { id: "denni-19", src: "Dobrou chuť", it: "Buon appetito" },
-      { id: "denni-20", src: "We are having an aperitivo this evening", it: "Stasera facciamo un aperitivo" },
-      { id: "denni-21", src: "My goals", it: "I miei obiettivi" },
+      { id: "telefon-1", src: "Costello Hostel, good morning!", it: "Ostello Costello, buongiorno!" },
+      { id: "telefon-2", src: "Do you have a reservation? (formal)", it: "Ha una prenotazione?" },
+      { id: "telefon-3", src: "Under what name?", it: "A che nome?" },
+      { id: "telefon-4", src: "For how many nights?", it: "Per quante notti?" },
+      { id: "telefon-5", src: "For how many people?", it: "Per quante persone?" },
+      { id: "telefon-6", src: "For which dates?", it: "Per quali date?" },
+      { id: "telefon-7", src: "We are full tonight", it: "Stasera siamo al completo" },
+      { id: "telefon-8", src: "We have a bed in a dorm", it: "Abbiamo un letto in dormitorio" },
+      { id: "telefon-9", src: "Could you spell it, please?", it: "Può fare lo spelling, per favore?" },
+      { id: "telefon-10", src: "I'll send you a confirmation by email", it: "Le mando una conferma via email" },
+      { id: "telefon-11", src: "Can you call back later?", it: "Può richiamare più tardi?" },
+      { id: "telefon-12", src: "One moment, please", it: "Un attimo, per favore" },
     ],
   },
   {
-    id: 'italstina',
-    title: 'Učím se italsky',
-    icon: '📚',
+    id: "problemy", level: "l4", title: "Problémy a řešení", icon: "🔧",
+    notes: [
+      "**Non funziona** = nefunguje – univerzální: „La doccia non funziona.“",
+      "**Ci penso io** = to vyřeším já / nech to na mně. Super věta pro recepci.",
+      "**Subito** = hned: „Lo sistemo subito.“",
+    ],
     phrases: [
-      { id: "italstina-1", src: "I try to practice", it: "Provo a esercitarmi" },
-      { id: "italstina-2", src: "I practice my Italian", it: "Pratico il mio italiano" },
-      { id: "italstina-3", src: "I have to practice my Italian", it: "Devo esercitarmi con l'italiano" },
-      { id: "italstina-4", src: "I need to practice my Italian", it: "Ho bisogno di esercitarmi con l'italiano" },
-      { id: "italstina-5", src: "I am writing down everything I want to say in Italian", it: "Mi scrivo tutto quello che voglio dire in italiano" },
-      { id: "italstina-6", src: "My Italian is better than yours", it: "Il mio italiano è meglio del tuo" },
-      { id: "italstina-7", src: "How do you say…?", it: "Come si dice…?" },
-      { id: "italstina-8", src: "What does \"…\" mean?", it: "Cosa significa \"…\"?" },
-      { id: "italstina-9", src: "I thought you could speak English", it: "Pensavo che parlassi inglese" },
+      { id: "problemy-1", src: "Is there a problem?", it: "C'è un problema?" },
+      { id: "problemy-2", src: "The shower doesn't work", it: "La doccia non funziona" },
+      { id: "problemy-3", src: "There's no hot water", it: "Non c'è acqua calda" },
+      { id: "problemy-4", src: "The Wi-Fi isn't working", it: "Il Wi-Fi non funziona" },
+      { id: "problemy-5", src: "I'll take care of it", it: "Ci penso io" },
+      { id: "problemy-6", src: "I'll fix it right away", it: "Lo sistemo subito" },
+      { id: "problemy-7", src: "Sorry for the inconvenience", it: "Mi dispiace per il disagio" },
+      { id: "problemy-8", src: "I'll call the technician", it: "Chiamo il tecnico" },
+      { id: "problemy-9", src: "Did you lose your key?", it: "Hai perso la chiave?" },
+      { id: "problemy-10", src: "I'll bring you another towel", it: "Ti porto un altro asciugamano" },
+      { id: "problemy-11", src: "Let me check", it: "Fammi controllare" },
+      { id: "problemy-12", src: "Don't worry", it: "Non ti preoccupare" },
+      { id: "problemy-13", src: "It's all sorted now", it: "Adesso è tutto a posto" },
     ],
   },
   {
-    id: 'mesto',
-    title: 'Ve městě',
-    icon: '🛍️',
+    id: "kdeje", level: "l5", title: "Kde je…?", icon: "📍",
+    notes: [
+      "**Dov'è…?** = kde je…? Víc věcí: **Dove sono** i bagni?",
+      "**C'è…?** = je tu…?: „C'è un supermercato qui vicino?“ = Je tu poblíž supermarket?",
+      "**Qui vicino** = tady blízko · **lontano** = daleko · **a piedi** = pěšky.",
+    ],
     phrases: [
-      { id: "mesto-1", src: "Can I pay by card?", it: "Posso pagare con la carta?" },
-      { id: "mesto-2", src: "No bag, thanks", it: "Niente sacchetto, grazie" },
-      { id: "mesto-3", src: "Takeaway", it: "Da portare via" },
+      { id: "kdeje-1", src: "Excuse me, where is the station?", it: "Scusi, dov'è la stazione?" },
+      { id: "kdeje-2", src: "Where is the bathroom?", it: "Dov'è il bagno?" },
+      { id: "kdeje-3", src: "Is there a supermarket nearby?", it: "C'è un supermercato qui vicino?" },
+      { id: "kdeje-4", src: "Is there a pharmacy around here?", it: "C'è una farmacia qui vicino?" },
+      { id: "kdeje-5", src: "Is it far?", it: "È lontano?" },
+      { id: "kdeje-6", src: "It's really close", it: "È vicinissimo" },
+      { id: "kdeje-7", src: "How long does it take on foot?", it: "Quanto ci vuole a piedi?" },
+      { id: "kdeje-8", src: "Five minutes on foot", it: "Cinque minuti a piedi" },
+      { id: "kdeje-9", src: "Where can I buy…?", it: "Dove posso comprare…?" },
+      { id: "kdeje-10", src: "I'm looking for the beach", it: "Cerco la spiaggia" },
+      { id: "kdeje-11", src: "Are you looking for something?", it: "Cerchi qualcosa?" },
+      { id: "kdeje-12", src: "Can I help you? Are you lost?", it: "Posso aiutarti? Ti sei perso?" },
+      { id: "kdeje-13", src: "I'll show you on the map", it: "Te lo faccio vedere sulla mappa" },
+    ],
+  },
+  {
+    id: "cesta", level: "l5", title: "Jak se tam dostanu", icon: "🧭",
+    notes: [
+      "**Vai dritto** = jdi rovně · **gira a destra / a sinistra** = zahni doprava / doleva. Při vykání: **vada, giri**.",
+      "**La prima / la seconda a destra** = první / druhá doprava.",
+      "Kde: **davanti a** (před), **dietro** (za), **accanto a** (vedle), **di fronte a** (naproti), **in fondo a** (na konci).",
+    ],
+    phrases: [
+      { id: "cesta-1", src: "Go straight on", it: "Vai dritto" },
+      { id: "cesta-2", src: "Turn right", it: "Gira a destra" },
+      { id: "cesta-3", src: "Turn left", it: "Gira a sinistra" },
+      { id: "cesta-4", src: "Take the first on the right", it: "Prendi la prima a destra" },
+      { id: "cesta-5", src: "At the traffic lights, turn left", it: "Al semaforo gira a sinistra" },
+      { id: "cesta-6", src: "Cross the street", it: "Attraversa la strada" },
+      { id: "cesta-7", src: "It's at the end of the street", it: "È in fondo alla strada" },
+      { id: "cesta-8", src: "It's next to the bar", it: "È accanto al bar" },
+      { id: "cesta-9", src: "It's opposite the church", it: "È di fronte alla chiesa" },
+      { id: "cesta-10", src: "It's behind the station", it: "È dietro la stazione" },
+      { id: "cesta-11", src: "You can't miss it", it: "Non puoi sbagliare" },
+      { id: "cesta-12", src: "Go straight, then turn right at the square", it: "Vai dritto, poi gira a destra in piazza" },
+    ],
+  },
+  {
+    id: "doprava", level: "l5", title: "Vlak, autobus, kolo", icon: "🚆",
+    notes: [
+      "Lístek = **il biglietto**. Vlakový lístek musíš předem **convalidare** (označit), jinak hrozí pokuta.",
+      "**Da quale binario parte?** = Z jaké koleje to jede?",
+      "**Salire** = nastoupit · **scendere** = vystoupit: „Scendi alla prossima fermata.“",
+    ],
+    phrases: [
       { id: "mesto-4", src: "Is this going to Bivio Cento?", it: "Questo va a Bivio Cento?" },
+      { id: "doprava-1", src: "Where do you buy the tickets?", it: "Dove si comprano i biglietti?" },
+      { id: "doprava-2", src: "A ticket to Riomaggiore, please", it: "Un biglietto per Riomaggiore, per favore" },
+      { id: "doprava-3", src: "What time does the train leave?", it: "A che ora parte il treno?" },
+      { id: "doprava-4", src: "From which platform?", it: "Da quale binario?" },
+      { id: "doprava-5", src: "You have to validate the ticket", it: "Devi convalidare il biglietto" },
+      { id: "doprava-6", src: "The bus comes every twenty minutes", it: "L'autobus passa ogni venti minuti" },
+      { id: "doprava-7", src: "Get off at the next stop", it: "Scendi alla prossima fermata" },
+      { id: "doprava-8", src: "The train is late", it: "Il treno è in ritardo" },
       { id: "mesto-5", src: "I'm here for the bike", it: "Sono qui per la bici" },
+      { id: "doprava-9", src: "Can I rent a bike?", it: "Posso noleggiare una bici?" },
+      { id: "doprava-10", src: "Where can I park?", it: "Dove posso parcheggiare?" },
       { id: "mesto-6", src: "Driveway – keep clear", it: "Passo carrabile" },
       { id: "mesto-7", src: "Waiting", it: "Attesa" },
     ],
   },
   {
-    id: 'gym',
-    title: 'Posilovna a tělo',
-    icon: '🏋️',
+    id: "obchod", level: "l5", title: "Nakupování", icon: "🛍️",
+    notes: [
+      "**Quanto costa?** (jedna věc) / **Quanto costano?** (víc věcí).",
+      "**Lo prendo** = beru to · **Do solo un'occhiata** = jen se dívám.",
+      "U pokladny se ptají „**Sacchetto?**“ – stačí „No, grazie“.",
+    ],
+    phrases: [
+      { id: "mesto-1", src: "Can I pay by card?", it: "Posso pagare con la carta?" },
+      { id: "mesto-2", src: "No bag, thanks", it: "Niente sacchetto, grazie" },
+      { id: "obchod-1", src: "How much are they?", it: "Quanto costano?" },
+      { id: "obchod-2", src: "I'll take it", it: "Lo prendo" },
+      { id: "obchod-3", src: "I'm just looking, thanks", it: "Do solo un'occhiata, grazie" },
+      { id: "obchod-4", src: "Do you have…?", it: "Avete…?" },
+      { id: "obchod-5", src: "Do you have a smaller size?", it: "Avete una taglia più piccola?" },
+      { id: "obchod-6", src: "Where is the checkout?", it: "Dov'è la cassa?" },
+      { id: "obchod-7", src: "A bottle of water, please", it: "Una bottiglia d'acqua, per favore" },
+      { id: "obchod-8", src: "Is it open on Sunday?", it: "È aperto la domenica?" },
+      { id: "obchod-9", src: "What time do you close?", it: "A che ora chiudete?" },
+    ],
+  },
+  {
+    id: "gym", level: "l6", title: "Posilovna a tělo", icon: "🏋️",
+    notes: [
+      "**Mi fa male…** = bolí mě…: „Mi fa male il ginocchio / la schiena.“",
+      "**Allenarsi** = trénovat: mi alleno, ti alleni… „Mi alleno tre volte a settimana.“",
+      "**A pezzi** = na kusy – hovorově „jsem úplně rozbitej“.",
+    ],
     phrases: [
       { id: "gym-1", src: "Deadlift", it: "Lo stacco da terra" },
       { id: "gym-2", src: "Is it okay if I do deadlifts here?", it: "Va bene se faccio gli stacchi qui?" },
+      { id: "gym-5", src: "Do you train here often?", it: "Ti alleni spesso qui?" },
+      { id: "gym-6", src: "I train three times a week", it: "Mi alleno tre volte a settimana" },
+      { id: "gym-7", src: "Are you using this?", it: "Stai usando questo?" },
+      { id: "gym-8", src: "Can I work in with you?", it: "Posso alternarmi con te?" },
+      { id: "gym-9", src: "How many sets do you have left?", it: "Quante serie ti mancano?" },
+      { id: "gym-10", src: "My knee hurts", it: "Mi fa male il ginocchio" },
+      { id: "gym-11", src: "My back hurts", it: "Mi fa male la schiena" },
+      { id: "gym-12", src: "I'm still sore from yesterday's workout", it: "Ho ancora i dolori dell'allenamento di ieri" },
       { id: "gym-3", src: "My body is very fucked up", it: "Ho il corpo a pezzi" },
       { id: "gym-4", src: "My knee is fucked up", it: "Ho il ginocchio a pezzi" },
     ],
   },
   {
-    id: 'sproste',
-    title: 'Sprostá slovíčka',
-    icon: '🤬',
+    id: "sproste", level: "l6", title: "Sprostá slovíčka", icon: "🤬",
+    notes: [
+      "Používej s rozmyslem 😄 **Merda** je jako „sakra / do prdele“ – slyšíš ho všude.",
+      "**Vaffanculo** je silné – fakt jen mezi kamarády, nebo když hoří.",
+      "Jemnější varianty: **Cavolo!** (sakra), **Porca miseria!** (do háje), **Che casino!** (to je bordel).",
+    ],
     phrases: [
       { id: "sproste-1", src: "Shit", it: "Merda" },
       { id: "sproste-2", src: "Fuck off", it: "Vaffanculo" },
+      { id: "sproste-3", src: "Damn!", it: "Cavolo!" },
+      { id: "sproste-4", src: "Bloody hell!", it: "Porca miseria!" },
+      { id: "sproste-5", src: "What a mess!", it: "Che casino!" },
     ],
   },
 ];
@@ -567,6 +1084,7 @@ function go(hash) { location.hash = hash; }
 function renderHome() {
   document.title = 'Bobik Speaks Italian';
   const total = LESSONS.reduce((a, l) => a + l.phrases.length, 0);
+  const next = nextLesson();
   app.innerHTML = `
     <header class="top"><div class="wrap">
       <div class="brand" style="flex:1">Bobik Speaks <span>Italian!</span></div>
@@ -578,19 +1096,28 @@ function renderHome() {
         <div class="stat"><b>⭐ ${store.points}</b><small>bodů</small></div>
         <div class="stat"><b>✅ ${masteredCount()}</b><small>z ${total} zvládnuto</small></div>
       </div>
-      <div class="section-title">Lekce</div>
-      ${LESSONS.length ? LESSONS.map(l => {
-        const pct = lessonProgress(l);
-        return `<button class="lesson" data-go="#/l/${encodeURIComponent(l.id)}">
-          <div class="ico">${l.icon || '📘'}</div>
-          <div class="meta">
-            <div class="t">${esc(l.title)}</div>
-            <div class="d">${l.phrases.length} ${phraseWord(l.phrases.length)}</div>
-            <div class="bar"><i style="width:${pct}%"></i></div>
-          </div>
-          <div class="pct">${pct} %</div>
-        </button>`;
-      }).join('') : `<div class="empty">Zatím žádné lekce.</div>`}
+      ${LEVELS.map((lv, li) => {
+        const ls = LESSONS.filter(l => l.level === lv.id);
+        if (!ls.length) return '';
+        const lvPct = Math.round(ls.reduce((a, l) => a + lessonProgress(l), 0) / ls.length);
+        return `<div class="level-head">
+            <div class="lt"><div><div class="ln">Úroveň ${li + 1}</div><h2>${esc(lv.title)}</h2></div><div class="lp">${lvPct} %</div></div>
+            <p>${esc(lv.desc)}</p>
+          </div>` + ls.map(l => {
+          const pct = lessonProgress(l);
+          const isNext = l === next;
+          return `<button class="lesson${isNext ? ' next' : ''}" data-go="#/l/${encodeURIComponent(l.id)}">
+            <div class="ico">${l.icon || '📘'}</div>
+            <div class="meta">
+              <div class="num">LEKCE ${lessonNumber(l)}${isNext ? '<span class="next-badge">Pokračuj tady</span>' : ''}</div>
+              <div class="t">${esc(l.title)}</div>
+              <div class="d">${l.phrases.length} ${phraseWord(l.phrases.length)}</div>
+              <div class="bar"><i style="width:${pct}%"></i></div>
+            </div>
+            <div class="pct">${pct} %</div>
+          </button>`;
+        }).join('');
+      }).join('') || `<div class="empty">Zatím žádné lekce.</div>`}
     </div></main>`;
   bindGo();
 }
@@ -608,10 +1135,14 @@ function renderLesson(lesson) {
       <button class="icon-btn" data-go="#/" aria-label="Zpět">←</button>
       <div style="flex:1;min-width:0">
         <h1>${lesson.icon || ''} ${esc(lesson.title)}</h1>
-        <div class="sub">${lesson.phrases.length} ${phraseWord(lesson.phrases.length)} · ${pct} % hotovo</div>
+        <div class="sub">Lekce ${lessonNumber(lesson)} · ${lesson.phrases.length} ${phraseWord(lesson.phrases.length)} · ${pct} % hotovo</div>
       </div>
     </div></header>
     <main><div class="wrap">
+      ${lesson.notes && lesson.notes.length ? `<details class="notes"${pct < 30 ? ' open' : ''}>
+        <summary>📖 Než začneš</summary>
+        <ul>${lesson.notes.map(n => `<li>${md(n)}</li>`).join('')}</ul>
+      </details>` : ''}
       <div class="modes">
         ${MODES.map((m, i) => `
           <button class="mode${i === 0 ? ' first' : ''}" data-go="#/l/${encodeURIComponent(lesson.id)}/${m.id}">
@@ -641,6 +1172,7 @@ function renderLesson(lesson) {
           </div>
           <button class="play" data-play="${i}" aria-label="Přehrát">🔊</button>
         </div>`).join('')}
+      ${(() => { const o = orderedLessons(); const nx = o[o.indexOf(lesson) + 1]; return nx ? `<button class="next-lesson" data-go="#/l/${encodeURIComponent(nx.id)}"><span style="font-size:1.5em">${nx.icon || '📘'}</span><span style="flex:1">Další lekce →<small>Lekce ${lessonNumber(nx)} · ${esc(nx.title)}</small></span></button>` : ''; })()}
       <button class="reset-link" id="resetLesson">Vynulovat pokrok lekce</button>
     </div></main>`;
   bindGo();
@@ -1016,6 +1548,12 @@ document.addEventListener('keydown', e => {
   else if (S.revealed && ['1', '2', '3'].includes(e.key)) rateCard(['hard', 'good', 'easy'][+e.key - 1]);
   else if (e.key === 'Escape') go(`#/l/${encodeURIComponent(S.lesson.id)}`);
 });
+
+// pořadí lekcí = pořadí úrovní, v rámci úrovně pořadí v LESSONS
+function orderedLessons() { return LEVELS.flatMap(lv => LESSONS.filter(l => l.level === lv.id)).concat(LESSONS.filter(l => !LEVELS.some(lv => lv.id === l.level))); }
+function lessonNumber(l) { return orderedLessons().indexOf(l) + 1; }
+function nextLesson() { const o = orderedLessons(); return o.find(l => lessonProgress(l) < 60) || null; }
+function md(t) { return esc(t).replace(/\*\*(.+?)\*\*/g, '<b>$1</b>'); }
 
 function bindGo() { app.querySelectorAll('[data-go]').forEach(el => el.onclick = () => go(el.dataset.go)); }
 
