@@ -1,0 +1,7 @@
+{
+  "name": "bobik-tts",
+  "private": true,
+  "type": "module",
+  "description": "Generování audia kurzu (Gemini TTS přes Cloudflare AI). Použití: npm i && (cd ../../worker && npx wrangler whoami) && CONC=24 node generate.mjs",
+  "dependencies": { "@breezystack/lamejs": "^1.2.7" }
+}

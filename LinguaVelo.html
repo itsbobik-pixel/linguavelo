@@ -2720,8 +2720,79 @@ function srcLang(p) {
 }
 function flag(p) { return srcLang(p) === 'cs-CZ' ? '🇨🇿' : '🇬🇧'; }
 
+// ═══════════════════════════════════════════════════════════
+//  AUDIO — předgenerované MP3 (Gemini TTS) v audio/<klíč>.mp3
+//  Hraje jeden <audio> přehrávač → běží i na pozadí a se zamčeným iPhonem.
+//  Když nahrávka chybí, mluví hlas prohlížeče (speechSynthesis).
+// ═══════════════════════════════════════════════════════════
+const AUDIO_BASE = 'audio/';
+const VOICE_IT = 'Puck', VOICE_SRC = 'Kore';
+const CAST_VOICE = { Bob: 'Puck', Giulia: 'Kore', Anna: 'Aoede', Marco: 'Charon', Luca: 'Fenrir', Signora: 'Leda' };
+let clipSet = new Set();
+fetch(AUDIO_BASE + 'index.json').then(r => r.json()).then(a => { clipSet = new Set(a); }).catch(() => {});
+
+// FNV-1a 64bit — stejná funkce generuje názvy souborů
+function clipKey(voice, text) {
+  let h1 = 0x811c9dc5, h2 = 0x01000193 ^ 0x5bd1e995;
+  const s = voice + '|' + text;
+  for (let i = 0; i < s.length; i++) {
+    const c = s.charCodeAt(i);
+    h1 = Math.imul(h1 ^ c, 0x01000193) >>> 0;
+    h2 = Math.imul(h2 ^ c, 0x5bd1e995) >>> 0;
+  }
+  return h1.toString(16).padStart(8, '0') + h2.toString(16).padStart(8, '0');
+}
+function clipUrl(voice, text) {
+  const k = clipKey(voice, text);
+  return clipSet.has(k) ? AUDIO_BASE + k + '.mp3' : null;
+}
+
+const player = new Audio();
+player.preload = 'auto';
+let playerDone = null; // resolve právě hrající nahrávky (stopSpeech ji ukončí)
+function playUrl(url, rate = 1) {
+  return new Promise(resolve => {
+    if (playerDone) playerDone();
+    let finished = false;
+    const done = () => { if (finished) return; finished = true; if (playerDone === done) playerDone = null; resolve(); };
+    playerDone = done;
+    player.onended = done; player.onerror = done;
+    player.src = url;
+    player.playbackRate = rate;
+    player.preservesPitch = true;
+    player.play().catch(done);
+  });
+}
+// iOS pustí zvuk jen po klepnutí – první dotyk přehrávač „odemkne“
+document.addEventListener('touchend', function unlock() {
+  document.removeEventListener('touchend', unlock);
+  if (player.src) return;
+  player.src = AUDIO_BASE + 'silence-400.mp3';
+  player.play().catch(() => {});
+}, { once: true });
+
+// pauza: na pozadí jako tichá nahrávka (časovače iOS uspí), jinak obyčejné čekání
+function gap(ms) {
+  if (!clipSet.size) return pause(ms);
+  const f = [400, 500, 900, 1500].reduce((a, b) => Math.abs(b - ms) < Math.abs(a - ms) ? b : a);
+  return playUrl(`${AUDIO_BASE}silence-${f}.mp3`);
+}
+
+// ovládání na zamčené obrazovce (název lekce, ▶ ⏸ ⏭)
+function mediaSession(title, { onPlay, onPause, onNext } = {}) {
+  if (!('mediaSession' in navigator)) return;
+  try {
+    navigator.mediaSession.metadata = new MediaMetadata({ title, artist: 'Bobik Speaks Italian', album: '🇮🇹 Italština', artwork: [{ src: 'icon-512.png', sizes: '512x512', type: 'image/png' }] });
+    navigator.mediaSession.setActionHandler('play', onPlay || null);
+    navigator.mediaSession.setActionHandler('pause', onPause || null);
+    navigator.mediaSession.setActionHandler('nexttrack', onNext || null);
+  } catch {}
+}
+
 let speakGen = 0;
 function speak(text, lang = 'it-IT', rate = 0.95, opts = {}) {
+  const url = clipUrl(opts.voiceName || (lang === 'it-IT' ? VOICE_IT : VOICE_SRC), text);
+  if (url) return playUrl(url, rate / 0.95);
   return new Promise(resolve => {
     if (!synth) return resolve();
     const u = new SpeechSynthesisUtterance(text);
@@ -2733,7 +2804,7 @@ function speak(text, lang = 'it-IT', rate = 0.95, opts = {}) {
     synth.speak(u);
   });
 }
-function stopSpeech() { speakGen++; if (synth) synth.cancel(); }
+function stopSpeech() { speakGen++; if (synth) synth.cancel(); player.pause(); if (playerDone) playerDone(); }
 function sayIt(text, slow = false) { stopSpeech(); return speak(text, 'it-IT', slow ? 0.65 : 0.95); }
 const pause = ms => new Promise(r => setTimeout(r, ms));
 
@@ -2960,17 +3031,18 @@ function renderLesson(lesson) {
     if (playBtn.dataset.on) { playAllGen++; stopSpeech(); speechKeepAwake(false); setPlaying(null); playBtn.textContent = '▶ Přehrát vše'; delete playBtn.dataset.on; return; }
     const gen = ++playAllGen; stopSpeech();
     playBtn.dataset.on = '1'; playBtn.textContent = '⏸ Zastavit';
+    mediaSession(lesson.title, { onPause: () => playBtn.dataset.on && playBtn.click(), onPlay: () => !playBtn.dataset.on && playBtn.click(), onNext: () => { player.pause(); if (playerDone) playerDone(); } });
     speechKeepAwake(true);
     do {
       for (let i = 0; i < lesson.phrases.length && gen === playAllGen; i++) {
         const p = lesson.phrases[i];
         setPlaying(i);
         await speak(p.src, srcLang(p)); if (gen !== playAllGen) break;
-        await pause(500); if (gen !== playAllGen) break;
+        await gap(500); if (gen !== playAllGen) break;
         await speak(p.it); if (gen !== playAllGen) break;
-        await pause(900);
+        await gap(900);
       }
-      if (gen === playAllGen && loopOn) await pause(1500); // krátká pauza před dalším kolem
+      if (gen === playAllGen && loopOn) await gap(1500); // krátká pauza před dalším kolem
     } while (gen === playAllGen && loopOn);
     if (gen === playAllGen) { speechKeepAwake(false); setPlaying(null); playBtn.textContent = '▶ Přehrát vše'; delete playBtn.dataset.on; }
   };
@@ -3332,7 +3404,7 @@ function speakAs(cast, who, text, slow = false) {
   const i = Math.max(0, keys.indexOf(who));
   const voices = synth ? synth.getVoices().filter(v => v.lang && v.lang.toLowerCase().startsWith('it')) : [];
   const voice = voices.length > 1 ? voices[i % voices.length] : itVoice;
-  return speak(text, 'it-IT', slow ? 0.7 : 0.95, { voice, pitch: voices.length > 1 ? 1 : (i ? 1.25 : 0.9) });
+  return speak(text, 'it-IT', slow ? 0.7 : 0.95, { voice, pitch: voices.length > 1 ? 1 : (i ? 1.25 : 0.9), voiceName: CAST_VOICE[cast[who]] });
 }
 
 function bubbleHtml(d, ln, idx, side = ln.s === Object.keys(d.cast)[0] ? 'me' : 'them', extra = '') {
@@ -3381,15 +3453,16 @@ function renderDialog(lesson, di) {
     stopSpeech();
     const g = ++dlgGen;
     playBtn.dataset.on = '1'; playBtn.textContent = '⏸ Zastavit';
+    mediaSession(`${d.title} · ${lesson.title}`, { onPause: () => playBtn.dataset.on && stop(), onPlay: () => !playBtn.dataset.on && playBtn.click(), onNext: () => { player.pause(); if (playerDone) playerDone(); } });
     speechKeepAwake(true);
     do {
       for (let i = 0; i < d.lines.length && g === dlgGen; i++) {
         mark(i);
         await speakAs(d.cast, d.lines[i].s, d.lines[i].it, slow);
         if (g !== dlgGen) return;
-        await pause(450);
+        await gap(450);
       }
-      if (g === dlgGen && loopOn) await pause(1500);
+      if (g === dlgGen && loopOn) await gap(1500);
     } while (g === dlgGen && loopOn);
     if (g === dlgGen) stop();
   };
